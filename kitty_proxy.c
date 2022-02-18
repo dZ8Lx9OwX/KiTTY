@@ -19,7 +19,7 @@ void SetProxySelectionFlag( const int flag ) { ProxySelectionFlag = flag ; }
 void debug_logevent( const char *fmt, ... ) ;
 
 struct Proxies proxies[MAX_PROXY] ;
-    
+
 void InitProxyList(void) {
 	HKEY hKey ;
 	int i,j;
@@ -42,7 +42,7 @@ void InitProxyList(void) {
 		RegQueryInfoKey(hKey,achClass,&cchClassName,NULL,&cSubKeys,&cbMaxSubKey,&cchMaxClass,&cValues,&cchMaxValue,&cbMaxValueData,&cbSecurityDescriptor,&ftLastWriteTime);
 		if( cSubKeys>0 )
 			for (i=0; i<cSubKeys; i++) {
-				DWORD cchValue = MAX_VALUE_NAME; 
+				DWORD cchValue = MAX_VALUE_NAME;
 				char lpData[4096] ;
 				if( RegEnumKeyEx(hKey, i, lpData, &cchValue, NULL, NULL, NULL, &ftLastWriteTime) == ERROR_SUCCESS ) {
 					if( strcmp(lpData,"None") && strcmp(lpData,"Default") ) {
@@ -58,7 +58,7 @@ void InitProxyList(void) {
 		DIR * dir ;
 		struct dirent * de ;
 		sprintf( fullpath, "%s\\Proxies", ConfigDirectory ) ;
-		if(!MakeDir( fullpath ) ) { MessageBox(NULL,"Unable to create the proxy definitions directory","Error",MB_OK|MB_ICONERROR); }
+		if(!MakeDir( fullpath ) ) { MessageBox(NULL,"无法创建代理定义目录","错误",MB_OK|MB_ICONERROR); }
 		if( (dir=opendir(fullpath)) != NULL ) {
 			while( (de=readdir(dir)) != NULL )
 			if( strcmp(de->d_name,".") && strcmp(de->d_name,"..") )	{
@@ -79,9 +79,9 @@ void InitProxyList(void) {
 int LoadProxyInfo( Conf * conf, const char * name ) {
 	char buffer[MAX_VALUE_NAME] ;
 	if( !strcmp(name,"- Session defined proxy -") ) { return 0 ; }
-	if( !strcmp(name,"- No proxy -") ) { 
+	if( !strcmp(name,"- No proxy -") ) {
 		debug_logevent( "Remove proxy definition" ) ;
-		conf_set_int(conf, CONF_proxy_type, PROXY_NONE) ; 
+		conf_set_int(conf, CONF_proxy_type, PROXY_NONE) ;
 		return 1 ;
 	}
 	debug_logevent( "Load proxy \"%s\" definition", name ) ;
@@ -97,17 +97,17 @@ int LoadProxyInfo( Conf * conf, const char * name ) {
 			return 0;
 		}
 		char lpData[4096] ;
-		if( GetValueData(HKEY_CURRENT_USER, buffer, "ProxyExcludeList", lpData ) ) { 
-			conf_set_str( conf, CONF_proxy_exclude_list, lpData ) ; 
+		if( GetValueData(HKEY_CURRENT_USER, buffer, "ProxyExcludeList", lpData ) ) {
+			conf_set_str( conf, CONF_proxy_exclude_list, lpData ) ;
 		}
 		if( GetValueData(HKEY_CURRENT_USER, buffer, "ProxyDNS", lpData ) ) {
 			int i=atoi(lpData);
 			conf_set_int(conf, CONF_proxy_dns, (i+1)%3);
 		}
-		if( GetValueData(HKEY_CURRENT_USER, buffer, "ProxyLocalhost", lpData ) ) { 
-			if( atoi(lpData) == 0 ) { conf_set_bool( conf, CONF_even_proxy_localhost, false ) ; 
+		if( GetValueData(HKEY_CURRENT_USER, buffer, "ProxyLocalhost", lpData ) ) {
+			if( atoi(lpData) == 0 ) { conf_set_bool( conf, CONF_even_proxy_localhost, false ) ;
 			} else { conf_set_bool( conf, CONF_even_proxy_localhost, true ) ;
-			}			
+			}
 		}
 		if( GetValueData(HKEY_CURRENT_USER, buffer, "ProxyMethod", lpData ) ) {
 			int i = atoi(lpData) ;
@@ -117,7 +117,7 @@ int LoadProxyInfo( Conf * conf, const char * name ) {
 			else if (i == 3) conf_set_int(conf, CONF_proxy_type, PROXY_HTTP) ;
 			else if (i == 4) conf_set_int(conf, CONF_proxy_type, PROXY_TELNET) ;
 			else if (i == 5) conf_set_int(conf, CONF_proxy_type, PROXY_CMD) ;
-			else conf_set_int(conf, CONF_proxy_type, PROXY_NONE) ; 
+			else conf_set_int(conf, CONF_proxy_type, PROXY_NONE) ;
 		}
 		if( GetValueData(HKEY_CURRENT_USER, buffer, "ProxyHost", lpData ) ) { conf_set_str( conf, CONF_proxy_host, lpData ) ; }
 		if( GetValueData(HKEY_CURRENT_USER, buffer, "ProxyPort", lpData ) ) { conf_set_int( conf, CONF_proxy_port, atoi(lpData) ) ; }
@@ -137,14 +137,14 @@ int LoadProxyInfo( Conf * conf, const char * name ) {
 				char buf2[MAX_VALUE_NAME]="";
 				while( fgets(buffer,MAX_VALUE_NAME,fp)!=NULL ) {
 					if( ReadPortableValue(buffer, "ProxyExcludeList", buf2, MAX_VALUE_NAME) ) {
-						conf_set_str( conf, CONF_proxy_exclude_list, buf2 ) ; 
+						conf_set_str( conf, CONF_proxy_exclude_list, buf2 ) ;
 					} else if( ReadPortableValue(buffer, "ProxyDNS", buf2, MAX_VALUE_NAME) ) {
 						int i=atoi(buf2);
 						conf_set_int(conf, CONF_proxy_dns, (i+1)%3);
 					} else if( ReadPortableValue(buffer, "ProxyLocalhost", buf2, MAX_VALUE_NAME) ) {
-						if( atoi(buf2) == 0 ) { conf_set_bool( conf, CONF_even_proxy_localhost, false ) ; 
+						if( atoi(buf2) == 0 ) { conf_set_bool( conf, CONF_even_proxy_localhost, false ) ;
 						} else { conf_set_bool( conf, CONF_even_proxy_localhost, true ) ;
-						}	
+						}
 					} else if( ReadPortableValue(buffer, "ProxyMethod", buf2, MAX_VALUE_NAME) ) {
 						int i = atoi(buf2) ;
 						if (i == 0) conf_set_int(conf, CONF_proxy_type, PROXY_NONE);
@@ -153,19 +153,19 @@ int LoadProxyInfo( Conf * conf, const char * name ) {
 						else if (i == 3) conf_set_int(conf, CONF_proxy_type, PROXY_HTTP) ;
 						else if (i == 4) conf_set_int(conf, CONF_proxy_type, PROXY_TELNET) ;
 						else if (i == 5) conf_set_int(conf, CONF_proxy_type, PROXY_CMD) ;
-						else conf_set_int(conf, CONF_proxy_type, PROXY_NONE) ; 
-					} else if( ReadPortableValue(buffer, "ProxyHost", buf2, MAX_VALUE_NAME) ) { 
-						conf_set_str( conf, CONF_proxy_host, buf2 ) ; 
-					} else if( ReadPortableValue(buffer, "ProxyPort", buf2, MAX_VALUE_NAME) ) { 
-						conf_set_int( conf, CONF_proxy_port, atoi(buf2) ) ; 
-					} else if( ReadPortableValue(buffer, "ProxyUsername", buf2, MAX_VALUE_NAME) ) { 
-						conf_set_str( conf, CONF_proxy_username, buf2 ) ; 
-					} else if( ReadPortableValue(buffer, "ProxyPassword", buf2, MAX_VALUE_NAME) ) { 
-						conf_set_str( conf, CONF_proxy_password, buf2 ) ; 
+						else conf_set_int(conf, CONF_proxy_type, PROXY_NONE) ;
+					} else if( ReadPortableValue(buffer, "ProxyHost", buf2, MAX_VALUE_NAME) ) {
+						conf_set_str( conf, CONF_proxy_host, buf2 ) ;
+					} else if( ReadPortableValue(buffer, "ProxyPort", buf2, MAX_VALUE_NAME) ) {
+						conf_set_int( conf, CONF_proxy_port, atoi(buf2) ) ;
+					} else if( ReadPortableValue(buffer, "ProxyUsername", buf2, MAX_VALUE_NAME) ) {
+						conf_set_str( conf, CONF_proxy_username, buf2 ) ;
+					} else if( ReadPortableValue(buffer, "ProxyPassword", buf2, MAX_VALUE_NAME) ) {
+						conf_set_str( conf, CONF_proxy_password, buf2 ) ;
 					} else if( ReadPortableValue(buffer, "ProxyTelnetCommand", buf2, MAX_VALUE_NAME) ) {
-						conf_set_str( conf, CONF_proxy_telnet_command, buf2 ) ; 
-					} else if( ReadPortableValue(buffer, "ProxyLogToTerm", buf2, MAX_VALUE_NAME) ) { 
-						conf_set_int( conf, CONF_proxy_log_to_term, atoi(buf2) ) ; 
+						conf_set_str( conf, CONF_proxy_telnet_command, buf2 ) ;
+					} else if( ReadPortableValue(buffer, "ProxyLogToTerm", buf2, MAX_VALUE_NAME) ) {
+						conf_set_int( conf, CONF_proxy_log_to_term, atoi(buf2) ) ;
 					}
 				}
 				fclose(fp);

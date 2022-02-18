@@ -88,8 +88,8 @@ DWORD errorShow(const char* pcErrText, const char* pcErrParam) {
 	DWORD erChyba;
 	char pcBuf[16];
 	char* pcHlaska = snewn((pcErrParam?strlen(pcErrParam):0) + strlen(pcErrText) + 256, char);
-	
-	erChyba = GetLastError();		
+
+	erChyba = GetLastError();
 	ltoa(erChyba, pcBuf, 10);
 
 	strcpy(pcHlaska, "Error: ");
@@ -105,21 +105,21 @@ DWORD errorShow(const char* pcErrText, const char* pcErrParam) {
 		strcat(pcHlaska, pcErrParam);
 		strcat(pcHlaska, "\n");
 	}
-    strcat(pcHlaska, "Error code: ");
+    strcat(pcHlaska, "错误代码：");
 	strcat(pcHlaska, pcBuf);
 
     /* JK: get parent-window and show */
     hwRodic = GetActiveWindow();
     if (hwRodic != NULL) { hwRodic = GetLastActivePopup(hwRodic);}
-  
-	if (MessageBox(hwRodic, pcHlaska, "Error", MB_OK|MB_APPLMODAL|MB_ICONEXCLAMATION) == 0) {
+
+	if (MessageBox(hwRodic, pcHlaska, "错误", MB_OK|MB_APPLMODAL|MB_ICONEXCLAMATION) == 0) {
         /* JK: this is really bad -> just ignore */
 	sfree(pcHlaska);
         return 0;
     }
-    
+
     //MessageBox(GetActiveWindow(),pcHlaska, "Error", MB_OK|MB_APPLMODAL|MB_ICONEXCLAMATION) ;
-    
+
 
 	sfree(pcHlaska);
 	return erChyba;
@@ -160,9 +160,9 @@ int createPath(char* dir) {
 		}
 		return 1;
 	}
-	
+
 	*p = '\0';
-	if( !createPath(dir) ) { MessageBox(NULL,"Unable to create directory !","Error",MB_OK|MB_ICONERROR) ; }
+	if( !createPath(dir) ) { MessageBox(NULL,"无法创建目录！","错误",MB_OK|MB_ICONERROR) ; }
 	*p = '\\';
 	++p;
 	/* what if it already exists */
@@ -185,7 +185,7 @@ char* joinPath(char* pcDest, char* pcMain, char* pcSuf) {
 	/* at first ExpandEnvironmentStrings */
 	if (0 == ExpandEnvironmentStrings(pcSuf, pcBuf, MAX_PATH)) {
 		/* JK: failure -> revert back - but it ussualy won't work, so report error to user! */
-		errorShow("Unable to ExpandEnvironmentStrings for session path", pcSuf);
+		errorShow("无法打开路径下的会话环境设置", pcSuf);
 		strncpy(pcBuf, pcSuf, strlen(pcSuf));
 	}
 	/* now ExpandEnvironmentStringsForUser - only on win2000Pro and above */
@@ -194,12 +194,12 @@ char* joinPath(char* pcDest, char* pcMain, char* pcSuf) {
 	static HMODULE userenv_module = NULL;
 	typedef BOOL (WINAPI *p_ExpandESforUser_t) (HANDLE, LPCTSTR, LPTSTR, DWORD);
 	static p_ExpandESforUser_t p_ExpandESforUser = NULL;
-	
+
 	HMODULE userenv_module = LoadLibrary("USERENV.DLL");
 
 	if (userenv_module) {
 	    p_ExpandESforUser = (p_ExpandESforUser_t) GetProcAddress(shell32_module, "ExpandEnvironmentStringsForUserA");
-		
+
 		if (p_ExpandESforUser) {
 
 			TOKEN_IMPERSONATE
@@ -250,7 +250,7 @@ int loadPath() {
 	HANDLE hFile ;
 
 	char* puttypath = snewn( (MAX_PATH*2), char);
-	
+
 	/* JK:  save path/curdir */
 	GetCurrentDirectory( (MAX_PATH*2), oldpath);
 
@@ -305,7 +305,7 @@ int loadPath() {
 	if(get_param("INIFILE")==SAVEMODE_DIR)
 	if( !existdirectory(sesspath) ) {
 		if( !MakeDir(sesspath) ) {
-			MessageBox( NULL, "Unable to create sessions directory !", "Error", MB_OK|MB_ICONERROR ) ;
+			MessageBox( NULL, "无法创建会话目录！", "错误", MB_OK|MB_ICONERROR ) ;
 		}
 	}
 
@@ -318,7 +318,7 @@ int loadPath() {
 
 		if (!ReadFile(hFile, fileCont, fileSize, &bytesRead, NULL))
 		{
-			errorShow("Unable to read configuration file, falling back to defaults", NULL);
+			errorShow("无法读取配置文件，返回默认设置。", NULL);
 			/* JK: default values are already there and clean-up at end */
 		}
 		else {
@@ -366,7 +366,7 @@ EMERGENCY_BREAK
 				else if (!strcmp(p, "seedfile")) {
 					p = strchr(p2, '\n');
 					*p = '\0';
-					joinPath(seedpath, puttypath, p2);			
+					joinPath(seedpath, puttypath, p2);
 					p2 = seedpath+strlen(seedpath)-1;
 					while ((*p2 == ' ')||(*p2 == '\n')||(*p2 == '\r')||(*p2 == '\t')) --p2;
 					*(p2+1) = '\0';
@@ -420,7 +420,7 @@ char * SetSessPath( const char * dec ) {
 	while( pst[0]=='\\' ) pst++ ;
 	return pst ;
 }
-	
+
 char * SetInitialSessPath( void ) { return strcpy( sesspath, initialsesspath ) ; }
 
 char * GetSessPath( void ) {
@@ -450,7 +450,7 @@ int CreateFolderInPath( const char * d ) {
 	int res = 0 ;
 	sprintf( buf, "%s\\%s", sesspath, d ) ;
 	res = createPath( buf ) ;
-	if( !res ) { MessageBox(NULL,"Unable to create directory", "Error", MB_OK|MB_ICONERROR); }
+	if( !res ) { MessageBox(NULL,"无法创建目录！", "错误", MB_OK|MB_ICONERROR); }
 	return res ;
 }
 
@@ -467,12 +467,12 @@ void SaveDumpPortableConfig( FILE * fp ) {
 
 
 HSettingsItem SettingsNewItem( const char * name, const char * value ) {
-	if( name==NULL ) return NULL ; 
+	if( name==NULL ) return NULL ;
 	HSettingsItem NewItem = malloc( sizeof( SettingsItem ) ) ;
 	NewItem->pNext = NULL ;
 	NewItem->pPrevious = NULL ;
 	NewItem->name = malloc( strlen(name) + 1 ) ; strcpy( NewItem->name, name ) ;
-	if( value == NULL ) { 
+	if( value == NULL ) {
 		NewItem->value = NULL ;
 	} else {
 		NewItem->value = malloc( strlen(value) + 1 ) ; strcpy( NewItem->value, value ) ;
@@ -499,7 +499,7 @@ void SettingsDelItem( HSettingsList list, const char * key ) {
 				if( !strcmp( current->name, key ) ) {
 					if( current->value != NULL ) { free( current->value ) ; current->value = NULL ; }
 					free( current->name ) ; current->name = NULL ;
-					if( current->pPrevious != NULL ) { 
+					if( current->pPrevious != NULL ) {
 						current->pPrevious->pNext = current->pNext ;
 					} else {
 						list->first = current->pNext ;
@@ -509,7 +509,7 @@ void SettingsDelItem( HSettingsList list, const char * key ) {
 					} else {
 						list->last = current->pPrevious ;
 					}
-				} 
+				}
 			}
 			current = current->pNext ;
 		}
@@ -555,7 +555,7 @@ void SettingsFree( HSettingsList list ) {
 				next = current->pNext ;
 				SettingsFreeItem( current ) ;
 				current = next ;
-			} 
+			}
 		}
 		list->first = NULL ;
 		list->last = NULL ;
@@ -612,9 +612,9 @@ void SettingsLoad( HSettingsList list, const char * filename ) {
 	FILE * fp ;
 	char *buffer;
 	int p ;
-	
+
 //debug_log("filename=%s|\n",filename); int i=0;
-	
+
 	if( (fp=fopen(filename,"rb")) != NULL ) {
 		list->filename = (char*) malloc( strlen(filename)+1 ) ; strcpy( list->filename, filename ) ;
 		buffer = (char*)malloc(4096*sizeof(char)) ;
@@ -663,14 +663,14 @@ void SettingsLoad( HSettingsList list, const char * filename ) {
 		fclose(fp );
 	} else {
 		//if( strcmp(filename,"Default%20Settings") ) MessageBox(NULL,"Unable to open session file", "Error", MB_OK);
-		errorShow( "Unable to read session file", filename ) ;
+		errorShow( "无法读取会话文件", filename ) ;
 	}
 }
 
 void SettingsSave( HSettingsList list, const char * filename ) {
 	FILE * fp ;
 	char buffer[4096] ;
-	
+
 	if( (fp=fopen(filename,"wb")) != NULL ) {
 		if( list != NULL ) {
 			HSettingsItem current = list->first ;
@@ -692,7 +692,7 @@ void SettingsSave( HSettingsList list, const char * filename ) {
 		}
 		fclose(fp);
 	} else {
-		errorShow( "Unable to write session file", filename ) ;
+		errorShow( "无法写入会话文件", filename ) ;
 	}
 }
 

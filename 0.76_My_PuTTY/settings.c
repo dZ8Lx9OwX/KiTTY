@@ -461,7 +461,7 @@ static void gprefs(settings_r *sesskey, const char *name, const char *def,
     sfree(value);
 }
 
-/* 
+/*
  * Write out a preference list.
  */
 static void wprefs(settings_w *sesskey, const char *name,
@@ -885,7 +885,7 @@ void save_open_settings(settings_w *sesskey, Conf *conf)
 	write_setting_filename(sesskey, "HyperlinkBrowser", conf_get_filename(conf, CONF_url_browser));
 	write_setting_i(sesskey, "HyperlinkRegularExpressionUseDefault", conf_get_int(conf, CONF_url_defregex));
 #ifndef MOD_NOHYPERLINK
-	if( !strcmp(conf_get_str(conf, CONF_url_regex),"@°@°@NO REGEX--") ) 
+	if( !strcmp(conf_get_str(conf, CONF_url_regex),"@°@°@NO REGEX--") )
 		write_setting_s(sesskey, "HyperlinkRegularExpression", urlhack_default_regex ) ;
 	else
 		write_setting_s(sesskey, "HyperlinkRegularExpression", conf_get_str(conf, CONF_url_regex));
@@ -986,7 +986,7 @@ bool load_settings(const char *section, Conf *conf)
 			//add_session_to_jumplist(section) ;
 			add_session_to_jumplist(name) ;
 			free(name) ;
-		} else { 
+		} else {
 			add_session_to_jumplist(section) ;
 		}
 	} else {
@@ -1004,7 +1004,7 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
 {
     int i;
     char *prot;
-	
+
 #ifdef MOD_PERSO
     /*
      * HACK: PuTTY-url
@@ -1384,7 +1384,7 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
 	    "85,85,255", "187,0,187", "255,85,255", "0,187,187",
 	    "85,255,255", "187,187,187", "255,255,255",
 	    "187,187,187",
-	    "0,0,0", "0,0,0", "187,0,0", "0,187,0"    
+	    "0,0,0", "0,0,0", "187,0,0", "0,187,0"
 	    , "187,187,0", "0,0,187",
 	    "187,0,187", "0,187,187", "187,187,187", "0,0,0", "187,187,187"
 	};
@@ -1524,7 +1524,7 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
     gppb(sesskey, "ConnectionSharingDownstream", true,
          conf, CONF_ssh_connection_sharing_downstream);
     gppmap(sesskey, "SSHManualHostKeys", conf, CONF_ssh_manual_hostkeys);
-    
+
     /*
      * SUPDUP settings
      */

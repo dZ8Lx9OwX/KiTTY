@@ -288,26 +288,26 @@ void write_aclip(int clipboard, char *, int, bool);
  * these strings are of exactly the type needed to go in
  * `lpstrFilter' in an OPENFILENAME structure.
  */
-#define FILTER_KEY_FILES ("PuTTY Private Key Files (*.ppk)\0*.ppk\0" \
-			      "All Files (*.*)\0*\0\0\0")
-#define FILTER_WAVE_FILES ("Wave Files (*.wav)\0*.WAV\0" \
-			       "All Files (*.*)\0*\0\0\0")
-#define FILTER_DYNLIB_FILES ("Dynamic Library Files (*.dll)\0*.dll\0" \
-				 "All Files (*.*)\0*\0\0\0")
+#define FILTER_KEY_FILES ("PuTTY私钥文件(*.ppk)\0*.ppk\0" \
+			      "所有文件(*.*)\0*\0\0\0")
+#define FILTER_WAVE_FILES ("声音文件(*.wav)\0*.WAV\0" \
+			       "所有文件(*.*)\0*\0\0\0")
+#define FILTER_DYNLIB_FILES ("动态库文件(*.dll)\0*.dll\0" \
+				 "所有文件(*.*)\0*\0\0\0")
 
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)
-#define FILTER_IMAGE_FILES ("Image Files\0*.BMP;*.JPG;*.JPEG\0" \
-			"BMP Files (*.bmp)\0*.BMP\0" \
-			"JPEG Files (*.jpg)\0*.JPG;*.JPEG\0" \
-			"All Files (*.*)\0*\0\0\0")
+#define FILTER_IMAGE_FILES ("图片文件\0*.BMP;*.JPG;*.JPEG\0" \
+			"BMP文件(*.bmp)\0*.BMP\0" \
+			"JPEG文件(*.jpg)\0*.JPG;*.JPEG\0" \
+			"所有文件(*.*)\0*\0\0\0")
 #endif
 #ifdef MOD_PERSO
-#define FILTER_ICON_FILES ("Icon Files (*.ico)\0*.ICO\0" \
-			"All Files (*.*)\0*\0\0\0")
+#define FILTER_ICON_FILES ("图标文件(*.ico)\0*.ICO\0" \
+			"所有文件(*.*)\0*\0\0\0")
 #endif
 #ifdef MOD_ZMODEM
-#define FILTER_EXE_FILES ("Executable Files (*.exe)\0*.EXE\0" \
-			       "All Files (*.*)\0*\0\0\0")
+#define FILTER_EXE_FILES ("可执行程序(*.exe)\0*.EXE\0" \
+			       "所有文件(*.*)\0*\0\0\0")
 #endif
 
 /*
@@ -718,9 +718,9 @@ char *get_jumplist_registry_entries(void);
 /*
  * Windows clipboard-UI wording.
  */
-#define CLIPNAME_IMPLICIT "Last selected text"
-#define CLIPNAME_EXPLICIT "System clipboard"
-#define CLIPNAME_EXPLICIT_OBJECT "system clipboard"
+#define CLIPNAME_IMPLICIT "最近的文本"
+#define CLIPNAME_EXPLICIT "系统剪贴板"
+#define CLIPNAME_EXPLICIT_OBJECT "系统剪贴板"
 /* These defaults are the ones PuTTY has historically had */
 #define CLIPUI_DEFAULT_AUTOCOPY true
 #define CLIPUI_DEFAULT_MOUSE CLIPUI_EXPLICIT

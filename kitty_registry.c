@@ -7,21 +7,21 @@ char * itoa (int __val, char *__s, int __radix) ;
 char * GetValueData(HKEY hkTopKey, char * lpSubKey, const char * lpValueName, char * rValue){
     HKEY hkKey;
     DWORD lpType, dwDataSize = cstMaxRegLength;
-  
+
   //Receptionne la valeur de réception lecture clé registre
     //unsigned char * lpData = new unsigned char[cstMaxRegLength];
 	unsigned char * lpData = (unsigned char*) malloc( cstMaxRegLength );
-    
+
   //Receptionne la valeur de réception lecture clé registre
     //char * rValue = (char*) malloc( cstMaxRegLength );
     rValue[0] = '\0';
   //Lecture de la clé registre si ok passe à la suite...
     if (RegOpenKeyEx(hkTopKey,lpSubKey,0,KEY_READ,&hkKey) == ERROR_SUCCESS){
-  
+
       if (RegQueryValueEx(hkKey,lpValueName,NULL,&lpType,lpData,&dwDataSize) == ERROR_SUCCESS){
       //déchiffrage des différents type de clé dans registry
         switch ((int)lpType){
-  
+
           case REG_BINARY:
                itoa((u_int)(lpData[0]),rValue, 10);
                strcat(rValue,".");
@@ -31,21 +31,21 @@ char * GetValueData(HKEY hkTopKey, char * lpSubKey, const char * lpValueName, ch
                strcat(rValue,".");
                itoa((u_int)(lpData[3]),(char*)(rValue+strlen(rValue)),10);
                break;
-  
+
           case REG_DWORD:
                itoa(*(int*)(lpData),rValue,10);
                break;
-  
+
           case REG_EXPAND_SZ:
                //rValue=(char *)lpData;
                strcpy( rValue, (char*)lpData ) ;
                break;
-  
+
           case REG_MULTI_SZ:
                //rValue=(char *)lpData;
                strcpy( rValue, (char*)lpData ) ;
                break;
-  
+
           case REG_SZ:
                //rValue=(char *)lpData;
                strcpy( rValue, (char*)lpData ) ;
@@ -54,8 +54,8 @@ char * GetValueData(HKEY hkTopKey, char * lpSubKey, const char * lpValueName, ch
       }//end if
       else { RegCloseKey(hkKey); free(lpData); return NULL ; }
        free(lpData); // libère la mémoire
-       RegCloseKey(hkKey); 
-      
+       RegCloseKey(hkKey);
+
     }//end if
     else { return NULL ; }
     return rValue;
@@ -70,7 +70,7 @@ int RegTestKey( HKEY hMainKey, LPCTSTR lpSubKey ) {
 	RegCloseKey( hKey ) ;
 	return 1 ;
 	}
-	
+
 // Retourne le nombre de sous-keys
 int RegCountKey( HKEY hMainKey, LPCTSTR lpSubKey ) {
 	HKEY hKey ;
@@ -80,7 +80,7 @@ int RegCountKey( HKEY hMainKey, LPCTSTR lpSubKey ) {
 
 	int nb = 0 ;
 	if( RegOpenKeyEx( hMainKey, TEXT(lpSubKey), 0, KEY_READ, &hKey) != ERROR_SUCCESS ) return 0 ;
-	
+
 	RegQueryInfoKey( hKey, achClass, &cchClassName, NULL, &cSubKeys, &cbMaxSubKey, &cchMaxClass
 		, &cValues, &cchMaxValue, &cbMaxValueData, &cbSecurityDescriptor, &ftLastWriteTime) ;
 	nb = cSubKeys ;
@@ -101,7 +101,7 @@ void RegTestOrCreate( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR name, LPCTSTR val
 		}
 	RegCloseKey( hKey ) ;
 	}
-	
+
 // Test l'existance d'une clé ou bien d'une valeur DWORD et la crée sinon
 void RegTestOrCreateDWORD( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR name, DWORD value ) {
 	HKEY hKey ;
@@ -115,15 +115,15 @@ void RegTestOrCreateDWORD( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR name, DWORD 
 		}
 	RegCloseKey( hKey ) ;
 	}
-	
+
 
 // Initialise toutes les sessions avec une valeur (si oldvalue==NULL) ou uniquement celles qui ont la valeur oldvalue
 void RegUpdateAllSessions( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR name, LPCTSTR oldvalue, LPCTSTR value  ) {
 	HKEY hKey ;
-	TCHAR    achClass[MAX_PATH] = TEXT(""), achKey[MAX_KEY_LENGTH]; 
+	TCHAR    achClass[MAX_PATH] = TEXT(""), achKey[MAX_KEY_LENGTH];
 	DWORD    cchClassName = MAX_PATH, cSubKeys=0, cbMaxSubKey, cbName=MAX_KEY_LENGTH, cchMaxClass, cValues, cchMaxValue, cbMaxValueData, cbSecurityDescriptor ;
 	FILETIME ftLastWriteTime;
-	
+
 	int i, retCode ;
 	if( RegOpenKeyEx( hMainKey, TEXT(lpSubKey), 0, KEY_READ, &hKey) != ERROR_SUCCESS ) return ;
 	RegQueryInfoKey( hKey, achClass, &cchClassName, NULL, &cSubKeys, &cbMaxSubKey, &cchMaxClass
@@ -131,7 +131,7 @@ void RegUpdateAllSessions( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR name, LPCTST
 
 	if (cSubKeys) {
 		for (i=0; i<cSubKeys; i++) {
-			retCode = RegEnumKeyEx(hKey, i, achKey, &cbName, NULL, NULL, NULL, &ftLastWriteTime); 
+			retCode = RegEnumKeyEx(hKey, i, achKey, &cbName, NULL, NULL, NULL, &ftLastWriteTime);
 			if (retCode == ERROR_SUCCESS) {
 				char buffer[MAX_KEY_LENGTH] ;
 				char previousvalue[1024] ;
@@ -144,59 +144,59 @@ void RegUpdateAllSessions( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR name, LPCTST
 		}
 	}
 }
-	
+
 // Exporte toute une cle de registre
-void QuerySubKey( HKEY hMainKey, LPCTSTR lpSubKey, FILE * fp_out, char * text  ) { 
+void QuerySubKey( HKEY hMainKey, LPCTSTR lpSubKey, FILE * fp_out, char * text  ) {
 	HKEY hKey ;
     TCHAR    achKey[MAX_KEY_LENGTH];   // buffer for subkey name
-    DWORD    cbName;                   // size of name string 
-    TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name 
-    DWORD    cchClassName = MAX_PATH;  // size of class string 
-    DWORD    cSubKeys=0;               // number of subkeys 
-    DWORD    cbMaxSubKey;              // longest subkey size 
-    DWORD    cchMaxClass;              // longest class string 
-    DWORD    cValues;              // number of values for key 
-    DWORD    cchMaxValue;          // longest value name 
-    DWORD    cbMaxValueData;       // longest value data 
-    DWORD    cbSecurityDescriptor; // size of security descriptor 
-    FILETIME ftLastWriteTime;      // last write time 
-    DWORD i, retCode; 
-	
+    DWORD    cbName;                   // size of name string
+    TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name
+    DWORD    cchClassName = MAX_PATH;  // size of class string
+    DWORD    cSubKeys=0;               // number of subkeys
+    DWORD    cbMaxSubKey;              // longest subkey size
+    DWORD    cchMaxClass;              // longest class string
+    DWORD    cValues;              // number of values for key
+    DWORD    cchMaxValue;          // longest value name
+    DWORD    cbMaxValueData;       // longest value data
+    DWORD    cbSecurityDescriptor; // size of security descriptor
+    FILETIME ftLastWriteTime;      // last write time
+    DWORD i, retCode;
+
 	char * buffer = NULL ;
 
 	// On ouvre la clé
 	if( RegOpenKeyEx( hMainKey, TEXT(lpSubKey), 0, KEY_READ, &hKey) != ERROR_SUCCESS ) return ;
 
-    // Get the class name and the value count. 
+    // Get the class name and the value count.
     retCode = RegQueryInfoKey(
-        hKey,                    // key handle 
-        achClass,                // buffer for class name 
-        &cchClassName,           // size of class string 
-        NULL,                    // reserved 
-        &cSubKeys,               // number of subkeys 
-        &cbMaxSubKey,            // longest subkey size 
-        &cchMaxClass,            // longest class string 
-        &cValues,                // number of values for this key 
-        &cchMaxValue,            // longest value name 
-        &cbMaxValueData,         // longest value data 
-        &cbSecurityDescriptor,   // security descriptor 
-        &ftLastWriteTime);       // last write time 
- 
+        hKey,                    // key handle
+        achClass,                // buffer for class name
+        &cchClassName,           // size of class string
+        NULL,                    // reserved
+        &cSubKeys,               // number of subkeys
+        &cbMaxSubKey,            // longest subkey size
+        &cchMaxClass,            // longest class string
+        &cValues,                // number of values for this key
+        &cchMaxValue,            // longest value name
+        &cbMaxValueData,         // longest value data
+        &cbSecurityDescriptor,   // security descriptor
+        &ftLastWriteTime);       // last write time
+
 	// Enumerate the subkeys, until RegEnumKeyEx fails.
 	if (cSubKeys) {
-		for (i=0; i<cSubKeys; i++) { 
+		for (i=0; i<cSubKeys; i++) {
 			cbName = MAX_KEY_LENGTH;
-			retCode = RegEnumKeyEx(hKey, i, achKey, &cbName, NULL, NULL, NULL, &ftLastWriteTime); 
+			retCode = RegEnumKeyEx(hKey, i, achKey, &cbName, NULL, NULL, NULL, &ftLastWriteTime);
 			if (retCode == ERROR_SUCCESS) {
 				buffer = (char*) malloc( strlen( TEXT(lpSubKey) ) + strlen( achKey ) + 100 ) ;
 				sprintf( buffer, "[HKEY_CURRENT_USER\\%s\\%s]", TEXT(lpSubKey), achKey ) ;
 				fprintf( fp_out, "\r\n%s\r\n", buffer ) ;
-				if( text!=NULL ) 
+				if( text!=NULL )
 					if( strlen( text ) > 0 ) fprintf( fp_out, "%s\r\n", text ) ;
-				free( buffer );				
+				free( buffer );
 				}
 			}
-		} 
+		}
 	RegCloseKey( hKey ) ;
 	}
 
@@ -205,12 +205,12 @@ void InitRegistryAllSessions( HKEY hMainKey, LPCTSTR lpSubKey, char * SubKeyName
 	char buf[1024] = "" ;
 	if( (fp=fopen( filename, "wb" )) != NULL ) {
 		fprintf( fp, "Windows Registry Editor Version 5.00\r\n" ) ;
-		sprintf( buf, "%s\\%s", lpSubKey, SubKeyName ); 
+		sprintf( buf, "%s\\%s", lpSubKey, SubKeyName );
 		QuerySubKey( hMainKey, (LPCTSTR)buf, fp, text ) ;
 		fclose( fp ) ;
 		}
 	}
-	
+
 void InitAllSessions( HKEY hMainKey, LPCTSTR lpSubKey, char * SubKeyName, char * filename ) {
 	char text[4096], f[1024] ;
 	FILE * fp ;
@@ -225,8 +225,8 @@ void InitAllSessions( HKEY hMainKey, LPCTSTR lpSubKey, char * SubKeyName, char *
 		unlink(filename);
 		}
 	}
-	
-// Détruit une valeur de clé de registre 
+
+// Détruit une valeur de clé de registre
 BOOL RegDelValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValue ) {
 	HKEY hKey;
 	LONG lResult;
@@ -234,7 +234,7 @@ BOOL RegDelValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValue ) {
 		RegDeleteValue( hKey, lpValue ) ;
 		RegCloseKey(hKey) ;
 		}
-	return TRUE;   
+	return TRUE;
 	}
 
 // Detruit une clé de registre et ses sous-clé
@@ -254,15 +254,15 @@ BOOL RegDelTree (HKEY hKeyRoot, LPCTSTR lpSubKey) {
     lResult = RegOpenKeyEx (hKeyRoot, lpSubKey, 0, KEY_READ, &hKey) ;
 
     if (lResult != ERROR_SUCCESS) {
-        if (lResult == ERROR_FILE_NOT_FOUND) { printf("Key not found.\n"); return TRUE; } 
-        else {printf("Error opening key.\n");return FALSE;}
+        if (lResult == ERROR_FILE_NOT_FOUND) { printf("未找到密钥。\n"); return TRUE; }
+        else {printf("打开密钥时出错。\n");return FALSE;}
     	}
 
     // Enumerate the keys
     dwSize = MAX_PATH;
     lResult = RegEnumKeyEx(hKey, 0, szName, &dwSize, NULL, NULL, NULL, &ftWrite) ;
 
-    if (lResult == ERROR_SUCCESS) 
+    if (lResult == ERROR_SUCCESS)
     {
         do {
             //StringCchCopy (lpEnd, MAX_PATH*2, szName);
@@ -285,97 +285,97 @@ BOOL RegDelTree (HKEY hKeyRoot, LPCTSTR lpSubKey) {
 	}
 
 // Copie une clé de registre vers une autre
-void RegCopyTree( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR lpDestKey ) { 
+void RegCopyTree( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR lpDestKey ) {
 	HKEY hKey, hDestKey ;
     TCHAR    achKey[MAX_KEY_LENGTH];   // buffer for subkey name
-    DWORD    cbName;                   // size of name string 
-    TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name 
-    DWORD    cchClassName = MAX_PATH;  // size of class string 
-    DWORD    cSubKeys=0;               // number of subkeys 
-    DWORD    cbMaxSubKey;              // longest subkey size 
-    DWORD    cchMaxClass;              // longest class string 
-    DWORD    cValues;              // number of values for key 
-    DWORD    cchMaxValue;          // longest value name 
-    DWORD    cbMaxValueData;       // longest value data 
-    DWORD    cbSecurityDescriptor; // size of security descriptor 
-    FILETIME ftLastWriteTime;      // last write time 
- 
-    DWORD i, retCode; 
- 
-    TCHAR  achValue[MAX_VALUE_NAME]; 
-    DWORD cchValue = MAX_VALUE_NAME; 
-	
+    DWORD    cbName;                   // size of name string
+    TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name
+    DWORD    cchClassName = MAX_PATH;  // size of class string
+    DWORD    cSubKeys=0;               // number of subkeys
+    DWORD    cbMaxSubKey;              // longest subkey size
+    DWORD    cchMaxClass;              // longest class string
+    DWORD    cValues;              // number of values for key
+    DWORD    cchMaxValue;          // longest value name
+    DWORD    cbMaxValueData;       // longest value data
+    DWORD    cbSecurityDescriptor; // size of security descriptor
+    FILETIME ftLastWriteTime;      // last write time
+
+    DWORD i, retCode;
+
+    TCHAR  achValue[MAX_VALUE_NAME];
+    DWORD cchValue = MAX_VALUE_NAME;
+
 	DWORD lpType, dwDataSize = 1024 ;
 	char * buffer = NULL, * destbuffer = NULL ;
-	
+
 	// On ouvre la clé
 	if( RegOpenKeyEx( hMainKey, TEXT(lpSubKey), 0, KEY_READ, &hKey) != ERROR_SUCCESS ) return ;
 	if( RegCreateKey( hMainKey, TEXT(lpDestKey), &hDestKey ) == ERROR_SUCCESS )
 					RegCloseKey( hDestKey ) ;
 
-    // Get the class name and the value count. 
+    // Get the class name and the value count.
     retCode = RegQueryInfoKey(
-        hKey,                    // key handle 
-        achClass,                // buffer for class name 
-        &cchClassName,           // size of class string 
-        NULL,                    // reserved 
-        &cSubKeys,               // number of subkeys 
-        &cbMaxSubKey,            // longest subkey size 
-        &cchMaxClass,            // longest class string 
-        &cValues,                // number of values for this key 
-        &cchMaxValue,            // longest value name 
-        &cbMaxValueData,         // longest value data 
-        &cbSecurityDescriptor,   // security descriptor 
-        &ftLastWriteTime);       // last write time 
- 
-    // Enumerate the key values. 
-    if (cValues) 
+        hKey,                    // key handle
+        achClass,                // buffer for class name
+        &cchClassName,           // size of class string
+        NULL,                    // reserved
+        &cSubKeys,               // number of subkeys
+        &cbMaxSubKey,            // longest subkey size
+        &cchMaxClass,            // longest class string
+        &cValues,                // number of values for this key
+        &cchMaxValue,            // longest value name
+        &cbMaxValueData,         // longest value data
+        &cbSecurityDescriptor,   // security descriptor
+        &ftLastWriteTime);       // last write time
+
+    // Enumerate the key values.
+    if (cValues)
     {
         //printf( "\nNumber of values: %d\n", cValues);
 
-        for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++) 
-        { 
-            cchValue = MAX_VALUE_NAME; 
-            achValue[0] = '\0'; 
-            retCode = RegEnumValue(hKey, i, 
-                achValue, 
-                &cchValue, 
-                NULL, 
+        for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++)
+        {
+            cchValue = MAX_VALUE_NAME;
+            achValue[0] = '\0';
+            retCode = RegEnumValue(hKey, i,
+                achValue,
+                &cchValue,
+                NULL,
                 NULL,
                 NULL,
                 NULL);
- 
-            if (retCode == ERROR_SUCCESS ) 
-            { 
+
+            if (retCode == ERROR_SUCCESS )
+            {
 				unsigned char lpData[1024] ;
 				dwDataSize = 1024 ;
 				RegQueryValueEx( hKey, TEXT( achValue ), 0, &lpType, lpData, &dwDataSize ) ;
-				
+
 				if( RegOpenKeyEx( hMainKey, TEXT(lpDestKey), 0, KEY_WRITE, &hDestKey) != ERROR_SUCCESS ) return ;
-				
+
 				RegSetValueEx( hDestKey, TEXT( achValue ), 0, lpType, lpData, dwDataSize );
-					
+
 				RegCloseKey( hDestKey ) ;
-            } 
+            }
         }
     }
-	
+
     // Enumerate the subkeys, until RegEnumKeyEx fails.
     if (cSubKeys)
     {
         //printf( "\nNumber of subkeys: %d\n", cSubKeys);
 
-        for (i=0; i<cSubKeys; i++) 
-        { 
+        for (i=0; i<cSubKeys; i++)
+        {
             cbName = MAX_KEY_LENGTH;
             retCode = RegEnumKeyEx(hKey, i,
-                     achKey, 
-                     &cbName, 
-                     NULL, 
-                     NULL, 
-                     NULL, 
-                     &ftLastWriteTime); 
-            if (retCode == ERROR_SUCCESS) 
+                     achKey,
+                     &cbName,
+                     NULL,
+                     NULL,
+                     NULL,
+                     &ftLastWriteTime);
+            if (retCode == ERROR_SUCCESS)
             {
 				buffer = (char*) malloc( strlen( TEXT(lpSubKey) ) + strlen( achKey ) + 3 ) ;
 				sprintf( buffer, "%s\\%s", TEXT(lpSubKey), achKey ) ;
@@ -383,14 +383,14 @@ void RegCopyTree( HKEY hMainKey, LPCTSTR lpSubKey, LPCTSTR lpDestKey ) {
 				sprintf( destbuffer, "%s\\%s", TEXT(lpDestKey), achKey ) ;
 				if( RegCreateKey( hMainKey, destbuffer, &hDestKey ) == ERROR_SUCCESS )
 					RegCloseKey( hDestKey ) ;
-					
+
 				RegCopyTree( hMainKey, buffer, destbuffer ) ;
 				free( buffer );
 				free( destbuffer );
             }
         }
-    } 
- 
+    }
+
 	RegCloseKey( hKey ) ;
 }
 
@@ -399,17 +399,17 @@ BOOL RegCleanPuTTY( void ) {
 	HKEY hKey, hSubKey ;
 	DWORD retCode, i;
 	TCHAR    achKey[MAX_KEY_LENGTH];   // buffer for subkey name
-	DWORD    cbName;                   // size of name string 
-	TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name 
-	DWORD    cchClassName = MAX_PATH;  // size of class string 
-	DWORD    cSubKeys=0;               // number of subkeys 
-	DWORD    cbMaxSubKey;              // longest subkey size 
-	DWORD    cchMaxClass;              // longest class string 
-	DWORD    cValues;              // number of values for key 
-	DWORD    cchMaxValue;          // longest value name 
-	DWORD    cbMaxValueData;       // longest value data 
-	DWORD    cbSecurityDescriptor; // size of security descriptor 
-	FILETIME ftLastWriteTime;      // last write time 
+	DWORD    cbName;                   // size of name string
+	TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name
+	DWORD    cchClassName = MAX_PATH;  // size of class string
+	DWORD    cSubKeys=0;               // number of subkeys
+	DWORD    cbMaxSubKey;              // longest subkey size
+	DWORD    cchMaxClass;              // longest class string
+	DWORD    cValues;              // number of values for key
+	DWORD    cchMaxValue;          // longest value name
+	DWORD    cbMaxValueData;       // longest value data
+	DWORD    cbSecurityDescriptor; // size of security descriptor
+	FILETIME ftLastWriteTime;      // last write time
 	char *buffer = NULL ;
 #ifdef FLJ
 return 1 ;
@@ -430,31 +430,31 @@ return 1 ;
 		RegDeleteValue( hSubKey, "KiClassName" ) ;
 		RegCloseKey(hSubKey) ;
 		}
-	
+
 	RegDelTree (HKEY_CURRENT_USER, "Software\\SimonTatham\\PuTTY\\Commands" ) ;
 	RegDelTree (HKEY_CURRENT_USER, "Software\\SimonTatham\\PuTTY\\Folders" ) ;
 	RegDelTree (HKEY_CURRENT_USER, "Software\\SimonTatham\\PuTTY\\Launcher" ) ;
-	
+
 	// On ouvre la clé
 	if( RegOpenKeyEx( HKEY_CURRENT_USER, "Software\\SimonTatham\\PuTTY\\Sessions", 0, KEY_READ|KEY_WRITE, &hKey) != ERROR_SUCCESS ) return 0;
-	
+
 	retCode = RegQueryInfoKey(
-        hKey,                    // key handle 
-        achClass,                // buffer for class name 
-        &cchClassName,           // size of class string 
-        NULL,                    // reserved 
-        &cSubKeys,               // number of subkeys 
-        &cbMaxSubKey,            // longest subkey size 
-        &cchMaxClass,            // longest class string 
-        &cValues,                // number of values for this key 
-        &cchMaxValue,            // longest value name 
-        &cbMaxValueData,         // longest value data 
-        &cbSecurityDescriptor,   // security descriptor 
+        hKey,                    // key handle
+        achClass,                // buffer for class name
+        &cchClassName,           // size of class string
+        NULL,                    // reserved
+        &cSubKeys,               // number of subkeys
+        &cbMaxSubKey,            // longest subkey size
+        &cchMaxClass,            // longest class string
+        &cValues,                // number of values for this key
+        &cchMaxValue,            // longest value name
+        &cbMaxValueData,         // longest value data
+        &cbSecurityDescriptor,   // security descriptor
         &ftLastWriteTime);
-	
+
 	// Enumerate the subkeys, until RegEnumKeyEx fails.
 	if (cSubKeys) {  //printf( "\nNumber of subkeys: %d\n", cSubKeys);
-		for (i=0; i<cSubKeys; i++) { 
+		for (i=0; i<cSubKeys; i++) {
 			cbName = MAX_KEY_LENGTH;
 			if( ( retCode = RegEnumKeyEx(hKey, i, achKey, &cbName,NULL,NULL,NULL, &ftLastWriteTime) ) == ERROR_SUCCESS ) {
 				buffer = (char*) malloc( strlen( achKey ) + 50 ) ;
@@ -559,10 +559,10 @@ return 1 ;
 				free( buffer );
 				}
 			}
-		} 
- 
+		}
+
 	RegCloseKey( hKey ) ;
-	
+
 	return 1;
 	}
 
@@ -638,9 +638,9 @@ void CreateFileAssoc() {
 	RegTestOrCreate( HKEY_CLASSES_ROOT, ext, "Content Type", "connection/ssh") ;
 	RegTestOrCreate( HKEY_CLASSES_ROOT, ext, "OpenWithProgids", "kitty.connect.1") ;
 }
-	
+
 // Check for KiTTY registry key. If not, copy from PuTTY one
-void TestRegKeyOrCopyFromPuTTY( HKEY hMainKey, char * KeyName ) { 
+void TestRegKeyOrCopyFromPuTTY( HKEY hMainKey, char * KeyName ) {
 	HKEY hKey ;
 	if( RegOpenKeyEx( hMainKey, TEXT(KeyName), 0, KEY_READ, &hKey) == ERROR_SUCCESS ) {
 		RegCloseKey( hKey ) ;
@@ -658,13 +658,13 @@ int ExportSubKeyToFile( HKEY hkey, const char *subkey, const char *keyname, cons
 	char *fullkey, *fullpath ;
 	FILE *fp;
 	HKEY hKey;
-	
+
 	int retCode, i;
 	unsigned char lpData[1024], unlpData[1024] ;
-	TCHAR achClass[MAX_PATH] = TEXT(""), achValue[MAX_VALUE_NAME] ; 
+	TCHAR achClass[MAX_PATH] = TEXT(""), achValue[MAX_VALUE_NAME] ;
 	DWORD cchClassName = MAX_PATH, cSubKeys=0, cbMaxSubKey, cchMaxClass, cValues, cchMaxValue, cbMaxValueData, cbSecurityDescriptor, cchValue = MAX_VALUE_NAME , dwDataSize, lpType;
-	FILETIME ftLastWriteTime; 
-	
+	FILETIME ftLastWriteTime;
+
 	if( subkey!=NULL ) {
 		if( keyname!=NULL ) {
 			fullkey = (char*) malloc( strlen(subkey)+strlen(keyname)+2 ) ;
@@ -677,7 +677,7 @@ int ExportSubKeyToFile( HKEY hkey, const char *subkey, const char *keyname, cons
 		fullkey = (char*) malloc( strlen(keyname)+1 ) ;
 		sprintf( fullkey, "%s", keyname ) ;
 	}
-	
+
 	if( maindir!=NULL ) {
 		if( subdir!=NULL ) {
 			fullpath = (char*) malloc( strlen(maindir)+strlen(subdir)+strlen(keyname)+3 ) ;
@@ -692,12 +692,12 @@ int ExportSubKeyToFile( HKEY hkey, const char *subkey, const char *keyname, cons
 	}
 	if( (fp=fopen(fullpath,"wb"))==NULL ) { free( fullpath ) ; free( fullkey ) ; return 1 ; }
 	if( RegOpenKeyEx( HKEY_CURRENT_USER, TEXT(fullkey), 0, KEY_READ, &hKey) != ERROR_SUCCESS ) { free( fullpath ) ; free( fullkey ) ; return 2 ; }
-	
+
 	if( RegQueryInfoKey(hKey,achClass,&cchClassName,NULL,&cSubKeys,&cbMaxSubKey
 		,&cchMaxClass,&cValues,&cchMaxValue,&cbMaxValueData,&cbSecurityDescriptor,&ftLastWriteTime) == ERROR_SUCCESS ) {
 		retCode = ERROR_SUCCESS ;
 		if(cValues) for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++) {
-			cchValue = MAX_VALUE_NAME; 
+			cchValue = MAX_VALUE_NAME;
 			achValue[0] = '\0';
 			if( (retCode = RegEnumValue(hKey, i, achValue, &cchValue, NULL, NULL,NULL,NULL) ) == ERROR_SUCCESS ) {
 				char *buffer=NULL;
@@ -716,14 +716,14 @@ int ExportSubKeyToFile( HKEY hkey, const char *subkey, const char *keyname, cons
 						itoa((u_int)(lpData[3]),buffer+strlen(buffer),10);
 						strcat( buffer, "\\" ) ;
 						break;
-  
+
 					case REG_DWORD:
 						buffer = (char*) malloc( strlen( achValue ) + 13 ) ;
 						sprintf( buffer, "%s\\", achValue ) ;
 						itoa(*(int*)(lpData),buffer+strlen(buffer),10) ;
 						strcat( buffer, "\\" ) ;
 						break;
-					
+
 					case REG_EXPAND_SZ:
 					case REG_MULTI_SZ:
 					case REG_SZ:
@@ -742,7 +742,7 @@ int ExportSubKeyToFile( HKEY hkey, const char *subkey, const char *keyname, cons
 	return 0 ;
 }
 
-	
+
 /******
 Supprimer toute trace de KiTTY dans le registre.
 Ecrire et exécuter un fichier utf-8 .reg contenant les lignes:

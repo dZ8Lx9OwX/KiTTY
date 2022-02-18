@@ -98,7 +98,7 @@ void set_storagetype(int new_storagetype)
  * A given key will be written at most once while saving a session.
  * Keys may be up to 255 characters long.  String values have no length
  * limit.
- * 
+ *
  * Any returned error message must be freed after use.
  *
  * STORAGETYPE SWITCHER
@@ -178,15 +178,15 @@ void close_settings_w(void *handle)
  * open_setting_r() to get a `void *' handle, then pass that to a
  * number of calls to read_setting_s() and read_setting_i(), and
  * then close it using close_settings_r().
- * 
+ *
  * read_setting_s() writes into the provided buffer and returns a
  * pointer to the same buffer.
- * 
+ *
  * If a particular string setting is not present in the session,
  * read_setting_s() can return NULL, in which case the caller
  * should invent a sensible default. If an integer setting is not
  * present, read_setting_i() returns its provided default.
- * 
+ *
  * read_setting_filename() and read_setting_fontspec() each read into
  * the provided buffer, and return zero if they failed to.
  *
@@ -395,7 +395,7 @@ static int try_random_seed(char const *path, int action, HANDLE *ret)
 
  /*
   * HELPER FOR RANDOM SEED FUNCTIONS (not part of storage.h)
-  * 
+  *
   * PARTLY HACKED: PuttyTray / PuTTY File - This is an original function (only first lines patched)
   */
 static HANDLE access_random_seed(int action)
@@ -417,7 +417,7 @@ static HANDLE access_random_seed(int action)
     /*
      * Iterate over a selection of possible random seed paths until
      * we find one that works.
-     * 
+     *
      * We do this iteration separately for reading and writing,
      * meaning that we will automatically migrate random seed files
      * if a better location becomes available (by reading from the
@@ -622,26 +622,26 @@ DWORD errorShow(const char* pcErrText, const char* pcErrParam) {
 	DWORD erChyba;
 	char pcBuf[16];
 	char* pcHlaska = snewn(strlen(pcErrParam) + strlen(pcErrText) + 31, char);
-	
-	erChyba = GetLastError();		
+
+	erChyba = GetLastError();
 	ltoa(erChyba, pcBuf, 10);
 
-	strcpy(pcHlaska, "Error: ");
+	strcpy(pcHlaska, "错误：");
 	strcat(pcHlaska, pcErrText);
-	strcat(pcHlaska, "\n");	
+	strcat(pcHlaska, "\n");
 
 	if (pcErrParam) {
 		strcat(pcHlaska, pcErrParam);
 		strcat(pcHlaska, "\n");
 	}
-    strcat(pcHlaska, "Error code: ");
+    strcat(pcHlaska, "错误代码：");
 	strcat(pcHlaska, pcBuf);
 
     /* JK: get parent-window and show */
     hwRodic = GetActiveWindow();
     if (hwRodic != NULL) { hwRodic = GetLastActivePopup(hwRodic);}
-  
-	if (MessageBox(hwRodic, pcHlaska, "Error", MB_OK|MB_APPLMODAL|MB_ICONEXCLAMATION) == 0) {
+
+	if (MessageBox(hwRodic, pcHlaska, "错误", MB_OK|MB_APPLMODAL|MB_ICONEXCLAMATION) == 0) {
         /* JK: this is really bad -> just ignore */
         return 0;
     }
@@ -683,7 +683,7 @@ int createPath(char* dir) {
 		}
 		return 1;
 	}
-	
+
 	*p = '\0';
 	createPath(dir);
 	*p = '\\';
@@ -709,7 +709,7 @@ char* joinPath(char* pcDest, char* pcMain, char* pcSuf) {
 	/* at first ExpandEnvironmentStrings */
 	if (0 == ExpandEnvironmentStrings(pcSuf, pcBuf, MAX_PATH)) {
 		/* JK: failure -> revert back - but it ussualy won't work, so report error to user! */
-		errorShow("Unable to ExpandEnvironmentStrings for session path", pcSuf);
+		errorShow("无法打开当前路径下的会话设置", pcSuf);
 		strncpy(pcBuf, pcSuf, strlen(pcSuf));
 	}
 	/* now ExpandEnvironmentStringsForUser - only on win2000Pro and above */
@@ -718,12 +718,12 @@ char* joinPath(char* pcDest, char* pcMain, char* pcSuf) {
 	static HMODULE userenv_module = NULL;
 	typedef BOOL (WINAPI *p_ExpandESforUser_t) (HANDLE, LPCTSTR, LPTSTR, DWORD);
 	static p_ExpandESforUser_t p_ExpandESforUser = NULL;
-	
+
 	HMODULE userenv_module = LoadLibrary("USERENV.DLL");
 
 	if (userenv_module) {
 	    p_ExpandESforUser = (p_ExpandESforUser_t) GetProcAddress(shell32_module, "ExpandEnvironmentStringsForUserA");
-		
+
 		if (p_ExpandESforUser) {
 
 			TOKEN_IMPERSONATE
@@ -807,8 +807,8 @@ int loadPath() {
 		fileCont = snewn(fileSize+16, char);
 
 		if (!ReadFile(hFile, fileCont, fileSize, &bytesRead, NULL)) {
-			errorShow("Unable to read configuration file, falling back to defaults", NULL);
-		
+			errorShow("无法读取配置文件，返回默认设置。", NULL);
+
 			/* JK: default values are already there and clean-up at end */
 		}
 		else {
@@ -845,7 +845,7 @@ int loadPath() {
 				else if (!strcmp(p, "seedfile")) {
 					p = strchr(p2, '\n');
 					*p = '\0';
-					joinPath(seedpath, puttypath, p2);			
+					joinPath(seedpath, puttypath, p2);
 					p2 = seedpath+strlen(seedpath)-1;
 					while ((*p2 == ' ')||(*p2 == '\n')||(*p2 == '\r')||(*p2 == '\t')) --p2;
 					*(p2+1) = '\0';
@@ -1066,7 +1066,7 @@ void file_close_settings_w(void *handle)
 	/* JK: we will write to disk now - open file, filename stored in handle already packed */
 	if ((hFile = FindFirstFile(sesspath, &FindFile)) == INVALID_HANDLE_VALUE) {
 		if (!createPath(sesspath)) {
-			errorShow("Unable to create directory for storing sessions", sesspath);
+			errorShow("无法创建用于存储会话的目录", sesspath);
 			return;
 		}
 	}
@@ -1076,7 +1076,7 @@ void file_close_settings_w(void *handle)
 
 	hFile = CreateFile( ((struct setPack*) handle)->fileBuf, GENERIC_WRITE,0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
 	if (hFile == INVALID_HANDLE_VALUE) {
-		errorShow("Unable to open file for writing", ((struct setPack*) handle)->fileBuf );
+		errorShow("无法打开文件进行写入", ((struct setPack*) handle)->fileBuf );
 		return;
 	}
 
@@ -1097,7 +1097,7 @@ void file_close_settings_w(void *handle)
 		writeok = writeok && WriteFile( (HANDLE) hFile, "\\\n", 2, &written, NULL);
 
 		if (!writeok) {
-			errorShow("Unable to save settings", st1->key);
+			errorShow("无法保存设置", st1->key);
 			return;
 			/* JK: memory should be freed here - fixme */
 		}
@@ -1170,7 +1170,7 @@ void *file_open_settings_r(const char *sessionname)
 			hFile = INVALID_HANDLE_VALUE;
 		}
 		SetCurrentDirectory(oldpath);
-		
+
 		if (hFile == INVALID_HANDLE_VALUE) {
 			sp->fromFile = 0;
 		}
@@ -1190,7 +1190,7 @@ void *file_open_settings_r(const char *sessionname)
 			hFile = INVALID_HANDLE_VALUE;
 		}
 		SetCurrentDirectory(oldpath);
-		
+
 		if (hFile == INVALID_HANDLE_VALUE) {
 			/* JK: some error occured -> just report and fail */
 
@@ -1200,7 +1200,7 @@ void *file_open_settings_r(const char *sessionname)
 			   (errorShow("Unable to load file for reading", p);)
 			*/
 //#error read comment above
-			errorShow("Unable to load file for reading", p);
+			errorShow("无法加载文件进行读取", p);
 
 			sfree(p);
 			return NULL;
@@ -1211,7 +1211,7 @@ void *file_open_settings_r(const char *sessionname)
 		fileCont = snewn(fileSize+16, char);
 
 		if (!ReadFile(hFile, fileCont, fileSize, &bytesRead, NULL)) {
-			errorShow("Unable to read session from file", p);
+			errorShow("无法从文件中读取会话", p);
 			sfree(p);
 			return NULL;
 		}
@@ -1220,7 +1220,7 @@ void *file_open_settings_r(const char *sessionname)
 		st1 = snew( struct setItem );
 		sp->fromFile = 1;
 		sp->handle = st1;
-		
+
 		p = fileCont;
 		sp->fileBuf = fileCont; /* JK: remeber for memory freeing */
 
@@ -1280,7 +1280,7 @@ char *file_read_setting_s(void *handle, const char *key, char *buffer, int bufle
 	if (!handle) return NULL;	/* JK: new in 0.1.3 */
 
 	if (((struct setPack*) handle)->fromFile) {
-		
+
 		p = snewn(3 * strlen(key) + 1, char);
 		mungestr(key, p);
 
@@ -1288,7 +1288,7 @@ char *file_read_setting_s(void *handle, const char *key, char *buffer, int bufle
 		while (st->key) {
 			if ( strcmp(st->key, p) == 0) {
 				unmungestr(st->value, buffer, buflen);
-				return st->value;				
+				return st->value;
 			}
 			st = st->next;
 		}
@@ -1319,7 +1319,7 @@ int file_read_setting_i(void *handle, const char *key, int defvalue)
 		st = ((struct setPack*) handle)->handle;
 		while (st->key) {
 			if ( strcmp(st->key, key) == 0) {
-				return atoi(st->value);				
+				return atoi(st->value);
 			}
 			st = st->next;
 		}
@@ -1423,7 +1423,7 @@ void file_del_settings(const char *sessionname)
 
 		p = snewn(3 * strlen(sessionname) + 1, char);
 		mungestr(sessionname, p);
-		
+
 		if (RegOpenKey(HKEY_CURRENT_USER, puttystr, &subkey1) != ERROR_SUCCESS)	return;
 
 		RegDeleteKey(subkey1, p);
@@ -1441,7 +1441,7 @@ void file_del_settings(const char *sessionname)
 		if (SetCurrentDirectory(sesspath)) {
 			if (!DeleteFile(p2))
 			{
-				errorShow("Unable to delete settings.", NULL);
+				errorShow("无法删除设置。", NULL);
 			}
 			SetCurrentDirectory(oldpath);
 		}
@@ -1460,7 +1460,7 @@ void *file_enum_settings_start(void)
 		loadPath();
 	}
 	/* JK: we have path variables */
-	
+
 	/* JK: let's do what this function should normally do */
 	ret = snew(struct enumsettings);
 
@@ -1484,9 +1484,9 @@ char *file_enum_settings_next(void *handle, char *buffer, int buflen)
     WIN32_FIND_DATA FindFileData;
 	HANDLE hFile;
 	char *otherbuf;
-	
+
 	if (!handle) return NULL;	/* JK: new in 0.1.3 */
-	
+
 	otherbuf = snewn( (3*buflen)+1, char); /* must be here */
 
 	if (! ((struct enumsettings *)handle)->fromFile ) {
@@ -1592,7 +1592,7 @@ int file_verify_host_key(const char *hostname, int port,
 	/* JK: settings on disk - every hostkey as file in dir */
 	GetCurrentDirectory( (MAX_PATH*2), oldpath);
 	if (SetCurrentDirectory(sshkpath)) {
-		
+
 		p = snewn(3 * strlen(regname) + 1 + 16, char);
 		packstr(regname, p);
 		strcat(p, keysuffix);
@@ -1629,7 +1629,7 @@ int file_verify_host_key(const char *hostname, int port,
 	else {
 		/* JK: there are no hostkeys as files -> try registry -> nothing to do here now */
 	}
-	
+
 	/* JK: directory/file not found -> try registry */
 	if (RegOpenKey(HKEY_CURRENT_USER, PUTTY_REG_POS "\\SshHostKeys", &rkey) != ERROR_SUCCESS) {
 		return 1;		       /* key does not exist in registry */
@@ -1714,11 +1714,11 @@ int file_verify_host_key(const char *hostname, int port,
 	else { /* key matched OK in registry */
 		/* JK: matching key found in registry -> warn user, ask what to do */
 		p = snewn(256, char);
-		userMB = MessageBox(NULL, "The host key is cached in the Windows registry. "
-			"Do you want to move it to a file? \n\n"
-			"Yes \t-> Move to file (and delete from registry)\n"
-			"No \t-> Copy to file (and keep in registry)\n"
-			"Cancel \t-> nothing will be done\n", "Security risk", MB_YESNOCANCEL|MB_ICONWARNING);
+		userMB = MessageBox(NULL, "主机密钥缓存在Windows注册表中。"
+			"您想把它移动到文件中吗？\n\n"
+			"“是” \t-> 移动到文件(并从注册表中删除)\n"
+			"“否” \t-> 复制到文件(保留注册标准的缓存)\n"
+			"“取消” \t-> 什么都不做\n", "安全风险", MB_YESNOCANCEL|MB_ICONWARNING);
 
 		if ((userMB == IDYES) || (userMB == IDNO)) {
 			/* JK: save key to file */
@@ -1731,16 +1731,16 @@ int file_verify_host_key(const char *hostname, int port,
 			p = snewn(3*strlen(regname) + 1 + 16, char);
 			packstr(regname, p);
 			strcat(p, keysuffix);
-			
+
 			hFile = CreateFile(p, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 			if (hFile == INVALID_HANDLE_VALUE) {
-				errorShow("Unable to create file (key won't be deleted from registry)", p);
+				errorShow("无法创建文件(密钥不会从注册表中删除)", p);
 				userMB = IDNO;
 			}
 			else {
 				if (!WriteFile(hFile, key, strlen(key), &bytesRW, NULL)) {
-					errorShow("Unable to save key to file (key won't be deleted from registry)", NULL);
+					errorShow("无法将密钥保存到文件(密钥不会从注册表中删除)", NULL);
 					userMB = IDNO;
 				}
 				CloseHandle(hFile);
@@ -1749,16 +1749,16 @@ int file_verify_host_key(const char *hostname, int port,
 		if (userMB == IDYES) {
 			/* delete from registry */
 			if (RegDeleteValue(rkey, regname) != ERROR_SUCCESS) {
-				errorShow("Unable to delete registry value", regname);
+				errorShow("无法删除注册表项", regname);
 			}
 		}
 		/* JK: else (Cancel) -> nothing to be done right now */
-		
+
 		RegCloseKey(rkey);
 
 		sfree(otherstr);
 		sfree(regname);
-		return 0;		       
+		return 0;
 	}
 }
 
@@ -1788,11 +1788,11 @@ void file_store_host_key(const char *hostname, int port,
 	hFile = CreateFile(p, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE) {
-		errorShow("Unable to create file", p);
+		errorShow("无法创建文件", p);
 	}
 	else {
 		if (!WriteFile(hFile, key, strlen(key), &bytesWritten, NULL)) {
-			errorShow("Unable to save key to file", NULL);
+			errorShow("无法将密钥保存到文件", NULL);
 		}
 		CloseHandle(hFile);
 	}
@@ -1814,40 +1814,40 @@ void *reg_open_settings_w(const char *sessionname, char **errmsg)
     int ret;
       return (void *) sesskey;
   }
-  
+
 void reg_write_setting_s(void *handle, const char *key, const char *value)
   {
       if (handle)
   	RegSetValueEx((HKEY) handle, key, 0, REG_SZ, value,
   		      1 + strlen(value));
   }
-  
+
 void reg_write_setting_i(void *handle, const char *key, int value)
   {
       if (handle)
   	RegSetValueEx((HKEY) handle, key, 0, REG_DWORD,
   		      (CONST BYTE *) &value, sizeof(value));
   }
-  
+
 void reg_close_settings_w(void *handle)
   {
       RegCloseKey((HKEY) handle);
   }
-  
+
 void *reg_open_settings_r(const char *sessionname)
   {
       HKEY subkey1, sesskey;
       char *p;
       return (void *) sesskey;
   }
-  
+
 char *reg_read_setting_s(void *handle, const char *key, char *buffer, int buflen)
   {
       DWORD type, size;
       size = buflen;
   	return buffer;
   }
-  
+
 int reg_read_setting_i(void *handle, const char *key, int defvalue)
   {
       DWORD type, val, size;
@@ -1859,7 +1859,7 @@ int reg_read_setting_fontspec(void *handle, const char *name, FontSpec *result)
 {
     char *settingname;
     FontSpec ret;
-  
+
     if (!reg_read_setting_s(handle, name, ret.name, sizeof(ret.name)))
 	return 0;
     settingname = dupcat(name, "IsBold", NULL);
@@ -1893,7 +1893,7 @@ void reg_write_setting_fontspec(void *handle, const char *name, FontSpec font)
     reg_write_setting_i(handle, settingname, font.height);
     sfree(settingname);
 }
-  
+
 int reg_read_setting_filename(void *handle, const char *name, Filename *result)
 {
     return !!reg_read_setting_s(handle, name, result->path, sizeof(result->path));
@@ -1903,12 +1903,12 @@ void reg_write_setting_filename(void *handle, const char *name, Filename result)
 {
     reg_write_setting_s(handle, name, result.path);
 }
-  
+
 void reg_close_settings_r(void *handle)
 {
     RegCloseKey((HKEY) handle);
 }
-  
+
 void reg_del_settings(const char *sessionname)
 {
     HKEY subkey1;
@@ -1928,20 +1928,20 @@ void *reg_enum_settings_start(int storagetype)
     HKEY key;
     return ret;
 }
-  
+
 char *reg_enum_settings_next(void *handle, char *buffer, int buflen)
 {
     struct enumsettings *e = (struct enumsettings *) handle;
     char *otherbuf;
 }
-  
+
 void reg_enum_settings_finish(void *handle)
 {
     struct enumsettings *e = (struct enumsettings *) handle;
     RegCloseKey(e->key);
     sfree(e);
 }
-  
+
 int reg_verify_host_key(const char *hostname, int port,
 		    const char *keytype, const char *key)
 {
@@ -1972,6 +1972,6 @@ void store_host_key(const char *hostname, int port,
 	RegCloseKey(rkey);
 
       } /* else key does not exist in registry */
-  
+
       sfree(regname);
  }

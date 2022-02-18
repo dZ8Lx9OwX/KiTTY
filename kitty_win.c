@@ -105,7 +105,7 @@ int OpenFileName( HWND hFrame, char * filename, char * Title, char * Filter ) {
 	//ofn.nMaxFile		= sizeof(szFileName);
 	ofn.nMaxFile		= 4096 ;
 	ofn.lpstrTitle		= szTitle;
-	ofn.Flags		= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST 
+	ofn.Flags		= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST
 				| OFN_HIDEREADONLY | OFN_LONGNAMES
 				| OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_EXTENSIONDIFFERENT | OFN_DONTADDTORECENT
 				;
@@ -142,7 +142,7 @@ int SaveFileName( HWND hFrame, char * filename, char * Title, char * Filter ) {
 	ofn.nMaxFile		= 4096 ;
 	ofn.lpstrTitle		= szTitle;
 	ofn.lpstrDefExt 	= ".ktx" ;
-	ofn.Flags		= OFN_PATHMUSTEXIST 
+	ofn.Flags		= OFN_PATHMUSTEXIST
 				| OFN_HIDEREADONLY | OFN_LONGNAMES | OFN_OVERWRITEPROMPT
 				| OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_EXTENSIONDIFFERENT | OFN_DONTADDTORECENT
 				;
@@ -161,15 +161,15 @@ int OpenDirName( HWND hFrame, char * dirname ) {
 	dirname[0]='\0' ;
 
 	strcpy( Buffer, getenv("ProgramFiles") ) ;
-	
+
 	//SHGetSpecialFolderLocation( hFrame, CSIDL_MYDOCUMENTS, &ol );
-	
+
 	memset(&bi,0,sizeof(BROWSEINFO));
 	bi.hwndOwner = hFrame ;
 	//bi.pidlRoot=NULL ; //
 	bi.pidlRoot=ol ;
 	bi.pszDisplayName=&Buffer[0];
-	bi.lpszTitle="Select a folder...";
+	bi.lpszTitle="选择文件...";
 	bi.ulFlags=0;
 	bi.lpfn=NULL;
 	if ((il=SHBrowseForFolder(&bi))!=NULL) {
@@ -233,7 +233,7 @@ int PrintMaxLinePerPage = 60 ;
 int PrintMaxCharPerLine = 85 ;
 
 int PrintText( const char * Text ) {
-	int return_code = 0 ; 
+	int return_code = 0 ;
 	PRINTDLG	pd;
 	DOCINFO		di;
 	int i, TextLen = 0, Index1 = 0, Index2 = 2;
@@ -264,7 +264,7 @@ int PrintText( const char * Text ) {
 				TextLen = strlen( Text ) ;
 				if( TextLen > 0 ) {
 					LinePrint = (char*) malloc( TextLen + 2 ) ;
-					Index1 = 0 ; Index2 = 2 ; 
+					Index1 = 0 ; Index2 = 2 ;
 					//Exit = 0 ;
 					for( i = 0 ; i < TextLen ; i++ ) {
 						if( Text[i]=='\r' ) i++;
@@ -290,12 +290,12 @@ int PrintText( const char * Text ) {
                        					Index2 = 2 ;
                        					}
                   				}
-                  			Index2++ ; 
+                  			Index2++ ;
                   			LinePrint[Index1] = '\0'; // Impression de la dernière page
                   			TextOut(pd.hDC,100, Index2*PrintCharSize, LinePrint, strlen(LinePrint)) ;
                	  			EndPage(pd.hDC) ;
                   			EndDoc(pd.hDC) ;
-                  			szMessage = "Print successful";
+                  			szMessage = "打印成功";
 					free( LinePrint ) ;
               				}
               			else { return_code = 1 ;  /* Chaine vide */ }
@@ -314,8 +314,8 @@ int PrintText( const char * Text ) {
 		//szMessage = "Impression annulée par l'utilisateur" ;
 		return_code = 4 ;
 		}
-	if (szMessage) { MessageBox (NULL, szMessage, "Print report", MB_OK) ; }
-	
+	if (szMessage) { MessageBox (NULL, szMessage, "打印报告", MB_OK) ; }
+
 	return return_code ;
 	}
 
@@ -340,27 +340,27 @@ int SetTextToClipboard( const char * buf ) {
 	LPTSTR lptstrCopy ;
 	if( !IsClipboardFormatAvailable(CF_TEXT) ) return 0 ;
 	if( !OpenClipboard(NULL) ) return 0 ;
-	EmptyClipboard() ; 
+	EmptyClipboard() ;
 	if( (hglbCopy= GlobalAlloc(GMEM_MOVEABLE, (strlen(buf)+1) * sizeof(TCHAR)) ) == NULL ) {
-		CloseClipboard() ; 
-		return 0 ;	
+		CloseClipboard() ;
+		return 0 ;
 	}
-	lptstrCopy = GlobalLock( hglbCopy ) ; 
+	lptstrCopy = GlobalLock( hglbCopy ) ;
 	memcpy( lptstrCopy, buf, (strlen(buf)+1) * sizeof(TCHAR) ) ;
-	GlobalUnlock( hglbCopy ) ; 
+	GlobalUnlock( hglbCopy ) ;
 	if( SetClipboardData(CF_TEXT, hglbCopy) == NULL ) {
 		CloseClipboard() ;
-		return 0 ; 
+		return 0 ;
 	}
 	CloseClipboard() ;
 	return 1 ;
 }
 
-// Execute une commande	
+// Execute une commande
 void RunCommand( HWND hwnd, const char * cmd ) {
 	PROCESS_INFORMATION ProcessInformation ;
 	ZeroMemory( &ProcessInformation, sizeof(ProcessInformation) );
-	
+
 	STARTUPINFO StartUpInfo ;
 	ZeroMemory( &StartUpInfo, sizeof(StartUpInfo) );
 	StartUpInfo.cb=sizeof(STARTUPINFO);
@@ -385,8 +385,8 @@ void RunCommand( HWND hwnd, const char * cmd ) {
 
 	if( !CreateProcess(NULL,(CHAR*)cmd,NULL,NULL,FALSE,NORMAL_PRIORITY_CLASS,NULL,NULL,&StartUpInfo,&ProcessInformation) ) {
 		ShellExecute(hwnd, "open", cmd ,0 , 0, SW_SHOWDEFAULT);
-	} else { 
-		WaitForInputIdle(ProcessInformation.hProcess, INFINITE ); 
+	} else {
+		WaitForInputIdle(ProcessInformation.hProcess, INFINITE );
 		CloseHandle( &StartUpInfo );
 		CloseHandle( &ProcessInformation );
 	}
@@ -396,12 +396,12 @@ void RunPuttyEd( HWND hwnd, char * filename ) {
 	char buffer[1024]="", shortname[1024]="" ;
 	if( GetModuleFileName( NULL, (LPTSTR)buffer, 1023 ) ) if( GetShortPathName( buffer, shortname, 1023 ) ) {
 		strcat( shortname, " -ed" );
-		if( filename!=NULL ) if( strlen(filename)>0 ) { 
-			strcat( shortname, "b " ) ; 
-			strcat( shortname, filename ) ; 
+		if( filename!=NULL ) if( strlen(filename)>0 ) {
+			strcat( shortname, "b " ) ;
+			strcat( shortname, filename ) ;
 		}
 		debug_logevent( shortname ) ;
-		RunCommand( hwnd, shortname ) ; 
+		RunCommand( hwnd, shortname ) ;
 	}
 }
 
@@ -434,7 +434,7 @@ bool IsPathAbsolute( const char * path ) {
 	bool test = false ;
 	if( path == NULL ) { return false ; }
 	if( strlen( path ) < 3 ) { return false ; }
-	if( ((path[0]>='a') && (path[0]<='z')) || ((path[0]>='A') && (path[0]<='Z')) ) 
+	if( ((path[0]>='a') && (path[0]<='z')) || ((path[0]>='A') && (path[0]<='Z')) )
 		if( path[1]==':' )
 			if( (path[2]=='/') || (path[2]=='\\') ) test = true ;
 	return test ;
@@ -461,11 +461,11 @@ void PopUpSystemMenu( HWND hwnd, int npos ) {
 		free(txt);
 	}
 	}
-	
+
 }
 
 // Description:
-//   Creates a tooltip for an item in a dialog box. 
+//   Creates a tooltip for an item in a dialog box.
 // Parameters:
 //   idTool - identifier of an dialog box item.
 //   nDlg - window handle of the dialog box.
@@ -481,20 +481,20 @@ HWND CreateToolTip(int toolID, HWND hDlg, PTSTR pszText)
     }
     // Get the window of the tool.
     HWND hwndTool = GetDlgItem(hDlg, toolID);
-    
+
     // Create the tooltip. g_hInst is the global instance handle.
     HWND hwndTip = CreateWindowEx((DWORD)NULL, TOOLTIPS_CLASS, NULL,
                               WS_POPUP |TTS_ALWAYSTIP | TTS_BALLOON,
                               CW_USEDEFAULT, CW_USEDEFAULT,
                               CW_USEDEFAULT, CW_USEDEFAULT,
-                              hDlg, NULL, 
+                              hDlg, NULL,
                               hinst /*g_hInst*/, NULL);
-    
+
    if (!hwndTool || !hwndTip)
    {
        return (HWND)NULL;
-   }                              
-                              
+   }
+
     // Associate the tooltip with the tool.
     TOOLINFO toolInfo = { 0 };
     toolInfo.cbSize = sizeof(toolInfo);
@@ -508,8 +508,8 @@ HWND CreateToolTip(int toolID, HWND hDlg, PTSTR pszText)
 }
 /*
 HWND CreateToolTip2(int toolID, HWND hDlg, PTSTR pszText) {
-    HWND hwndToolTips = CreateWindow(TOOLTIPS_CLASS, NULL, 
-                            WS_POPUP | TTS_NOPREFIX | TTS_BALLOON, 
+    HWND hwndToolTips = CreateWindow(TOOLTIPS_CLASS, NULL,
+                            WS_POPUP | TTS_NOPREFIX | TTS_BALLOON,
                             0, 0, 0, 0, NULL, NULL, GetModuleHandle(NULL), NULL);
     if (hwndToolTips)
 {
