@@ -25,7 +25,7 @@ static const WCHAR unitab_xterm_std[32] = {
  * duplicate definitions.
  */
 
-/* 
+/*
  * Tables for ISO-8859-{1-10,13-16} derived from those downloaded
  * 2001-10-02 from <http://www.unicode.org/Public/MAPPINGS/> -- jtn
  * Table for ISO-8859-11 derived from same on 2002-11-18. -- bjh21
@@ -430,7 +430,7 @@ static const struct cp_list_item cp_list[] = {
     {"CP852", 852},
     {"CP878", 20866},
 
-    {"Use font encoding", -1},
+    {"输入字符集编码", -1},
 
     {0, 0}
 };
@@ -447,8 +447,8 @@ void init_ucs(Conf *conf, struct unicode_data *ucsdata)
     ucsdata->line_codepage = decode_codepage(conf_get_str(conf,
 							  CONF_line_codepage));
 
-    if (ucsdata->font_codepage <= 0) { 
-	ucsdata->font_codepage=0; 
+    if (ucsdata->font_codepage <= 0) {
+	ucsdata->font_codepage=0;
 	ucsdata->dbcs_screenfont=false;
     }
 
@@ -552,7 +552,7 @@ void init_ucs(Conf *conf, struct unicode_data *ucsdata)
     /* Find the line control characters. */
     for (i = 0; i < 256; i++)
 	if (ucsdata->unitab_line[i] < ' '
-	    || (ucsdata->unitab_line[i] >= 0x7F && 
+	    || (ucsdata->unitab_line[i] >= 0x7F &&
 		ucsdata->unitab_line[i] < 0xA0))
 	    ucsdata->unitab_ctrl[i] = i;
 	else
@@ -574,14 +574,14 @@ void init_ucs(Conf *conf, struct unicode_data *ucsdata)
     if (ucsdata->dbcs_screenfont &&
 	ucsdata->font_codepage != ucsdata->line_codepage) {
 	/* F***ing Microsoft fonts, Japanese and Korean codepage fonts
-	 * have a currency symbol at 0x5C but their unicode value is 
+	 * have a currency symbol at 0x5C but their unicode value is
 	 * still given as U+005C not the correct U+00A5. */
 	ucsdata->unitab_line['\\'] = CSET_OEMCP + '\\';
     }
 
     /* Last chance, if !unicode then try poorman links. */
     if (vtmode != VT_UNICODE) {
-	static const char poorman_scoacs[] = 
+	static const char poorman_scoacs[] =
 	    "CueaaaaceeeiiiAAE**ooouuyOUc$YPsaiounNao?++**!<>###||||++||++++++--|-+||++--|-+----++++++++##||#aBTPEsyt******EN=+><++-=... n2* ";
 	static const char poorman_latin1[] =
 	    " !cL.Y|S\"Ca<--R~o+23'u|.,1o>///?AAAAAAACEEEEIIIIDNOOOOOxOUUUUYPBaaaaaaaceeeeiiiionooooo/ouuuuypy";
@@ -599,9 +599,9 @@ void init_ucs(Conf *conf, struct unicode_data *ucsdata)
 	    if (!DIRECT_FONT(ucsdata->unitab_xterm[i]))
 		ucsdata->unitab_xterm[i] =
 	    (WCHAR) (CSET_ACP + poorman_vt100[i - 96]);
-	for(i=128;i<256;i++) 
+	for(i=128;i<256;i++)
 	    if (!DIRECT_FONT(ucsdata->unitab_scoacs[i]))
-		ucsdata->unitab_scoacs[i] = 
+		ucsdata->unitab_scoacs[i] =
 		    (WCHAR) (CSET_ACP + poorman_scoacs[i - 128]);
     }
 }

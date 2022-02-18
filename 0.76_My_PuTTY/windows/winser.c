@@ -451,7 +451,7 @@ const BackendVtable serial_backend = {
     .unthrottle = serial_unthrottle,
     .cfg_info = serial_cfg_info,
     .id = "serial",
-    .displayname = "Serial",
+    .displayname = "串口",
     .protocol = PROT_SERIAL,
     .serial_parity_mask = ((1 << SER_PAR_NONE) |
                            (1 << SER_PAR_ODD) |

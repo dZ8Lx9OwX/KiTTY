@@ -39,8 +39,8 @@
 const int ngsslibs = 3;
 const char *const gsslibnames[3] = {
     "MIT Kerberos GSSAPI"MIT_KERB_SUFFIX".DLL",
-    "Microsoft SSPI SECUR32.DLL",
-    "User-specified GSSAPI DLL",
+    "微软SSPI     SECUR32.DLL",
+    "用户指定     GSSAPI DLL",
 };
 const struct keyvalwhere gsslibkeywords[] = {
     { "gssapi32", 0, -1, -1 },
