@@ -105,7 +105,7 @@ bool ssh1_handle_direction_specific_packet(
       case SSH1_SMSG_FAILURE:
         if (!s->succfail_head) {
             ssh_remote_error(s->ppl.ssh,
-                             "Received %s with no outstanding request",
+                             "收到 %s 没有未完成的请求",
                              ssh1_pkt_type(pktin->type));
             return true;
         }

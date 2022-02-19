@@ -356,8 +356,8 @@ bool ssh2_common_filter_queue(PacketProtocolLayer *ppl)
             msg = get_string(pktin);
 
             ssh_remote_error(
-                ppl->ssh, "Remote side sent disconnect message\n"
-                "type %d (%s):\n\"%.*s\"", reason,
+                ppl->ssh, "远端发送断开消息\n"
+                "类型 %d (%s):\n\"%.*s\"", reason,
                 ((reason > 0 && reason < lenof(ssh2_disconnect_reasons)) ?
                  ssh2_disconnect_reasons[reason] : "unknown"),
                 PTRLEN_PRINTF(msg));
@@ -460,8 +460,8 @@ static bool ssh2_transport_filter_queue(struct ssh2_transport_state *s)
              * packets coming from the server before we've seen
              * the first NEWKEYS. */
             if (!s->higher_layer_ok) {
-                ssh_proto_error(s->ppl.ssh, "Received premature higher-"
-                                "layer packet, type %d (%s)", pktin->type,
+                ssh_proto_error(s->ppl.ssh, "过早收到"
+                                "高层数据包，类型：%d (%s)", pktin->type,
                                 ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                               s->ppl.bpp->pls->actx,
                                               pktin->type));
@@ -888,7 +888,7 @@ static bool ssh2_scan_kexinits(
             /* Report a better error than the spurious "Couldn't
              * agree" that we'd generate if we pressed on regardless
              * and treated the empty get_string() result as genuine */
-            ssh_proto_error(ssh, "KEXINIT packet was incomplete");
+            ssh_proto_error(ssh, "KEXINIT 数据包不完整");
             return false;
         }
 
@@ -938,8 +938,8 @@ static bool ssh2_scan_kexinits(
              * produce a reasonably useful message instead of an
              * assertion failure.
              */
-            ssh_sw_abort(ssh, "Selected %s \"%.*s\" does not correspond to "
-                         "any supported algorithm",
+            ssh_sw_abort(ssh, "选择的 %s \"%.*s\" 不对应于"
+                         "任何支持的算法",
                          kexlist_descr[i], PTRLEN_PRINTF(found));
             return false;
         }
@@ -996,7 +996,7 @@ static bool ssh2_scan_kexinits(
             /*
              * Otherwise, any match failure _is_ a fatal error.
              */
-            ssh_sw_abort(ssh, "Couldn't agree a %s (available: %.*s)",
+            ssh_sw_abort(ssh, "无法同意 %s (可用：%.*s)",
                          kexlist_descr[i], PTRLEN_PRINTF(slists[i]));
             return false;
         }
@@ -1220,8 +1220,8 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
      */
     crMaybeWaitUntilV((pktin = ssh2_transport_pop(s)) != NULL);
     if (pktin->type != SSH2_MSG_KEXINIT) {
-        ssh_proto_error(s->ppl.ssh, "Received unexpected packet when "
-                        "expecting KEXINIT, type %d (%s)", pktin->type,
+        ssh_proto_error(s->ppl.ssh, "等待 KEXINIT 时，收到"
+                        "意外的数据包，类型：%d (%s)", pktin->type,
                         ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                       s->ppl.bpp->pls->actx, pktin->type));
         return;
@@ -1273,7 +1273,7 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
             s, "key-exchange algorithm", s->kex_alg->name, s->kex_alg);
         crMaybeWaitUntilV(s->dlgret >= 0);
         if (s->dlgret == 0) {
-            ssh_user_close(s->ppl.ssh, "User aborted at kex warning");
+            ssh_user_close(s->ppl.ssh, "用户在 kex 警告中中止");
             return;
         }
     }
@@ -1329,7 +1329,7 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
         }
         crMaybeWaitUntilV(s->dlgret >= 0);
         if (s->dlgret == 0) {
-            ssh_user_close(s->ppl.ssh, "User aborted at host key warning");
+            ssh_user_close(s->ppl.ssh, "用户在主机密钥警告中中止");
             return;
         }
     }
@@ -1340,7 +1340,7 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
             s->out.cipher);
         crMaybeWaitUntilV(s->dlgret >= 0);
         if (s->dlgret == 0) {
-            ssh_user_close(s->ppl.ssh, "User aborted at cipher warning");
+            ssh_user_close(s->ppl.ssh, "用户在密码警告中中止");
             return;
         }
     }
@@ -1351,7 +1351,7 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
             s->in.cipher);
         crMaybeWaitUntilV(s->dlgret >= 0);
         if (s->dlgret == 0) {
-            ssh_user_close(s->ppl.ssh, "User aborted at cipher warning");
+            ssh_user_close(s->ppl.ssh, "用户在密码警告中中止");
             return;
         }
     }
@@ -1490,8 +1490,8 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
      */
     crMaybeWaitUntilV((pktin = ssh2_transport_pop(s)) != NULL);
     if (pktin->type != SSH2_MSG_NEWKEYS) {
-        ssh_proto_error(s->ppl.ssh, "Received unexpected packet when "
-                        "expecting SSH_MSG_NEWKEYS, type %d (%s)",
+        ssh_proto_error(s->ppl.ssh, "等待 SSH_MSG_NEWKEYS 时，"
+                        "收到意外的数据包，类型：%d (%s)",
                         pktin->type,
                         ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                       s->ppl.bpp->pls->actx,
@@ -1578,8 +1578,8 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
             pq_push(s->ppl.out_pq, pktout);
             crMaybeWaitUntilV((pktin = ssh2_transport_pop(s)) != NULL);
             if (pktin->type != SSH2_MSG_SERVICE_ACCEPT) {
-                ssh_sw_abort(s->ppl.ssh, "Server refused request to start "
-                             "'%s' protocol", s->higher_layer->vt->name);
+                ssh_sw_abort(s->ppl.ssh, "服务器拒绝启动请求"
+                             "'%s' 协议", s->higher_layer->vt->name);
                 return;
             }
         } else {
@@ -1588,8 +1588,8 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
             /* We're the server, so expect SERVICE_REQUEST. */
             crMaybeWaitUntilV((pktin = ssh2_transport_pop(s)) != NULL);
             if (pktin->type != SSH2_MSG_SERVICE_REQUEST) {
-                ssh_proto_error(s->ppl.ssh, "Received unexpected packet when "
-                                "expecting SERVICE_REQUEST, type %d (%s)",
+                ssh_proto_error(s->ppl.ssh, "等待 SERVICE_REQUEST 时，"
+                                "收到意外的数据包，类型：%d (%s)",
                                 pktin->type,
                                 ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                               s->ppl.bpp->pls->actx,
@@ -1598,8 +1598,8 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
             }
             service_name = get_string(pktin);
             if (!ptrlen_eq_string(service_name, s->higher_layer->vt->name)) {
-                ssh_proto_error(s->ppl.ssh, "Client requested service "
-                                "'%.*s' when we only support '%s'",
+                ssh_proto_error(s->ppl.ssh, "客服端要求的服务"
+                                "'%.*s' 但我们只支持 '%s'",
                                 PTRLEN_PRINTF(service_name),
                                 s->higher_layer->vt->name);
                 return;
@@ -1627,9 +1627,9 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
          * higher layer (via filter_queue). */
         if ((pktin = ssh2_transport_pop(s)) != NULL) {
             if (pktin->type != SSH2_MSG_KEXINIT) {
-                ssh_proto_error(s->ppl.ssh, "Received unexpected transport-"
-                                "layer packet outside a key exchange, "
-                                "type %d (%s)", pktin->type,
+                ssh_proto_error(s->ppl.ssh, "在密钥交换之外，意外"
+                                "收到传输层数据包，"
+                                "类型：%d (%s)", pktin->type,
                                 ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                               s->ppl.bpp->pls->actx,
                                               pktin->type));
@@ -1996,14 +1996,14 @@ static bool ssh2_transport_get_specials(
             need_separator = false;
         }
 
-        add_special(ctx, "Repeat key exchange", SS_REKEY, 0);
+        add_special(ctx, "重复交换密钥", SS_REKEY, 0);
         toret = true;
 
         if (s->n_uncert_hostkeys) {
             int i;
 
             add_special(ctx, NULL, SS_SEP, 0);
-            add_special(ctx, "Cache new host key type", SS_SUBMENU, 0);
+            add_special(ctx, "缓存新的主机密钥类型", SS_SUBMENU, 0);
             for (i = 0; i < s->n_uncert_hostkeys; i++) {
                 const ssh_keyalg *alg =
                     ssh2_hostkey_algs[s->uncert_hostkeys[i]].alg;

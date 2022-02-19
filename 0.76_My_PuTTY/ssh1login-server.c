@@ -180,8 +180,8 @@ static void ssh1_login_server_process_queue(PacketProtocolLayer *ppl)
 
     crMaybeWaitUntilV((pktin = ssh1_login_server_pop(s)) != NULL);
     if (pktin->type != SSH1_CMSG_SESSION_KEY) {
-        ssh_proto_error(s->ppl.ssh, "Received unexpected packet in response"
-                        " to initial public key packet, type %d (%s)",
+        ssh_proto_error(s->ppl.ssh, "在初始化公钥数据包时，收到意外"
+                        "的数据包响应，类型：%d (%s)",
                         pktin->type, ssh1_pkt_type(pktin->type));
         return;
     }
@@ -194,18 +194,18 @@ static void ssh1_login_server_process_queue(PacketProtocolLayer *ppl)
         s->remote_protoflags = get_uint32(pktin);
 
         if (get_err(pktin)) {
-            ssh_proto_error(s->ppl.ssh, "Unable to parse session key packet");
+            ssh_proto_error(s->ppl.ssh, "无法解析会话密钥数据包");
             return;
         }
         if (!ptrlen_eq_ptrlen(client_cookie, make_ptrlen(s->cookie, 8))) {
             ssh_proto_error(s->ppl.ssh,
-                            "Client sent incorrect anti-spoofing cookie");
+                            "客户端发送了错误的反欺骗cookie");
             return;
         }
     }
     if (s->cipher_type >= 32 ||
         !((s->supported_ciphers_mask >> s->cipher_type) & 1)) {
-        ssh_proto_error(s->ppl.ssh, "Client selected an unsupported cipher");
+        ssh_proto_error(s->ppl.ssh, "客户端选择了不受支持的密码");
         return;
     }
 
@@ -237,7 +237,7 @@ static void ssh1_login_server_process_queue(PacketProtocolLayer *ppl)
         strbuf_free(data);
     }
     if (s->sesskey) {
-        ssh_proto_error(s->ppl.ssh, "Failed to decrypt session key");
+        ssh_proto_error(s->ppl.ssh, "无法解密会话密钥");
         return;
     }
 
@@ -258,8 +258,8 @@ static void ssh1_login_server_process_queue(PacketProtocolLayer *ppl)
 
     crMaybeWaitUntilV((pktin = ssh1_login_server_pop(s)) != NULL);
     if (pktin->type != SSH1_CMSG_USER) {
-        ssh_proto_error(s->ppl.ssh, "Received unexpected packet while "
-                        "expecting username, type %d (%s)",
+        ssh_proto_error(s->ppl.ssh, "等待用户名时，收到意外的"
+                        "数据包，类型：%d (%s)",
                         pktin->type, ssh1_pkt_type(pktin->type));
         return;
     }
@@ -359,8 +359,8 @@ static void ssh1_login_server_process_queue(PacketProtocolLayer *ppl)
 
             crMaybeWaitUntilV((pktin = ssh1_login_server_pop(s)) != NULL);
             if (pktin->type != SSH1_CMSG_AUTH_RSA_RESPONSE) {
-                ssh_proto_error(s->ppl.ssh, "Received unexpected packet in "
-                                "response to RSA auth challenge, type %d (%s)",
+                ssh_proto_error(s->ppl.ssh, "等待RSA身份验证时，收到意外的"
+                                "数据包，类型：%d (%s)",
                                 pktin->type, ssh1_pkt_type(pktin->type));
                 return;
             }
@@ -408,8 +408,8 @@ static void ssh1_login_server_process_queue(PacketProtocolLayer *ppl)
                              SSH1_CMSG_AUTH_TIS_RESPONSE :
                              SSH1_CMSG_AUTH_CCARD_RESPONSE);
             if (pktin->type != response_type) {
-                ssh_proto_error(s->ppl.ssh, "Received unexpected packet in "
-                                "response to %s challenge, type %d (%s)",
+                ssh_proto_error(s->ppl.ssh, "等待 %s 问询时，收到意外的"
+                                "数据包，类型：%d (%s)",
                                 (s->current_method == AUTHMETHOD_TIS ?
                                  "TIS" : "CryptoCard"),
                                 pktin->type, ssh1_pkt_type(pktin->type));
@@ -425,8 +425,8 @@ static void ssh1_login_server_process_queue(PacketProtocolLayer *ppl)
 
   auth_success:
     if (!auth_successful(s->authpolicy, s->username, s->current_method)) {
-        ssh_sw_abort(s->ppl.ssh, "Multiple authentications required but SSH-1"
-                     " cannot perform them");
+        ssh_sw_abort(s->ppl.ssh, "需要多个身份验证，但 SSH-1"
+                     " 不能执行验证");
         return;
     }
 

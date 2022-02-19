@@ -353,7 +353,7 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
                     break;
                 if (s->packetlen >= (long)OUR_V2_PACKETLIMIT) {
                     ssh_sw_abort(s->bpp.ssh,
-                                 "No valid incoming packet found");
+                                 "未找到有效的传入数据包");
                     crStopV;
                 }
             }
@@ -400,7 +400,7 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
             if (s->len < 0 || s->len > (long)OUR_V2_PACKETLIMIT ||
                 s->len % s->cipherblk != 0) {
                 ssh_sw_abort(s->bpp.ssh,
-                             "Incoming packet length field was garbled");
+                             "传入数据包长度字段乱码");
                 crStopV;
             }
 
@@ -429,7 +429,7 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
              */
             if (s->in.mac && !ssh2_mac_verify(
                     s->in.mac, s->data, s->len + 4, s->in.sequence)) {
-                ssh_sw_abort(s->bpp.ssh, "Incorrect MAC received on packet");
+                ssh_sw_abort(s->bpp.ssh, "数据包上收到的MAC不正确");
                 crStopV;
             }
 
@@ -464,7 +464,7 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
             if (s->len < 0 || s->len > (long)OUR_V2_PACKETLIMIT ||
                 (s->len + 4) % s->cipherblk != 0) {
                 ssh_sw_abort(s->bpp.ssh,
-                             "Incoming packet was garbled on decryption");
+                             "传入数据包在解密时出现乱码");
                 crStopV;
             }
 
@@ -501,7 +501,7 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
              */
             if (s->in.mac && !ssh2_mac_verify(
                     s->in.mac, s->data, s->len + 4, s->in.sequence)) {
-                ssh_sw_abort(s->bpp.ssh, "Incorrect MAC received on packet");
+                ssh_sw_abort(s->bpp.ssh, "数据包上收到的MAC不正确");
                 crStopV;
             }
         }
@@ -509,7 +509,7 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
         s->pad = s->data[4];
         if (s->pad < 4 || s->len - s->pad < 1) {
             ssh_sw_abort(s->bpp.ssh,
-                         "Invalid padding length on received packet");
+                         "接收到的数据包填充长度无效");
             crStopV;
         }
         /*
@@ -605,9 +605,9 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
                 /* See EXT_INFO handler below */
                 if (type != SSH2_MSG_USERAUTH_SUCCESS) {
                     ssh_proto_error(s->bpp.ssh,
-                                    "Remote side sent SSH2_MSG_EXT_INFO "
-                                    "not either preceded by NEWKEYS or "
-                                    "followed by USERAUTH_SUCCESS");
+                                    "远端发送 SSH2_MSG_EXT_INFO "
+                                    "前一数据包不是 NEWKEYS"
+                                    " 或 USERAUTH_SUCCESS");
                     return;
                 }
                 s->enforce_next_packet_is_userauth_success = false;
@@ -660,9 +660,9 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
                      * Clients may not send EXT_INFO at _any_ other
                      * time. */
                     ssh_proto_error(s->bpp.ssh,
-                                    "Remote side sent SSH2_MSG_EXT_INFO "
-                                    "that was not immediately after the "
-                                    "initial NEWKEYS");
+                                    "远端发送 SSH2_MSG_EXT_INFO "
+                                    "不是紧接着最初的"
+                                    " NEWKEYS 数据包之后");
                     return;
                 } else if (s->nnewkeys > 0 && s->seen_userauth_success) {
                     /* We're the client, so they're the server. In
@@ -673,8 +673,8 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
                      * yet, or because we've already seen
                      * USERAUTH_SUCCESS). */
                     ssh_proto_error(s->bpp.ssh,
-                                    "Remote side sent SSH2_MSG_EXT_INFO "
-                                    "after USERAUTH_SUCCESS");
+                                    "远端在 USERAUTH_SUCCESS 之后"
+                                    "发送 SSH2_MSG_EXT_INFO ");
                     return;
                 } else {
                     /* This _could_ be OK, provided the next packet is
@@ -713,9 +713,9 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
     crMaybeWaitUntilV(!pq_peek(&s->bpp.in_pq));
     if (!s->bpp.expect_close) {
         ssh_remote_error(s->bpp.ssh,
-                         "Remote side unexpectedly closed network connection");
+                         "远程端意外关闭网络连接");
     } else {
-        ssh_remote_eof(s->bpp.ssh, "Remote side closed network connection");
+        ssh_remote_eof(s->bpp.ssh, "远端关闭网络连接");
     }
     return;  /* avoid touching s now it's been freed */
 

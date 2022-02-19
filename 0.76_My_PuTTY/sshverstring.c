@@ -367,13 +367,13 @@ void ssh_verstring_handle_input(BinaryPacketProtocol *bpp)
          */
         if (!ssh_version_includes_v2(s->our_protoversion)) {
             ssh_sw_abort(s->bpp.ssh,
-                         "SSH protocol version 1 required by our "
-                         "configuration but not provided by remote");
+                         "我们要求使用 SSH-1 协议版本，"
+                         "但远端不提供配置。");
         } else {
             ssh_sw_abort(s->bpp.ssh,
-                         "SSH protocol version 2 required by our "
-                         "configuration but remote only provides "
-                         "(old, insecure) SSH-1");
+                         "我们要求使用 SSH-2 协议版本，"
+                         "但远端仅提供"
+                         "(旧的，不安全的) SSH-1");
         }
         crStopV;
     }
@@ -399,7 +399,7 @@ void ssh_verstring_handle_input(BinaryPacketProtocol *bpp)
 
   eof:
     ssh_remote_error(s->bpp.ssh,
-                     "Remote side unexpectedly closed network connection");
+                     "远程端意外关闭网络连接");
     return;  /* avoid touching s now it's been freed */
 
     crFinishV;
@@ -407,8 +407,8 @@ void ssh_verstring_handle_input(BinaryPacketProtocol *bpp)
 
 static PktOut *ssh_verstring_new_pktout(int type)
 {
-    unreachable("Should never try to send packets during SSH version "
-                "string exchange");
+    unreachable("永远不要在SSH版本字符交换期间"
+                "尝试发送数据包");
 }
 
 static void ssh_verstring_handle_output(BinaryPacketProtocol *bpp)

@@ -32,7 +32,7 @@ BOOL WINAPI __declspec(dllimport) CryptProtectMemory( LPVOID pData, DWORD  cbDat
 #ifdef MOD_PRINTCLIP
 #define PRINT_TO_CLIPBOARD_STRING "Windows clipboard"
 #endif
-#ifdef MOD_HYPERLINK 
+#ifdef MOD_HYPERLINK
 /*
  * HACK: PuttyTray / Nutty
  * Hyperlink stuff: define
@@ -155,7 +155,7 @@ enum {
     X(white_bold, "ANSI White Bold")            \
     X(white_underline,"ANSI White Underlined")  \
     /* end of list */
-    
+
 #define OSCP_COLOUR_LIST(X)                     \
     X(black)                                    \
     X(red)                                      \
@@ -211,28 +211,28 @@ enum {
     /* end of list */
 #else
 #define CONF_COLOUR_LIST(X)                     \
-    X(fg, "Default Foreground")                 \
-    X(fg_bold, "Default Bold Foreground")       \
-    X(bg, "Default Background")                 \
-    X(bg_bold, "Default Bold Background")       \
-    X(cursor_fg, "Cursor Text")                 \
-    X(cursor_bg, "Cursor Colour")               \
-    X(black, "ANSI Black")                      \
-    X(black_bold, "ANSI Black Bold")            \
-    X(red, "ANSI Red")                          \
-    X(red_bold, "ANSI Red Bold")                \
-    X(green, "ANSI Green")                      \
-    X(green_bold, "ANSI Green Bold")            \
-    X(yellow, "ANSI Yellow")                    \
-    X(yellow_bold, "ANSI Yellow Bold")          \
-    X(blue, "ANSI Blue")                        \
-    X(blue_bold, "ANSI Blue Bold")              \
-    X(magenta, "ANSI Magenta")                  \
-    X(magenta_bold, "ANSI Magenta Bold")        \
-    X(cyan, "ANSI Cyan")                        \
-    X(cyan_bold, "ANSI Cyan Bold")              \
-    X(white, "ANSI White")                      \
-    X(white_bold, "ANSI White Bold")            \
+    X(fg, "默认前景")                 \
+    X(fg_bold, "默认前景粗体")       \
+    X(bg, "默认背景")                 \
+    X(bg_bold, "默认背景粗体")       \
+    X(cursor_fg, "光标文本")                 \
+    X(cursor_bg, "光标颜色")               \
+    X(black, "ANSI黑色")                      \
+    X(black_bold, "ANSI黑色粗体")            \
+    X(red, "ANSI红色")                          \
+    X(red_bold, "ANSI红色粗体")                \
+    X(green, "ANSI绿色")                      \
+    X(green_bold, "ANSI绿色粗体")            \
+    X(yellow, "ANSI黄色")                    \
+    X(yellow_bold, "ANSI黄色粗体")          \
+    X(blue, "ANSI蓝色")                        \
+    X(blue_bold, "ANSI蓝色粗体")              \
+    X(magenta, "ANSI品红")                  \
+    X(magenta_bold, "ANSI品红粗体")        \
+    X(cyan, "ANSI青色")                        \
+    X(cyan_bold, "ANSI青色粗体")              \
+    X(white, "ANSI白色")                      \
+    X(white_bold, "ANSI白色粗体")            \
     /* end of list */
 
 #define OSCP_COLOUR_LIST(X)                     \
@@ -304,7 +304,7 @@ extern const int colour_indices_conf_to_oscp[CONF_NCOLOURS];
 extern const int colour_indices_conf_to_osc4[CONF_NCOLOURS];
 extern const int colour_indices_oscp_to_osc4[OSCP_NCOLOURS];
 
-/* Three attribute types: 
+/* Three attribute types:
  * The ATTRs (normal attributes) are stored with the characters in
  * the main display arrays
  *
@@ -313,7 +313,7 @@ extern const int colour_indices_oscp_to_osc4[OSCP_NCOLOURS];
  *
  * The LATTRs (line attributes) are an entirely disjoint space of
  * flags.
- * 
+ *
  * The DATTRs (display attributes) are internal to terminal.c (but
  * defined here because their values have to match the others
  * here); they reuse the TATTR_* space but are always masked off
@@ -1216,7 +1216,7 @@ struct SeatVtable {
      * prompts by malicious servers.
      */
     bool (*set_trust_status)(Seat *seat, bool trusted);
-    
+
     /*
      * Ask the seat whether it would like verbose messages.
      */
@@ -2011,7 +2011,7 @@ void settings_set_default_port(int);
 /*
  * Functions used by settings.c to provide platform-specific
  * default settings.
- * 
+ *
  * (The integer one is expected to return `def' if it has no clear
  * opinion of its own. This is because there's no integer value
  * which I can reliably set aside to indicate `nil'. The string
@@ -2056,7 +2056,7 @@ void term_pre_reconfig(Terminal *, Conf *);
 void term_reconfig(Terminal *, Conf *);
 void term_request_copy(Terminal *, const int *clipboards, int n_clipboards);
 void term_request_paste(Terminal *, int clipboard);
-void term_seen_key_event(Terminal *); 
+void term_seen_key_event(Terminal *);
 size_t term_data(Terminal *, bool is_stderr, const void *data, size_t len);
 void term_provide_backend(Terminal *term, Backend *backend);
 void term_provide_logctx(Terminal *term, LogContext *logctx);
@@ -2130,7 +2130,7 @@ struct LogPolicyVtable {
      * file :-)
      */
     void (*logging_error)(LogPolicy *lp, const char *event);
-    
+
     /*
      * Ask whether extra verbose log messages are required.
      */
@@ -2343,12 +2343,12 @@ int mk_wcswidth_cjk(const unsigned int *pwcs, size_t n);
 
 /*
  * Exports from pageantc.c.
- * 
+ *
  * agent_query returns NULL for here's-a-response, and non-NULL for
  * query-in- progress. In the latter case there will be a call to
  * `callback' at some future point, passing callback_ctx as the first
  * parameter and the actual reply data as the second and third.
- * 
+ *
  * The response may be a NULL pointer (in either of the synchronous
  * or asynchronous cases), which indicates failure to receive a
  * response.
@@ -2551,24 +2551,24 @@ bool open_for_write_would_lose_data(const Filename *fn);
  * structure as the time when that event is due. The first time a
  * callback function gives you that value or more as `now', you do
  * the thing.
- * 
+ *
  * expire_timer_context() drops all current timers associated with
  * a given value of ctx (for when you're about to free ctx).
- * 
+ *
  * run_timers() is called from the front end when it has reason to
  * think some timers have reached their moment, or when it simply
  * needs to know how long to wait next. We pass it the time we
  * think it is. It returns true and places the time when the next
  * timer needs to go off in `next', or alternatively it returns
  * false if there are no timers at all pending.
- * 
+ *
  * timer_change_notify() must be supplied by the front end; it
  * notifies the front end that a new timer has been added to the
  * list which is sooner than any existing ones. It provides the
  * time when that timer needs to go off.
- * 
+ *
  * *** FRONT END IMPLEMENTORS NOTE:
- * 
+ *
  * There's an important subtlety in the front-end implementation of
  * the timer interface. When a front end is given a `next' value,
  * either returned from run_timers() or via timer_change_notify(),
@@ -2576,7 +2576,7 @@ bool open_for_write_would_lose_data(const Filename *fn);
  * parameter to its next run_timers call. It should _not_ simply
  * call GETTICKCOUNT() to get the `now' parameter when invoking
  * run_timers().
- * 
+ *
  * The reason for this is that an OS's system clock might not agree
  * exactly with the timing mechanisms it supplies to wait for a
  * given interval. I'll illustrate this by the simple example of
@@ -2585,7 +2585,7 @@ bool open_for_write_would_lose_data(const Filename *fn);
  * Suppose, for the sake of argument, that this wait() function
  * tends to return early by 1%. Then a possible sequence of actions
  * is:
- * 
+ *
  *  - run_timers() tells the front end that the next timer firing
  *    is 10000ms from now.
  *  - Front end calls wait(10000ms), but according to
@@ -2598,29 +2598,29 @@ bool open_for_write_would_lose_data(const Filename *fn);
  *  - Front end calls run_timers() yet again, passing time T-1ms.
  *  - run_timers() says there's still 1ms to wait.
  *  - Front end calls wait(1ms).
- * 
+ *
  * If you're _lucky_ at this point, wait(1ms) will actually wait
  * for 1ms and you'll only have woken the program up three times.
  * If you're unlucky, wait(1ms) might do nothing at all due to
  * being below some minimum threshold, and you might find your
  * program spends the whole of the last millisecond tight-looping
  * between wait() and run_timers().
- * 
+ *
  * Instead, what you should do is to _save_ the precise `next'
  * value provided by run_timers() or via timer_change_notify(), and
  * use that precise value as the input to the next run_timers()
  * call. So:
- * 
+ *
  *  - run_timers() tells the front end that the next timer firing
  *    is at time T, 10000ms from now.
  *  - Front end calls wait(10000ms).
  *  - Front end then immediately calls run_timers() and passes it
  *    time T, without stopping to check GETTICKCOUNT() at all.
- * 
+ *
  * This guarantees that the program wakes up only as many times as
  * there are actual timer actions to be taken, and that the timing
  * mechanism will never send it into a tight loop.
- * 
+ *
  * (It does also mean that the timer action in the above example
  * will occur 100ms early, but this is not generally critical. And
  * the hypothetical 1% error in wait() will be partially corrected

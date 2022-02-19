@@ -361,7 +361,7 @@ static bool ssh2_connection_filter_queue(struct ssh2_connection_state *s)
             if (!s->globreq_head) {
                 ssh_proto_error(
                     s->ppl.ssh,
-                    "Received %s with no outstanding global request",
+                    "收到 %s 没有未完成的全局请求",
                     ssh2_pkt_type(s->ppl.bpp->pls->kctx, s->ppl.bpp->pls->actx,
                                   pktin->type));
                 return true;
@@ -475,7 +475,7 @@ static bool ssh2_connection_filter_queue(struct ssh2_connection_state *s)
 
             if (!c || c->halfopen != expect_halfopen) {
                 ssh_proto_error(s->ppl.ssh,
-                                "Received %s for %s channel %u",
+                                "已收到 %s 在 %s 通道 %u",
                                 ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                               s->ppl.bpp->pls->actx,
                                               pktin->type),
@@ -749,8 +749,8 @@ static bool ssh2_connection_filter_queue(struct ssh2_connection_state *s)
                 if (!ocr) {
                     ssh_proto_error(
                         s->ppl.ssh,
-                        "Received %s for channel %d with no outstanding "
-                        "channel request",
+                        "收到 %s 在通道 %d ，没有未完成的"
+                        "通道请求",
                         ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                       s->ppl.bpp->pls->actx, pktin->type),
                         c->localid);
@@ -1041,8 +1041,8 @@ static void ssh2_connection_process_queue(PacketProtocolLayer *ppl)
              * Anything that reaches here must be bogus.
              */
 
-            ssh_proto_error(s->ppl.ssh, "Received unexpected connection-layer "
-                            "packet, type %d (%s)", pktin->type,
+            ssh_proto_error(s->ppl.ssh, "收到意外的连接层"
+                            "数据包，类型：%d (%s)", pktin->type,
                             ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                           s->ppl.bpp->pls->actx,
                                           pktin->type));
@@ -1275,7 +1275,7 @@ static void ssh2_check_termination(struct ssh2_connection_state *s)
          * and indeed OpenSSH feels this is more polite than sending a
          * DISCONNECT. So now we don't.
          */
-        ssh_user_close(s->ppl.ssh, "All channels closed");
+        ssh_user_close(s->ppl.ssh, "所有通道关闭");
         return;
     }
 }
@@ -1612,7 +1612,7 @@ static bool ssh2_connection_get_specials(
         if (toret)
             add_special(ctx, NULL, SS_SEP, 0);
 
-        add_special(ctx, "IGNORE message", SS_NOP, 0);
+        add_special(ctx, "IGNORE 信息", SS_NOP, 0);
         toret = true;
     }
 

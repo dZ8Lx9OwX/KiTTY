@@ -296,7 +296,7 @@ static void mainchan_request_response(Channel *chan, bool success)
              * fallback command, so we've run out of options.
              */
             ssh_sw_abort(mc->ppl->ssh,
-                         "Server refused to start a shell/command");
+                         "服务器拒绝启动 shell/命令");
         }
         return;
     }
@@ -310,7 +310,7 @@ static void mainchan_request_response(Channel *chan, bool success)
             mainchan_ready(mc);
         } else {
             ssh_sw_abort(mc->ppl->ssh,
-                         "Server refused to start a shell/command");
+                         "服务器拒绝启动 shell/命令");
         }
         return;
     }
@@ -339,7 +339,7 @@ static void mainchan_open_failure(Channel *chan, const char *errtext)
     mainchan *mc = container_of(chan, mainchan, chan);
 
     ssh_sw_abort_deferred(mc->ppl->ssh,
-                          "Server refused to open main channel: %s", errtext);
+                          "服务器拒绝打开主通道：%s", errtext);
 }
 
 static size_t mainchan_send(Channel *chan, bool is_stderr,
@@ -468,7 +468,7 @@ void mainchan_get_specials(
 {
     /* FIXME: this _does_ depend on whether these services are supported */
 
-    add_special(ctx, "Break", SS_BRK, 0);
+    add_special(ctx, "中断", SS_BRK, 0);
 
     #define SIGNAL_MAIN(name, desc) \
     add_special(ctx, "SIG" #name " (" desc ")", SS_SIG ## name, 0);
@@ -477,7 +477,7 @@ void mainchan_get_specials(
     #undef SIGNAL_MAIN
     #undef SIGNAL_SUB
 
-    add_special(ctx, "More signals", SS_SUBMENU, 0);
+    add_special(ctx, "更短信号", SS_SUBMENU, 0);
 
     #define SIGNAL_MAIN(name, desc)
     #define SIGNAL_SUB(name) \
