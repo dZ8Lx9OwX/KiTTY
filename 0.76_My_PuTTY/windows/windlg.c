@@ -85,7 +85,7 @@ void do_eventlog( const char * st ) ;
 #define PRINT_TO_CLIPBOARD_STRING "Windows clipboard"
 #endif
 
-#define PRINTER_DISABLED_STRING "None (printing disabled)"
+#define PRINTER_DISABLED_STRING "无(禁止打印)"
 
 void force_normal(HWND hwnd)
 {
@@ -124,7 +124,7 @@ static INT_PTR CALLBACK LogProc(HWND hwnd, UINT msg,
 
     switch (msg) {
       case WM_INITDIALOG: {
-	    char *str = dupprintf("%s Event Log", appname);
+	    char *str = dupprintf("%s 日志事件", appname);
 	    SetWindowText(hwnd, str);
 	    sfree(str);
 	    static int tabs[4] = { 78, 108 };
@@ -217,7 +217,7 @@ static INT_PTR CALLBACK LicenceProc(HWND hwnd, UINT msg,
 {
     switch (msg) {
       case WM_INITDIALOG: {
-	    char *str = dupprintf("%s Licence", appname);
+	    char *str = dupprintf("%s 许可证", appname);
 	    SetWindowText(hwnd, str);
 	    sfree(str);
             SetDlgItemText(hwnd, IDA_TEXT, LICENCE_TEXT("\r\n\r\n"));
@@ -243,7 +243,7 @@ static INT_PTR CALLBACK LicenceProc(HWND hwnd, UINT msg,
 #if (defined MOD_PERSO) && (!defined FLJ)
 
 //static const char MESSAGE[] = "";
-static const char MESSAGE[] = "                                                                                           KiTTY software is developed by Cyd for 9bis.com, copyright \251 2005-2022, thanks to Leo for bcrypt and mini libraries, thanks to all contributors                                                                                       " ;
+static const char MESSAGE[] = "                                                                                 KiTTY software is developed by Cyd for 9bis.com, copyright \251 2005-2022, thanks to Leo for bcrypt and mini libraries, thanks to all contributors                                                                                                 " ;
 
 static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
                                   WPARAM wParam, LPARAM lParam)
@@ -260,7 +260,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
     static HCURSOR hCursorHover;
     static int message_timer = 1000 ;
     static char * mess = NULL ;
-	
+
     switch (msg) {
 	case WM_INITDIALOG: {
 		char buffer[1024] ;
@@ -271,14 +271,14 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		/* Creation des association de fichiers .ktx */
 		CreateFileAssoc() ;
 #endif
-		
+
 		sprintf( buffer, "KiTTY - %s", BuildVersionTime ) ;
 		SetDlgItemText(hwnd,IDA_VERSION,buffer);
-        
-		str = dupprintf("About %s That's all folks !", appname);
+
+		str = dupprintf("关于%s_v0.76.0.8.1 - 这是一个KiTTY中文版本！", appname);
 		SetWindowText(hwnd, str);
 		sfree(str);
-        
+
 		if (hFontTitle == NULL) {
 			if (NULL == (hFontTitle = (HFONT)SendDlgItemMessage(hwnd,IDA_VERSION,WM_GETFONT,0,0)))
 				hFontTitle = GetStockObject(DEFAULT_GUI_FONT);
@@ -292,7 +292,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		GetObject(hFontHover,sizeof(LOGFONT),&lf);
 		lf.lfUnderline = TRUE;
 		hFontNormal = CreateFontIndirect(&lf);
-	
+
 		//  Cursor setup
 		hCursorNormal = LoadCursor( NULL, MAKEINTRESOURCE((DWORD)IDC_ARROW) ) ;
 		if (!(hCursorHover = LoadCursor( NULL, (LPCTSTR)MAKEINTRESOURCE((DWORD)IDC_HAND) )))
@@ -304,14 +304,14 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		capture_webpage = FALSE;
 
 		CenterDlgInParent(hwnd);
-		
+
 		mess = (char*)MESSAGE ;
 		SetDlgItemText(hwnd,IDC_BAN,mess);
 		if( strlen( mess ) > 0 ) SetTimer(hwnd, message_timer, 100, NULL) ;
-		return 1; 
+		return 1;
 		}
 		break ;
-		
+
 	case WM_TIMER:
 		if ((UINT_PTR)wParam == message_timer) {
 			mess++ ;
@@ -319,7 +319,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 			if( strlen( mess ) < strlen("                                                                                       ") ) mess = (char*)MESSAGE ;
 			}
 		break ;
-	
+
 	case WM_NCACTIVATE:
 		if (!(BOOL)wParam) { //  we're not active, clear hover states
 			hover_email = FALSE;
@@ -330,7 +330,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 			InvalidateRect(GetDlgItem(hwnd,IDC_WEBPAGE),NULL,FALSE);
 			}
 		return FALSE;
-	
+
 	case WM_CTLCOLORSTATIC: {
 		DWORD dwId = GetWindowLong((HWND)lParam,GWL_ID);
 		HDC hdc = (HDC)wParam;
@@ -355,7 +355,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 			}
 		}
 		break ;
-	
+
 	case WM_MOUSEMOVE:  {
 		POINT pt = { LOWORD(lParam), HIWORD(lParam) };
 		HWND hwndHover = ChildWindowFromPoint(hwnd,pt);
@@ -377,7 +377,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 			}
 		}
 		break;
-	
+
 	case WM_LBUTTONDOWN: {
 		POINT pt = { LOWORD(lParam), HIWORD(lParam) };
 		HWND hwndHover = ChildWindowFromPoint(hwnd,pt);
@@ -398,7 +398,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		SetCursor((hover_email || hover_webpage)?hCursorHover:hCursorNormal);
 		}
 		break;
-	
+
 	case WM_LBUTTONUP: {
 		POINT pt = { LOWORD(lParam), HIWORD(lParam) };
 		HWND hwndHover = ChildWindowFromPoint(hwnd,pt);
@@ -418,7 +418,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		SetCursor((hover_email || hover_webpage)?hCursorHover:hCursorNormal);
 		}
 		break;
-      
+
       case WM_COMMAND:
 	switch (LOWORD(wParam)) {
 	  case IDOK:
@@ -680,9 +680,9 @@ static INT_PTR CALLBACK GenericMainDlgProc(HWND hwnd, UINT msg,
 	RECT rcClient ;
 	int h ;
 	GetWindowRect(hwnd, &rcClient) ;
-      
-        int NormalSize = 555 ;
-	
+
+        int NormalSize = 536 ;
+
 	if( GetConfigBoxWindowHeight() > 0 ) { h = GetConfigBoxWindowHeight() ; }
 	else if( GetConfigBoxHeight() >= 100 ) { h = GetConfigBoxHeight() ; }
 	else {
@@ -690,7 +690,7 @@ static INT_PTR CALLBACK GenericMainDlgProc(HWND hwnd, UINT msg,
 		else if( GetConfigBoxHeight() <= 16 ) { h = NormalSize ; }
 		else {
 			h = NormalSize + 12 * ( GetConfigBoxHeight()-16 ) ;
-			if( h < NormalSize ) h = NormalSize ; 
+			if( h < NormalSize ) h = NormalSize ;
 			}
 		}
 	if( get_param("INIFILE")==SAVEMODE_DIR ) {
@@ -752,7 +752,7 @@ static INT_PTR CALLBACK GenericMainDlgProc(HWND hwnd, UINT msg,
 	    r.top = 3;
 	    r.bottom = r.top + 10;
 	    MapDialogRect(hwnd, &r);
-	    tvstatic = CreateWindowEx(0, "STATIC", "Cate&gory:",
+	    tvstatic = CreateWindowEx(0, "STATIC", "分类：",
 				      WS_CHILD | WS_VISIBLE,
 				      r.left, r.top,
 				      r.right - r.left, r.bottom - r.top,
@@ -905,9 +905,9 @@ static INT_PTR CALLBACK GenericMainDlgProc(HWND hwnd, UINT msg,
                 return 0;
 
             i = TreeView_GetSelection(((LPNMHDR) lParam)->hwndFrom);
- 
+
  	    SendMessage (hwnd, WM_SETREDRAW, false, 0);
- 
+
 	    item.hItem = i;
 	    item.pszText = buffer;
 	    item.cchTextMax = sizeof(buffer);
@@ -934,7 +934,7 @@ static INT_PTR CALLBACK GenericMainDlgProc(HWND hwnd, UINT msg,
 	    create_controls(hwnd, (char *)item.lParam);
 
 	    dlg_refresh(NULL, &dp);    /* set up control values */
- 
+
 	    SendMessage (hwnd, WM_SETREDRAW, true, 0);
  	    InvalidateRect (hwnd, NULL, true);
 
@@ -1018,19 +1018,19 @@ bool do_config(Conf *conf)
     bool ret;
 #ifdef MOD_PERSO
 	// On cree la session "Default Settings" si elle n'existe pas
-	if( GetDefaultSettingsFlag() ) if( (IniFileFlag==SAVEMODE_REG) || SessPathIsInitial() ) { 
+	if( GetDefaultSettingsFlag() ) if( (IniFileFlag==SAVEMODE_REG) || SessPathIsInitial() ) {
 		char buffer[1024] ;
 		if( !IsThereDefaultSessionFile() ) {
 			Conf *defconf = conf_new() ;
 			load_settings(NULL,defconf);
 			if( !strcmp(FileExtension,"") ) {
-				if( save_settings( "Default Settings", defconf ) != NULL ) { 
-					do_eventlog( "Can not create Default Settings file" ) ; 
-				}	
+				if( save_settings( "Default Settings", defconf ) != NULL ) {
+					do_eventlog( "Can not create Default Settings file" ) ;
+				}
 			} else {
 				sprintf(buffer,"Default Settings%s", FileExtension);
 				if( save_settings( buffer, defconf ) != NULL ) {
-					do_eventlog("Can not create Default Settings file" ) ; 
+					do_eventlog("Can not create Default Settings file" ) ;
 				}
 			}
 			conf_free( defconf ) ;
@@ -1045,8 +1045,8 @@ bool do_config(Conf *conf)
     winctrl_init(&ctrls_panel);
     dp_add_tree(&dp, &ctrls_base);
     dp_add_tree(&dp, &ctrls_panel);
-    dp.wintitle = dupprintf("%s Configuration", appname);
-    dp.errtitle = dupprintf("%s Error", appname);
+    dp.wintitle = dupprintf("%s 配置", appname);
+    dp.errtitle = dupprintf("%s 错误", appname);
     dp.data = conf;
     dlg_auto_set_fixed_pitch_flag(&dp);
     dp.shortcuts['g'] = true;	       /* the treeview: `Cate&gory' */
@@ -1085,15 +1085,15 @@ bool do_reconfig(HWND hwnd, Conf *conf, int protcfginfo)
     winctrl_init(&ctrls_panel);
     dp_add_tree(&dp, &ctrls_base);
     dp_add_tree(&dp, &ctrls_panel);
-    dp.wintitle = dupprintf("%s Reconfiguration", appname);
-    dp.errtitle = dupprintf("%s Error", appname);
+    dp.wintitle = dupprintf("%s 重新配置", appname);
+    dp.errtitle = dupprintf("%s 错误", appname);
     dp.data = conf;
     dlg_auto_set_fixed_pitch_flag(&dp);
     dp.shortcuts['g'] = true;	       /* the treeview: `Cate&gory' */
 
     ret = SaneDialogBox(hinst, MAKEINTRESOURCE(IDD_MAINBOX), NULL,
 		  GenericMainDlgProc) ;
-		  
+
     ctrl_free_box(ctrlbox);
     winctrl_cleanup(&ctrls_base);
     winctrl_cleanup(&ctrls_panel);
@@ -1104,7 +1104,7 @@ bool do_reconfig(HWND hwnd, Conf *conf, int protcfginfo)
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)
 	if( GetBackgroundImageFlag() && (conf_get_int(conf,CONF_bg_slideshow)!=conf_get_int(backup_conf,CONF_bg_slideshow)) ) {
 		KillTimer( hwnd, TIMER_SLIDEBG ) ;
-		if((conf_get_int(conf,CONF_bg_type)!=0)&&(conf_get_int(conf,CONF_bg_slideshow)>0)) 
+		if((conf_get_int(conf,CONF_bg_type)!=0)&&(conf_get_int(conf,CONF_bg_slideshow)>0))
 			SetTimer(hwnd, TIMER_SLIDEBG, (int)(conf_get_int(conf,CONF_bg_slideshow)*1000), NULL) ;
 		InvalidateRect(hwnd, NULL, TRUE);
 	}
@@ -1177,7 +1177,7 @@ void showabout(HWND hwnd)
 	char buffer[1024] ;
     DialogBox(hinst, MAKEINTRESOURCE(IDD_ABOUTBOX), hwnd, AboutProc);
 	sprintf( buffer, "That's all folks ! version\r\n%s", BuildVersionTime ) ;
-    MessageBox( hwnd, buffer, "Info", MB_OK ) ;
+    MessageBox( hwnd, buffer, "信息", MB_OK ) ;
 	*/
 	if( get_param("PUTTY") ) DialogBox(hinst, MAKEINTRESOURCE(IDD_ABOUTBOX), hwnd, AboutProcOrig);
 	else {
@@ -1304,7 +1304,7 @@ static INT_PTR CALLBACK HostKeyDialogProc(HWND hwnd, UINT msg,
             HFONT prev_font = (HFONT)SelectObject(
                 hdc, (HFONT)GetStockObject(SYSTEM_FONT));
             LOGFONT lf;
-            if (GetObject(prev_font, sizeof(lf), &lf)) { 
+            if (GetObject(prev_font, sizeof(lf), &lf)) {
                 lf.lfWeight = FW_BOLD;
                 lf.lfHeight = lf.lfHeight * 3 / 2;
                 HFONT bold_font = CreateFontIndirect(&lf);
@@ -1400,12 +1400,11 @@ int win_seat_confirm_weak_crypto_primitive(
     Seat *seat, const char *algtype, const char *algname,
     void (*callback)(void *ctx, int result), void *ctx)
 {
-    static const char mbtitle[] = "%s Security Alert";
+    static const char mbtitle[] = "%s 安全警报";
     static const char msg[] =
-	"The first %s supported by the server\n"
-	"is %s, which is below the configured\n"
-	"warning threshold.\n"
-	"Do you want to continue with this connection?\n";
+        "当前服务器支持的%s\n"
+        "为%s，低于配置的警告阀值。\n"
+        "您想继续这个连接吗？？？\n";
     char *message, *title;
     int mbret;
 
@@ -1426,14 +1425,14 @@ int win_seat_confirm_weak_cached_hostkey(
     Seat *seat, const char *algname, const char *betteralgs,
     void (*callback)(void *ctx, int result), void *ctx)
 {
-    static const char mbtitle[] = "%s Security Alert";
+    static const char mbtitle[] = "%s 安全警报";
     static const char msg[] =
-	"The first host key type we have stored for this server\n"
-	"is %s, which is below the configured warning threshold.\n"
-	"The server also provides the following types of host key\n"
-        "above the threshold, which we do not have stored:\n"
+        "我们为此服务器存储的第一个主机密钥类型\n"
+        "是%s，低于配置的警告阀值。\n"
+        "服务器还提供一下类型的主机密钥\n"
+        "超过阀值，我们没有存储：\n"
         "%s\n"
-	"Do you want to continue with this connection?\n";
+        "您想继续这个连接吗？？？\n";
     char *message, *title;
     int mbret;
 
@@ -1459,18 +1458,18 @@ static int win_gui_askappend(LogPolicy *lp, Filename *filename,
                              void *ctx)
 {
     static const char msgtemplate[] =
-	"The session log file \"%.*s\" already exists.\n"
-	"You can overwrite it with a new session log,\n"
-	"append your session log to the end of it,\n"
-	"or disable session logging for this session.\n"
-	"Hit Yes to wipe the file, No to append to it,\n"
-	"or Cancel to disable logging.";
+        "会话日志文件\"%.*s\"已存在。\n"
+        "您可以用新的会话日志覆盖它，\n"
+        "将新的会话日志附加到它的末尾，\n"
+        "或者禁止此次会话的日志记录。\n"
+        "选择“是”擦除文件，“否”追加到末尾，\n"
+        "或者“取消”禁用此次日志记录。";
     char *message;
     char *mbtitle;
     int mbret;
 
     message = dupprintf(msgtemplate, FILENAME_MAX, filename->path);
-    mbtitle = dupprintf("%s Log to File", appname);
+    mbtitle = dupprintf("%s 写入日志文件", appname);
 
     mbret = MessageBox(NULL, message, mbtitle,
 		       MB_ICONQUESTION | MB_YESNOCANCEL | MB_DEFBUTTON3);
@@ -1497,7 +1496,7 @@ const LogPolicyVtable win_gui_logpolicy_vt = {
 
 /*
  * Warn about the obsolescent key file format.
- * 
+ *
  * Uniquely among these functions, this one does _not_ expect a
  * frontend handle. This means that if PuTTY is ported to a
  * platform which requires frontend handles, this function will be
@@ -1507,17 +1506,15 @@ const LogPolicyVtable win_gui_logpolicy_vt = {
  */
 void old_keyfile_warning(void)
 {
-    static const char mbtitle[] = "%s Key File Warning";
+    static const char mbtitle[] = "%s 密钥文件警告";
     static const char message[] =
-	"You are loading an SSH-2 private key which has an\n"
-	"old version of the file format. This means your key\n"
-	"file is not fully tamperproof. Future versions of\n"
-	"%s may stop supporting this private key format,\n"
-	"so we recommend you convert your key to the new\n"
-	"format.\n"
-	"\n"
-	"You can perform this conversion by loading the key\n"
-	"into PuTTYgen and then saving it again.";
+        "您正在加载一个旧版本的SSH-2私钥文件。\n"
+        "这意味着当前密钥文件不是完全防篡改的。\n"
+        "未来版本的程序可能会停止支持这种私钥，\n"
+        "所有我们建议您将密钥转换为新的格式。\n"
+        "\n"
+        "将密钥加载到PuTTYgen中，只需要再次保\n"
+        "存即可完成转换。";
 
     char *msg, *title;
     msg = dupprintf(message, appname);

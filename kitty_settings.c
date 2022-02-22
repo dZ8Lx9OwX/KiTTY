@@ -44,7 +44,7 @@ void write_setting_fontspec_forced(void *handle, const char *key, FontSpec *font
 static void wmap_forced(void *handle, char const *outkey, Conf *conf, int primary,int include_values) ;
 static void wprefs_forced(void *sesskey, const char *name, const struct keyvalwhere *mapping, int nvals, Conf *conf, int primary) ;
 static void write_clip_setting_forced(void *sesskey, const char *savekey, Conf *conf, int confkey, int strconfkey) ;
-	
+
 int read_setting_i_forced(void *handle, const char *key, int defvalue) ;
 char *read_setting_s_forced(void *handle, const char *key) ;
 Filename *read_setting_filename_forced(void *handle, const char *key) ;
@@ -60,7 +60,7 @@ static void gppfont_forced(void *handle, const char *name, Conf *conf, int prima
 static int gppmap_forced(void *handle, const char *name, Conf *conf, int primary) ;
 static void gprefs_forced(void *sesskey, const char *name, const char *def, const struct keyvalwhere *mapping, int nvals, Conf *conf, int primary) ;
 static void read_clip_setting_forced(void *sesskey, char *savekey, int def, Conf *conf, int confkey, int strconfkey) ;
- 
+
 /* Fonction principale */
 void save_open_settings_forced(char *filename, Conf *conf) {
 	FILE *sesskey ;
@@ -330,7 +330,7 @@ void save_open_settings_forced(char *filename, Conf *conf) {
     write_setting_b_forced(sesskey, "ConnectionSharingUpstream", conf_get_bool(conf, CONF_ssh_connection_sharing_upstream));
     write_setting_b_forced(sesskey, "ConnectionSharingDownstream", conf_get_bool(conf, CONF_ssh_connection_sharing_downstream));
     wmap_forced(sesskey, "SSHManualHostKeys", conf, CONF_ssh_manual_hostkeys, false);
-    
+
     /*
      * PuTTY 0.75 SUPDUP settings
 
@@ -384,7 +384,7 @@ void save_open_settings_forced(char *filename, Conf *conf) {
 	write_setting_filename_forced(sesskey, "HyperlinkBrowser", conf_get_filename(conf, CONF_url_browser));
 	write_setting_i_forced(sesskey, "HyperlinkRegularExpressionUseDefault", conf_get_int(conf, CONF_url_defregex));
 #ifndef MOD_NOHYPERLINK
-	if( !strcmp(conf_get_str(conf, CONF_url_regex),"@°@°@NO REGEX--") ) 
+	if( !strcmp(conf_get_str(conf, CONF_url_regex),"@°@°@NO REGEX--") )
 		write_setting_s_forced(sesskey, "HyperlinkRegularExpression", urlhack_default_regex ) ;
 	else
 		write_setting_s_forced(sesskey, "HyperlinkRegularExpression", conf_get_str(conf, CONF_url_regex));
@@ -463,15 +463,15 @@ void save_open_settings_forced(char *filename, Conf *conf) {
 
 void load_open_settings_forced(char *filename, Conf *conf) {
 	FILE *sesskey ;
-	if( (sesskey=fopen(filename,"r")) == NULL ) { 
+	if( (sesskey=fopen(filename,"r")) == NULL ) {
 		char buffer[1024] ;
-		sprintf(buffer,"File %s not found !",filename);
-		MessageBox(NULL, buffer, "Error", MB_OK|MB_ICONERROR) ; return ; 
+		sprintf(buffer,"找不到 %s 文件！",filename);
+		MessageBox(NULL, buffer, "错误", MB_OK|MB_ICONERROR) ; return ;
 		}
 	Conf * confDef ;
 	confDef = conf_new() ;
 	do_defaults( "Default Settings" , confDef);
-		
+
 // BEGIN COPY/PASTE
     int i;
     char *prot;
@@ -986,7 +986,7 @@ void load_open_settings_forced(char *filename, Conf *conf) {
     gppb_forced(sesskey, "ConnectionSharingDownstream", true,
          conf, CONF_ssh_connection_sharing_downstream);
     gppmap_forced(sesskey, "SSHManualHostKeys", conf, CONF_ssh_manual_hostkeys);
-    
+
     /*
      * PuTTY 0.75 SUPDUP settings
     gpps_forced(sesskey, "SUPDUPLocation", "The Internet", conf, CONF_supdup_location);
@@ -1115,7 +1115,7 @@ void load_open_settings_forced(char *filename, Conf *conf) {
 // END COPY/PASTE
 	conf_set_str( conf, CONF_folder, "Default") ;
 	fclose(sesskey) ;
-		
+
 	conf_free( confDef ) ;
 }
 
@@ -1334,7 +1334,7 @@ char *read_setting_s_forced(void *handle, const char *key) {
 	char buffer[2048], name[256] ;
 	rewind(handle);
 	sprintf( name, "%s\\", key ) ;
-	
+
 	while( fgets(buffer,2047,handle)!=NULL ) {
 		while( (buffer[strlen(buffer)-1]=='\n')||(buffer[strlen(buffer)-1]=='\r') ) buffer[strlen(buffer)-1]='\0' ;
 		if( buffer[strlen(buffer)-1] != '\\' ) { decryptstring( buffer, MASTER_PASSWORD) ; }

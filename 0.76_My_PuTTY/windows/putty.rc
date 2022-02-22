@@ -1,7 +1,7 @@
 #include "rcstuff.h"
 
 #define APPNAME "PuTTY"
-#define APPDESC "SSH, Telnet, Rlogin, and SUPDUP client"
+#define APPDESC "cnKiTTY - KiTTY中文版本"
 
 #include "winhelp.rc2"
 #include "win_res.rc2"

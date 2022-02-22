@@ -3,13 +3,13 @@
 int cryptstring( const int mode, char * st, const char * key ) {
 	if( mode>1 ) return strlen(st);
 	if( strlen(st)==0 ) { return 0 ; }
-	return bcrypt_string_base64( st, st, strlen( st ), key, 0 ) ; 
+	return bcrypt_string_base64( st, st, strlen( st ), key, 0 ) ;
 }
 
-int decryptstring( const int mode, char * st, const char * key ) { 
+int decryptstring( const int mode, char * st, const char * key ) {
 	if( mode>1 ) return strlen(st);
 	if( strlen(st)==0 ) { return 0 ; }
-	int res = buncrypt_string_base64( st, st, strlen( st ), key ) ; 
+	int res = buncrypt_string_base64( st, st, strlen( st ), key ) ;
 	if( res == 0 ) strcpy( st, "" ) ;
 	return res ;
 	}
@@ -19,13 +19,13 @@ void dopasskey( int mode, char * passkey, const char * host, const char * termty
 	strcpy( passkey, "KiTTY" ) ;
     } else {
 	if( strlen(host)>0 ) {
-		if( (strlen(host)+strlen(termtype)) < 1000 ) { 
+		if( (strlen(host)+strlen(termtype)) < 1000 ) {
 			sprintf( passkey, "%s%sKiTTY", host, termtype ) ;
 		} else {
 			strcpy( passkey, "" ) ;
 		}
-	} else { 
-		if( strlen(termtype) < 1000 ) { 
+	} else {
+		if( strlen(termtype) < 1000 ) {
 			sprintf( passkey, "%sKiTTY", termtype ) ;
 		} else {
 			strcpy( passkey, "" ) ;
@@ -57,7 +57,7 @@ void MASKPASS( const int mode, char * password ) {
 	if( mode > 0 ) return ;
 	if( password==NULL ) return ;
 	if( strlen(password)==0) return ;
-	
+
 	int i,j=0, len=strlen(password) ;
 	char c, *buffer ;
 	buffer=(char*)malloc(strlen(password)+1);
@@ -76,7 +76,7 @@ void MASKPASS( const int mode, char * password ) {
 
 // Passphrase (entree registry KiPP)
 static char PassPhrase[256] = "" ;
-	
+
 // Procedure de management de la passphrase
 char * ManagePassPhrase( const char * st ) {
 	if( !GetUserPassSSHNoSave() && (st != NULL) ) {
@@ -88,7 +88,7 @@ char * ManagePassPhrase( const char * st ) {
 
 
 
-/* ISO-8859-1 to UTF-8 mapper 
+/* ISO-8859-1 to UTF-8 mapper
  * return 0 for success, and need buffer size otherwise
  */
 size_t iso8859_1_to_utf8(char *content, size_t max_size) {

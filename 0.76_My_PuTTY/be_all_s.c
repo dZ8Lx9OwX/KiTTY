@@ -15,7 +15,7 @@
  * declarations of appname, for as long as I can...
  */
 #if (defined MOD_PERSO) && (!defined FLJ)
-char *appname = "KiTTY";
+char *appname = "cnKiTTY";
 #else
 const char *const appname = "PuTTY";
 #endif

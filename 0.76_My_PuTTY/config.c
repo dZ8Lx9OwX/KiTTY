@@ -2628,7 +2628,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
 #ifdef MOD_PROXY
     if( !GetPuttyFlag() && GetProxySelectionFlag() ) {
     if (!midsession) {
-        ctrl_droplist(s, "Proxy choice", NO_SHORTCUT, 60,
+        ctrl_droplist(s, "代理选择：", NO_SHORTCUT, 60,
 		  HELPCTX(no_help),
 		  proxy_selection_handler, I(0));
         }
@@ -3216,7 +3216,7 @@ s = ctrl_getset(b, "终端/提示音", "overload",
     if( !GetPuttyFlag() && (GetIconeFlag()>0) ) {
     s = ctrl_getset(b, "窗口/外观", "icon",
 		    "自定义窗口图标：");
-    c = ctrl_editbox(s, "图标 (内部资源 0-49 )", NO_SHORTCUT, 40,
+    c = ctrl_editbox(s, "图标(内部资源0-43，0=随机)", NO_SHORTCUT, 40,
 			 HELPCTX(no_help),
 			 conf_editbox_handler, I(CONF_icone), I(-1) ) ;
     ctrl_filesel(s, "外部图标文件", NO_SHORTCUT,
@@ -3233,64 +3233,64 @@ s = ctrl_getset(b, "终端/提示音", "overload",
      * (This would really belong in Appearance but we overflowed -- to much
      * stuff on one page otherwise).
      */
-    str = dupprintf("Configure the background of %s's window", appname);
-    ctrl_settitle(b, "Window/Back.&Image", str);
+    str = dupprintf("%s窗口背景设置", appname);
+    ctrl_settitle(b, "窗口/背景图片", str);
     sfree(str);
 
-    s = ctrl_getset(b, "Window/Back.&Image", "bg_style",
-            "Background settings");
-    ctrl_radiobuttons(s, "Background Style:", NO_SHORTCUT, 3,
+    s = ctrl_getset(b, "窗口/背景图片", "bg_style",
+            "背景设置：");
+    ctrl_radiobuttons(s, "背景类型", NO_SHORTCUT, 3,
               HELPCTX(no_help),
-              conf_radiobutton_handler, 
+              conf_radiobutton_handler,
               I(CONF_bg_type),
-              "Solid", NO_SHORTCUT, I(0),  // TODO: Define shortcuts for these.
-              "Desktop", NO_SHORTCUT, I(1),
-              "Image", NO_SHORTCUT, I(2),
+              "固定", NO_SHORTCUT, I(0),  // TODO: Define shortcuts for these.
+              "桌面", NO_SHORTCUT, I(1),
+              "图片", NO_SHORTCUT, I(2),
               NULL);
 
-    s = ctrl_getset(b, "Window/Back.&Image", "bg_wp_img_settings",
-            "Desktop and image settings");
-    ctrl_editbox(s, "Opacity: (negative with Image for gradient)", NO_SHORTCUT, 20,
-		 HELPCTX(no_help),
-		 conf_editbox_handler, 
-		 I(CONF_bg_opacity), I(-1) ) ; 
-    ctrl_editbox(s, "Slideshow:", NO_SHORTCUT, 20,
-		 HELPCTX(no_help),
-		 conf_editbox_handler, 
-		 I(CONF_bg_slideshow), I(-1) ) ;
-
-    s = ctrl_getset(b, "Window/Back.&Image", "bg_img_settings",
-            "Image settings");
-    ctrl_filesel(s, "Image file: (or #RRGGBB for gradient)", NO_SHORTCUT,
-		     FILTER_IMAGE_FILES, FALSE, "Select background image file",
-		     HELPCTX(no_help),
-		     conf_filesel_handler, I(CONF_bg_image_filename)  ); 
-    ctrl_radiobuttons(s, "Image placement:", NO_SHORTCUT, 3,
-              HELPCTX(no_help),
-              conf_radiobutton_handler, 
-              I(CONF_bg_image_style), 
-              "Tile", NO_SHORTCUT, I(0),  // TODO: Define shortcuts for these.
-              "Center", NO_SHORTCUT, I(1),
-              "Stretch", NO_SHORTCUT, I(2),
-              "Absolute (X,Y)", NO_SHORTCUT, I(3),
-	      "Blank back.", NO_SHORTCUT, I(4),
-	      "Stretch+", NO_SHORTCUT, I(5),
-              NULL);
-
-    ctrl_editbox(s, "Absolute Left (X):", NO_SHORTCUT, 20,
-		 HELPCTX(no_help),
-		 conf_editbox_handler, 
-		 I(CONF_bg_image_abs_x), I(-1) ) ;
-    ctrl_editbox(s, "Absolute Top (Y):", NO_SHORTCUT, 20,
+    s = ctrl_getset(b, "窗口/背景图片", "bg_wp_img_settings",
+            "桌面和图片设置：");
+    ctrl_editbox(s, "不透明度(负数为渐变图像)", NO_SHORTCUT, 20,
 		 HELPCTX(no_help),
 		 conf_editbox_handler,
-		 I(CONF_bg_image_abs_y), I(-1) ) ; 
-    ctrl_radiobuttons(s, "Image placement is relative to:", NO_SHORTCUT, 2,
+		 I(CONF_bg_opacity), I(-1) ) ;
+    ctrl_editbox(s, "幻灯片", NO_SHORTCUT, 20,
+		 HELPCTX(no_help),
+		 conf_editbox_handler,
+		 I(CONF_bg_slideshow), I(-1) ) ;
+
+    s = ctrl_getset(b, "窗口/背景图片", "bg_img_settings",
+            "图片设置：");
+    ctrl_filesel(s, "图像文件(或者#RRGGBB用于渐变)", NO_SHORTCUT,
+		     FILTER_IMAGE_FILES, FALSE, "选择背景图像文件",
+		     HELPCTX(no_help),
+		     conf_filesel_handler, I(CONF_bg_image_filename)  );
+    ctrl_radiobuttons(s, "图片放置：", NO_SHORTCUT, 3,
               HELPCTX(no_help),
-              conf_radiobutton_handler, 
+              conf_radiobutton_handler,
+              I(CONF_bg_image_style),
+              "平铺", NO_SHORTCUT, I(0),  // TODO: Define shortcuts for these.
+              "居中", NO_SHORTCUT, I(1),
+              "拉伸", NO_SHORTCUT, I(2),
+              "固定坐标(X,Y)", NO_SHORTCUT, I(3),
+	      "空白背影", NO_SHORTCUT, I(4),
+	      "拉伸+", NO_SHORTCUT, I(5),
+              NULL);
+
+    ctrl_editbox(s, "坐标横轴(X)", NO_SHORTCUT, 20,
+		 HELPCTX(no_help),
+		 conf_editbox_handler,
+		 I(CONF_bg_image_abs_x), I(-1) ) ;
+    ctrl_editbox(s, "坐标竖轴(Y)", NO_SHORTCUT, 20,
+		 HELPCTX(no_help),
+		 conf_editbox_handler,
+		 I(CONF_bg_image_abs_y), I(-1) ) ;
+    ctrl_radiobuttons(s, "图像放置相对于：", NO_SHORTCUT, 2,
+              HELPCTX(no_help),
+              conf_radiobutton_handler,
               I(CONF_bg_image_abs_fixed),
-              "Desktop", NO_SHORTCUT, I(0),  // TODO: Define shortcuts for these.
-              "Terminal Window", NO_SHORTCUT, I(1),
+              "桌面", NO_SHORTCUT, I(0),  // TODO: Define shortcuts for these.
+              "终端窗口", NO_SHORTCUT, I(1),
               NULL);
 
       }
@@ -3489,13 +3489,13 @@ if( !GetPuttyFlag() ) {
     cd = (struct colour_data *) ctrl_alloc(b, sizeof(struct colour_data));
     memset(cd , 0, sizeof(*cd ));
     cd->bold_checkbox =
-	ctrl_checkbox(s, "Bolded text is a different colour", NO_SHORTCUT,
+	ctrl_checkbox(s, "粗体文本是不同的颜色", NO_SHORTCUT,
 		      HELPCTX(no_help), colour_handler, P(cd));
     cd->underline_checkbox =
-	ctrl_checkbox(s, "Underlined text is a different colour", NO_SHORTCUT,
+	ctrl_checkbox(s, "下划线文本是不同颜色", NO_SHORTCUT,
 		      HELPCTX(no_help), colour_handler, P(cd));
     cd->selected_checkbox =
-	ctrl_checkbox(s, "Selected text is a different colour", NO_SHORTCUT,
+	ctrl_checkbox(s, "所选文本是不同颜色", NO_SHORTCUT,
 		      HELPCTX(no_help), colour_handler, P(cd));
 #endif
 
@@ -4375,44 +4375,44 @@ if( !GetPuttyFlag() ) {
 #ifdef MOD_ZMODEM
     // z-modem panel
      if( (!GetPuttyFlag())&&GetZModemFlag() ) {
-    ctrl_settitle(b, "Connection/ZModem",
-		      "Options controlling Z Modem transfers");
-   s = ctrl_getset(b, "Connection/ZModem", "download",
-			"Download folder");
-    ctrl_editbox(s, "Location:",  NO_SHORTCUT, 100,
+    ctrl_settitle(b, "连接/ZModem",
+		      "Z Modem传输控制设置");
+   s = ctrl_getset(b, "连接/ZModem", "download",
+			"下载文件夹：");
+    ctrl_editbox(s, "位置",  NO_SHORTCUT, 100,
 		 HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_zdownloaddir), I(1));
 
-    ctrl_settitle(b, "Connection/ZModem/rz",
-		  "rz path and options");
+    ctrl_settitle(b, "连接/ZModem/RZ",
+		  "RZ 路径和选项:");
 
-    s = ctrl_getset(b, "Connection/ZModem/rz", "receive",
-			"Receive command");
+    s = ctrl_getset(b, "连接/ZModem/RZ", "receive",
+			"接收命令");
 
-    ctrl_filesel(s, "Command rz:", NO_SHORTCUT,
-		 FILTER_EXE_FILES, FALSE, "Select command to receive zmodem data",
+    ctrl_filesel(s, "RZ 命令", NO_SHORTCUT,
+		 FILTER_EXE_FILES, FALSE, "选择命令接收 ZModem 数据",
 		 HELPCTX(no_help),
 		 conf_filesel_handler, I(CONF_rzcommand) ) ;
 
-    ctrl_editbox(s, "Options", NO_SHORTCUT,
+    ctrl_editbox(s, "选项", NO_SHORTCUT,
 		     50,
 		     HELPCTX(no_help),
 		     conf_editbox_handler, I(CONF_rzoptions), I(1));
-    ctrl_text(s, "Ctrl+X to quit rz before completing",
+    ctrl_text(s, "Ctrl+X 在完成前退出RZ",
 	      HELPCTX(no_help));
 
-    ctrl_settitle(b, "Connection/ZModem/sz",
-		  "sz path and options");
+    ctrl_settitle(b, "连接/ZModem/SZ",
+		  "SZ 路径和选项:");
 
-    s = ctrl_getset(b, "Connection/ZModem/sz", "send",
-			"Send command");
+    s = ctrl_getset(b, "连接/ZModem/SZ", "send",
+			"发送命令");
 
-    ctrl_filesel(s, "Command sz:", NO_SHORTCUT,
-		 FILTER_EXE_FILES, FALSE, "Select command to send zmodem data",
+    ctrl_filesel(s, "SZ 命令", NO_SHORTCUT,
+		 FILTER_EXE_FILES, FALSE, "选择命令发送 ZModem 数据",
 		 HELPCTX(no_help),
 		 conf_filesel_handler, I(CONF_szcommand) ) ;
 
-    ctrl_editbox(s, "Options", NO_SHORTCUT,
+    ctrl_editbox(s, "选项", NO_SHORTCUT,
 		     50,
 		     HELPCTX(no_help),
 		     conf_editbox_handler, I(CONF_szoptions), I(1));

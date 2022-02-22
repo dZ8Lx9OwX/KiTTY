@@ -19,7 +19,7 @@
 #endif
 
 static const char *const reg_jumplist_key = PUTTY_REG_POS "\\Jumplist";
-static const char *const reg_jumplist_value = "Recent sessions";
+static const char *const reg_jumplist_value = "最近会话";
 static const char *const puttystr = PUTTY_REG_POS "\\Sessions";
 
 #ifdef MOD_PERSO
@@ -28,7 +28,7 @@ static const char *const puttystr = PUTTY_REG_POS "\\Sessions";
 
 static bool tried_shgetfolderpath = false;
 static HMODULE shell32_module = NULL;
-DECL_WINDOWS_FUNCTION(static, HRESULT, SHGetFolderPathA, 
+DECL_WINDOWS_FUNCTION(static, HRESULT, SHGetFolderPathA,
 		      (HWND, int, HANDLE, DWORD, LPSTR));
 
 struct settings_w {
@@ -58,8 +58,8 @@ settings_w *open_settings_w(const char *sessionname, char **errmsg)
 		if ( *(sessionname+strlen(sessionname)-1) == ']') {
 			if( ( p = strrchr(sessionname, '[') ) != NULL )	*(p-1) = '\0';
 		}
-		
-		if( (strlen(sessionname)==0)||((strstr( sessionname, " [" )==sessionname)&&(sessionname[strlen(sessionname)-1]==']')) ) 
+
+		if( (strlen(sessionname)==0)||((strstr( sessionname, " [" )==sessionname)&&(sessionname[strlen(sessionname)-1]==']')) )
 			{ return NULL ; }
 		sb = strbuf_new();
 		escape_registry_key(sessionname, sb);
@@ -78,14 +78,14 @@ settings_w *open_settings_w(const char *sessionname, char **errmsg)
     ret = RegCreateKey(HKEY_CURRENT_USER, puttystr, &subkey1);
     if (ret != ERROR_SUCCESS) {
 	strbuf_free(sb);
-        *errmsg = dupprintf("Unable to create registry key\n"
+        *errmsg = dupprintf("无法创建注册表项\n"
                             "HKEY_CURRENT_USER\\%s", puttystr);
 	return NULL;
     }
     ret = RegCreateKey(subkey1, sb->s, &sesskey);
     RegCloseKey(subkey1);
     if (ret != ERROR_SUCCESS) {
-        *errmsg = dupprintf("Unable to create registry key\n"
+        *errmsg = dupprintf("无法创建注册表项\n"
                             "HKEY_CURRENT_USER\\%s\\%s", puttystr, sb->s);
 	strbuf_free(sb);
 	return NULL;
@@ -137,7 +137,7 @@ void close_settings_w(settings_w *handle)
 		WIN32_FIND_DATA FindFile;
 		if ((hFile = FindFirstFile(sesspath, &FindFile)) == INVALID_HANDLE_VALUE) {
 			if (!createPath(sesspath)) {
-				errorShow("Unable to create directory for storing sessions", sesspath);
+				errorShow("无法创建用于存储会话的目录", sesspath);
 				return;
 			}
 		}
@@ -187,7 +187,7 @@ settings_r *open_settings_r(const char *sessionname)
     		settings_r *toret = snew(settings_r) ;
 		toret->list = SettingsInit() ;
 		GetCurrentDirectory( (MAX_PATH*2), oldpath);
-    
+
 		if (SetCurrentDirectory(sesspath)) {
 			hFile = CreateFile(p, GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 		} else {
@@ -195,7 +195,7 @@ settings_r *open_settings_r(const char *sessionname)
 		}
 
 		if( strcmp(sessionname,"Default Settings") && (hFile == INVALID_HANDLE_VALUE) ) {
-			//errorShow("Unable to load file for reading", p);
+			//errorShow("无法加载文件进行读取", p);
 			SetCurrentDirectory(oldpath);
 			SettingsFree(toret->list);
 			sfree(toret);
@@ -206,7 +206,7 @@ settings_r *open_settings_r(const char *sessionname)
 		if( hFile != INVALID_HANDLE_VALUE ) {
 			CloseHandle(hFile);
 			SettingsLoad( toret->list, p ) ;
-		} else { 
+		} else {
 			CloseHandle(hFile) ;
 			SetCurrentDirectory(oldpath);
 			SettingsFree(toret->list);
@@ -252,11 +252,11 @@ char *read_setting_s(settings_r *handle, const char *key)
 	return NULL;
 
 #ifdef MOD_PERSO
-	if( get_param("INIFILE")==SAVEMODE_DIR ) {    
+	if( get_param("INIFILE")==SAVEMODE_DIR ) {
 		return SettingsKey_str( handle->list, key ) ;
 	}
 #endif
-    
+
     /* Find out the type and size of the data. */
     if (RegQueryValueEx(handle->sesskey, key, 0,
 			&type, NULL, &size) != ERROR_SUCCESS ||
@@ -288,7 +288,7 @@ int read_setting_i(settings_r *handle, const char *key, int defvalue)
 		return SettingsKey_int( handle->list, key, defvalue ) ;
 	}
 #endif
-	
+
     if (!handle ||
         RegQueryValueEx(handle->sesskey, key, 0, &type,
 			(BYTE *) &val, &size) != ERROR_SUCCESS ||
@@ -400,17 +400,17 @@ void del_settings(const char *sessionname)
 		if( GetReadOnlyFlag() ) return ;
 		if( (strstr( sessionname, " [" )==sessionname)&&(sessionname[strlen(sessionname)-1]==']') ) {
 			if( !strcmp(sessionname," [..]") ) {
-				MessageBox(NULL,"It is not allowed to delete .. directory","Error",MB_OK|MB_ICONERROR) ;
-				return ; 
+				MessageBox(NULL,"不允许删除 .. 目录","错误",MB_OK|MB_ICONERROR) ;
+				return ;
 			}
 			// La session a purger est un folder
 			p = snewn(3 * strlen(sessionname) + 1, char);
 			strcpy( p, sessionname+2 ) ;
 			p[strlen(p)-1] = '\0' ;
 			GetCurrentDirectory( (MAX_PATH*2), oldpath);
-			char buffer[1024]; 
-			sprintf( buffer, "Are your sure you want to delete %s directory ?", p );
-			if( MessageBox( NULL, buffer, "Confirmation", MB_YESNO|MB_ICONWARNING|MB_DEFBUTTON2|MB_APPLMODAL ) == IDYES )
+			char buffer[1024];
+			sprintf( buffer, "您确定要删除 %s 目录吗？？", p );
+			if( MessageBox( NULL, buffer, "确认", MB_YESNO|MB_ICONWARNING|MB_DEFBUTTON2|MB_APPLMODAL ) == IDYES )
 				if (SetCurrentDirectory(sesspath)) {
 					DelDir( p ) ;
 					SetCurrentDirectory(oldpath);
@@ -432,8 +432,8 @@ void del_settings(const char *sessionname)
 			DelDir( buffer ) ;
 			GetCurrentDirectory( (MAX_PATH*2), oldpath);
 			if (SetCurrentDirectory(sesspath)) {
-				if (!DeleteFile(p2)) { 
-					errorShow("Unable to delete settings.", NULL) ; 
+				if (!DeleteFile(p2)) {
+					errorShow("无法删除设置。", NULL) ;
 				}
 				SetCurrentDirectory(oldpath);
 				}
@@ -474,7 +474,7 @@ settings_e *enum_settings_start(void)
 #ifdef MOD_PERSO
 	if (*sesspath == '\0') { loadPath() ; }
 	ret = snew(settings_e);
-	
+
 	if( get_param("INIFILE")!=SAVEMODE_DIR ) {
 		if (RegOpenKey(HKEY_CURRENT_USER, puttystr, &key) != ERROR_SUCCESS) return NULL;
 	}
@@ -512,7 +512,7 @@ if( (get_param("INIFILE")==SAVEMODE_DIR) && (!e->fromFile) ) { // On cherche le 
 
 	if (!SetCurrentDirectory(sesspath)) { return false ; }
 	hFile = FindFirstFile("*", &FindFileData) ;
-	
+
 	if( !get_param("DIRECTORYBROWSE") ) {
 		while ( (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) {
 			if (!FindNextFile(hFile,&FindFileData)) { return false ; }
@@ -523,7 +523,7 @@ if( (get_param("INIFILE")==SAVEMODE_DIR) && (!e->fromFile) ) { // On cherche le 
 			if( !FindNextFile(hFile,&FindFileData) ) { return false ; }
 	}
 	if (hFile != INVALID_HANDLE_VALUE) {
-		if( get_param("DIRECTORYBROWSE") 
+		if( get_param("DIRECTORYBROWSE")
 			&&(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) {
 			e->hFile = hFile;
 			sprintf( buffer, " [%s]",FindFileData.cFileName ) ;
@@ -554,14 +554,14 @@ if( (get_param("INIFILE")==SAVEMODE_DIR) && (!e->fromFile) ) { // On cherche le 
 			while( (!strcmp(FindFileData.cFileName,"."))
 				||( (!strcmp(sesspath,"\\Sessions"))&&(!strcmp(FindFileData.cFileName,".."))) )
 				//while( (!strcmp(FindFileData.cFileName,"."))
-				//	|| (!strcmp(FindFileData.cFileName,"..")) ) 
+				//	|| (!strcmp(FindFileData.cFileName,"..")) )
 				if (!FindNextFile(e->hFile,&FindFileData)) { return false ; }
-			if( (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) { 
-				sprintf(buffer, " [%s]", FindFileData.cFileName ) ; 
+			if( (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) {
+				sprintf(buffer, " [%s]", FindFileData.cFileName ) ;
 			} else {
 				unmungestr(FindFileData.cFileName, buffer, strlen(FindFileData.cFileName)+1 ) ;
 				/* JK: cut off sessionsuffix */
-				char * otherbuf = buffer + strlen(buffer) - strlen(sessionsuffix) ; 
+				char * otherbuf = buffer + strlen(buffer) - strlen(sessionsuffix) ;
 				if (strncmp(otherbuf, sessionsuffix, strlen(sessionsuffix)) == 0) { *otherbuf = '\0' ; }
 			}
 		}
@@ -598,7 +598,7 @@ void enum_settings_finish(settings_e *e)
 #ifdef MOD_PERSO
 	if( e==NULL ) return ;
 	if(get_param("INIFILE")==SAVEMODE_DIR) {
-		
+
 	RegCloseKey(e->key);
 	FindClose(e->hFile);
 	SetCurrentDirectory(oldpath);
@@ -681,14 +681,14 @@ int verify_host_key(const char *hostname, int port,
 			sfree(p);
 		}
 	} else { /* JK: there are no hostkeys as files -> try registry -> nothing to do here now */
-		if (!createPath(sshkpath)) { errorShow("Unable to verify key and jump into ssh host keys directory ", sshkpath ); }
+		if (!createPath(sshkpath)) { errorShow("无法验证密钥并跳转到SSH主机密钥目录", sshkpath ); }
 	}
 
 	/* JK: directory/file not found -> try registry */
 	if (RegOpenKey(HKEY_CURRENT_USER, PUTTY_REG_POS "\\SshHostKeys", &rkey) != ERROR_SUCCESS) {
 		return 1; /* key does not exist in registry */
 	}
-	
+
 	readlen = len;
 	ret = RegQueryValueEx(rkey, regname->s, NULL, &type, (BYTE*)otherstr, &readlen);
 
@@ -770,41 +770,41 @@ int verify_host_key(const char *hostname, int port,
 		if( GetAutoStoreSSHKeyFlag() ) { userMB=IDYES ; }
 		else if( GetReadOnlyFlag() ) { userMB=IDCANCEL ; }
 		else
-		userMB = MessageBox(NULL, "Host key is cached but in registry. "
-			"Do you want to move it to file? \n\n"
-			"Yes \t-> Move (delete key in registry)\n"
-			"No \t-> Copy (keep key in registry)\n"
-			"Cancel \t-> nothing will be done\n", "Security risk", MB_YESNOCANCEL|MB_ICONWARNING);
+		userMB = MessageBox(NULL, "主机密钥已注册表中缓存。"
+                        "您确定想要把它移动到文件中吗？？ \n\n"
+                        "是 \t-> 移动 (删除注册表中的密钥)\n"
+                        "否 \t-> 复制 (保留注册表中的密钥)\n"
+                        "取消 \t-> 什么都不做\n", "安全风险", MB_YESNOCANCEL|MB_ICONWARNING);
 
 		if ((userMB == IDYES) || (userMB == IDNO)) {
 			/* JK: save key to file */
 			if ((hFile = FindFirstFile(sshkpath, &FindFile)) == INVALID_HANDLE_VALUE) {
 				if( !createPath(sshkpath) ){
-					errorShow("Unable to create directory for storing ssh server keys", sshkpath);
+					errorShow("无法创建用于存储SSH服务器密钥的目录", sshkpath);
 				}
 			}
 			FindClose(hFile);
-			if( !SetCurrentDirectory(sshkpath) ) { 
+			if( !SetCurrentDirectory(sshkpath) ) {
 				if (!createPath(sshkpath)) {
-					errorShow("Unable to save key to file and jump into ssh host keys directory ", sshkpath); 
+					errorShow("无法将密钥保存到文件并跳转到SSH主机密钥目录 ", sshkpath);
 				}
 			}
 
 			p = snewn(3*strlen(regname->s) + 1 + 16, char);
 			packstr(regname->s, p);
 			strcat(p, keysuffix);
-			
+
 			hFile = CreateFile(p, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-			
+
 			SetCurrentDirectory(oldpath);
-			
+
 			if (hFile == INVALID_HANDLE_VALUE) {
-				errorShow("Unable to create file (key won't be deleted from registry)", p);
+				errorShow("无法创建文件(密钥不会从注册表中删除)", p);
 				userMB = IDNO;
 			}
 			else {
 				if (!WriteFile(hFile, key, strlen(key), &bytesRW, NULL)) {
-					errorShow("Unable to save key to file (key won't be deleted from registry)", NULL);
+					errorShow("无法将密钥保存到文件(密钥不会从注册表中删除)", NULL);
 					userMB = IDNO;
 				}
 				CloseHandle(hFile);
@@ -813,16 +813,16 @@ int verify_host_key(const char *hostname, int port,
 		if (userMB == IDYES) {
 			/* delete from registry */
 			if (RegDeleteValue(rkey, regname->s) != ERROR_SUCCESS) {
-				errorShow("Unable to delete registry value", regname->s);
+				errorShow("无法删除注册表值", regname->s);
 			}
 		}
 		/* JK: else (Cancel) -> nothing to be done right now */
-		
+
 		RegCloseKey(rkey);
 
 		sfree(otherstr);
 		strbuf_free(regname);
-		return 0;		       
+		return 0;
 	}
     }
 //return 0;
@@ -950,23 +950,23 @@ void store_host_key(const char *hostname, int port,
 	if( GetReadOnlyFlag() ) return ;
 	/* JK: save hostkey to file in dir */
 	if ((hFile = FindFirstFile(sshkpath, &FindFile)) == INVALID_HANDLE_VALUE) {
-		if( !createPath(sshkpath) ) { errorShow("Unable to create directory for storing ssh host keys", sshkpath); }
+		if( !createPath(sshkpath) ) { errorShow("无法创建用于存储SSH主机密钥的目录", sshkpath); }
 	}
 	FindClose(hFile);
-	if( !SetCurrentDirectory(sshkpath) ) { errorShow("Unable to jump into ssh host keys directory", sshkpath); }
+	if( !SetCurrentDirectory(sshkpath) ) { errorShow("无法跳转到SSH主机密钥目录", sshkpath); }
 
 	p = snewn(3*strlen(regname->s) + 1, char);
 	packstr(regname->s, p);
 	strcat(p, keysuffix);
-	
+
 	hFile = CreateFile(p, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE) {
-		errorShow("Unable to create file", p);
+		errorShow("无法创建文件", p);
 	}
 	else {
 		if (!WriteFile(hFile, key, strlen(key), &bytesWritten, NULL)) {
-			errorShow("Unable to save key to file", NULL);
+			errorShow("无法将密钥保存到文件", NULL);
 		}
 		CloseHandle(hFile);
 	}
@@ -995,7 +995,7 @@ static bool try_random_seed(char const *path, int action, HANDLE *ret)
 {
     if (action == DEL) {
         if (!DeleteFile(path) && GetLastError() != ERROR_FILE_NOT_FOUND) {
-            nonfatal("Unable to delete '%s': %s", path,
+            nonfatal("无法删除 '%s': %s", path,
                      win_strerror(GetLastError()));
         }
 	*ret = INVALID_HANDLE_VALUE;
@@ -1029,7 +1029,7 @@ static HANDLE access_random_seed(int action)
     /*
      * Iterate over a selection of possible random seed paths until
      * we find one that works.
-     * 
+     *
      * We do this iteration separately for reading and writing,
      * meaning that we will automatically migrate random seed files
      * if a better location becomes available (by reading from the
@@ -1185,7 +1185,7 @@ static int transform_jumplist_registry
 	if(*jumplistpath == '\0') { loadPath() ; }
 if( get_param("INIFILE")==SAVEMODE_DIR ) {
 	ret = ERROR_SUCCESS ;
-	if( !existdirectory(jumplistpath) ) { 
+	if( !existdirectory(jumplistpath) ) {
 		if( !createPath(jumplistpath) ) { errorShow("Unable to create directory for storing jump list", jumplistpath); }
 	}
 	sprintf(RecentSessionsFile,"%s/RecentSessions",jumplistpath);

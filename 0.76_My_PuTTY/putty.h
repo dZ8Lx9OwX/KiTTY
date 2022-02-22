@@ -217,22 +217,22 @@ enum {
     X(bg_bold, "默认背景粗体")       \
     X(cursor_fg, "光标文本")                 \
     X(cursor_bg, "光标颜色")               \
-    X(black, "ANSI黑色")                      \
-    X(black_bold, "ANSI黑色粗体")            \
-    X(red, "ANSI红色")                          \
-    X(red_bold, "ANSI红色粗体")                \
-    X(green, "ANSI绿色")                      \
-    X(green_bold, "ANSI绿色粗体")            \
-    X(yellow, "ANSI黄色")                    \
-    X(yellow_bold, "ANSI黄色粗体")          \
-    X(blue, "ANSI蓝色")                        \
-    X(blue_bold, "ANSI蓝色粗体")              \
-    X(magenta, "ANSI品红")                  \
-    X(magenta_bold, "ANSI品红粗体")        \
-    X(cyan, "ANSI青色")                        \
-    X(cyan_bold, "ANSI青色粗体")              \
-    X(white, "ANSI白色")                      \
-    X(white_bold, "ANSI白色粗体")            \
+    X(black, "ANSI 黑色")                      \
+    X(black_bold, "ANSI 黑色粗体")            \
+    X(red, "ANSI 红色")                          \
+    X(red_bold, "ANSI 红色粗体")                \
+    X(green, "ANSI 绿色")                      \
+    X(green_bold, "ANSI 绿色粗体")            \
+    X(yellow, "ANSI 黄色")                    \
+    X(yellow_bold, "ANSI 黄色粗体")          \
+    X(blue, "ANSI 蓝色")                        \
+    X(blue_bold, "ANSI 蓝色粗体")              \
+    X(magenta, "ANSI 品红")                  \
+    X(magenta_bold, "ANSI 品红粗体")        \
+    X(cyan, "ANSI 青色")                        \
+    X(cyan_bold, "ANSI 青色粗体")              \
+    X(white, "ANSI 白色")                      \
+    X(white_bold, "ANSI 白色粗体")            \
     /* end of list */
 
 #define OSCP_COLOUR_LIST(X)                     \

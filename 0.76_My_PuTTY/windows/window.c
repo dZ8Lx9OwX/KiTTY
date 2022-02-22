@@ -1717,7 +1717,7 @@ TrayIcone.hWnd = wgs.term_hwnd ;
         else
             AppendMenu(m, MF_ENABLED, IDM_VISIBLE, "始终可见(&B)");
         AppendMenu(m, MF_ENABLED, IDM_PROTECT, "保护(&C)");
-//char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"info",MB_OK);
+//char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"信息",MB_OK);
         if( GetWinrolFlag() ) AppendMenu(m, MF_ENABLED, IDM_WINROL, "向上卷起(&P)");
 	HMENU FontMenu = CreateMenu();
 		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTUP, "字体放大");
@@ -1737,7 +1737,7 @@ TrayIcone.hWnd = wgs.term_hwnd ;
         if( PSCPPath!=NULL ) AppendMenu(m, MF_ENABLED, IDM_PSCP, "使用PSCP发送(&H)");
         else AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_PSCP, "使用PSCP发送(&H)");
         if( WinSCPPath!=NULL ) AppendMenu(m, MF_ENABLED, IDM_WINSCP, "启动 WinSCP(&S)");
-        else AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_WINSCP, "&Start WinSCP");
+        else AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_WINSCP, "启动 WinSCP(&S)");
 
 
         AppendMenu(m, MF_ENABLED, IDM_SHOWPORTFWD, "转发端口(&R)");
@@ -1751,9 +1751,9 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 #ifdef MOD_ZMODEM
 	if( (!GetPuttyFlag()) && GetZModemFlag() ) {
 	    AppendMenu(m, MF_SEPARATOR, 0, 0);
-	    AppendMenu(m, term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZSTART, "&Zmodem Receive");
-	    AppendMenu(m, term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZUPLOAD, "Zmodem &Upload");
-	    AppendMenu(m, !term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZABORT, "Zmodem &Abort");
+	    AppendMenu(m, term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZSTART, "Zmodem 接收");
+	    AppendMenu(m, term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZUPLOAD, "Zmodem 上传");
+	    AppendMenu(m, !term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZABORT, "关于 Zmodem");
 	}
 #endif
 	    AppendMenu(m, MF_SEPARATOR, 0, 0);
