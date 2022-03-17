@@ -275,7 +275,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		sprintf( buffer, "KiTTY - %s", BuildVersionTime ) ;
 		SetDlgItemText(hwnd,IDA_VERSION,buffer);
 
-		str = dupprintf("关于%s_v0.76.0.8.1 - 这是一个KiTTY中文版本！", appname);
+		str = dupprintf("关于%s_v0.76.0.8.2 - 这是一个KiTTY中文版本！", appname);
 		SetWindowText(hwnd, str);
 		sfree(str);
 
