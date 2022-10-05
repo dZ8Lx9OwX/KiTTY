@@ -2769,7 +2769,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
     ctrl_columns(s, 1, 100);
 
     s = ctrl_getset(b, "会话", "otheropts", NULL);
-    ctrl_radiobuttons(s, "关闭窗口时退出：", 'x', 4,
+    ctrl_radiobuttons(s, "退出时关闭窗口：", 'x', 4,
                       HELPCTX(session_coe),
                       conf_radiobutton_handler,
                       I(CONF_close_on_exit),

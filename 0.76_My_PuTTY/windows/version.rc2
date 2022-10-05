@@ -43,7 +43,7 @@ BEGIN
 	BEGIN
 #ifdef MOD_PERSO
 	    VALUE "CompanyName",	"9bis.com"  /* required :/ */
-	    VALUE "ProductName",	"cnKiTTY_v0.76.0.8.1"
+	    VALUE "ProductName",	"cnKiTTY_v0.76.0.8.2"
 	    VALUE "FileDescription",	APPDESC
 	    VALUE "InternalName",	APPNAME
 	    VALUE "OriginalFilename",	"KiTTY"
