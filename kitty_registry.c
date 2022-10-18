@@ -254,9 +254,14 @@ BOOL RegDelTree (HKEY hKeyRoot, LPCTSTR lpSubKey) {
     lResult = RegOpenKeyEx (hKeyRoot, lpSubKey, 0, KEY_READ, &hKey) ;
 
     if (lResult != ERROR_SUCCESS) {
-        if (lResult == ERROR_FILE_NOT_FOUND) { printf("未找到密钥。\n"); return TRUE; }
-        else {printf("打开密钥时出错。\n");return FALSE;}
-    	}
+        if (lResult == ERROR_FILE_NOT_FOUND) { 
+		//printf("找不到密钥。\n") ;
+		return TRUE ; 
+	} else {
+		//printf("打开密钥时出错。\n") ;
+		return FALSE ;
+	}
+    }
 
     // Enumerate the keys
     dwSize = MAX_PATH;
