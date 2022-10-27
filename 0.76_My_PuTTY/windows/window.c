@@ -7730,7 +7730,7 @@ static void wintw_set_title(TermWin *tw, const char *title_in) {
 	char *title ;
 
 	if( title_in==NULL ) { return ; }
-	title = (char*)malloc(strlen(title_in)+1); strcpy(title,title_in);
+	title = (char*)malloc(strlen(title_in)+1024); strcpy(title,title_in);
 
 	if( (title[0]=='_')&&(title[1]=='_') ) { // Mode commande a distance
 		if( ManageLocalCmd( MainHwnd, title+2 ) ) { free(title); return ; }
@@ -7742,11 +7742,11 @@ static void wintw_set_title(TermWin *tw, const char *title_in) {
 		{ title[strlen(title)-12]='\0' ; }
 
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)
-	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + strlen( conf_get_filename(conf,CONF_bg_image_filename)->path ) + 40 ) ;
+	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + strlen( conf_get_filename(conf,CONF_bg_image_filename)->path ) + 4096 ) ; 
 	if( GetBackgroundImageFlag() && GetImageViewerFlag() && (!PuttyFlag) ) { sprintf( buffer, "%s", conf_get_filename(conf,CONF_bg_image_filename)->path ) ; }
 	else
 #else
-	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + 40 ) ;
+	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + 4096 ) ; 
 #endif
 	if( GetSizeFlag() && (!IsZoomed( MainHwnd )) ) {
 		if( strlen( title ) > 0 ) {
@@ -7779,7 +7779,7 @@ static void wintw_set_title(TermWin *tw, const char *title_in) {
 
 static void wintw_set_icon_title(TermWin *tw, const char *title2)
 {
-	char title[1024]="",buf[512]=""; ;
+	char title[4096]="",buf[512]=""; ;
 	int i=0;
 	do { buf[i]=title2[i]; i++ ; }
 	while ( (i<511)&&(title2[i]!='\0') ) ;
