@@ -275,7 +275,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		sprintf( buffer, "KiTTY - %s", BuildVersionTime ) ;
 		SetDlgItemText(hwnd,IDA_VERSION,buffer);
 
-		str = dupprintf("关于%s_v0.76.0.11.1 - 这是一个KiTTY中文版本！", appname);
+		str = dupprintf("关于%s_v0.76.0.12.1 - 这是一个KiTTY中文版本！", appname);
 		SetWindowText(hwnd, str);
 		sfree(str);
 
@@ -1381,9 +1381,9 @@ int win_seat_verify_ssh_host_key(
         int dlgid = (ret == 2 ? IDD_HK_WRONG : IDD_HK_ABSENT);
 #ifdef MOD_PERSO
         int mbret ;
-	if( GetAutoStoreSSHKeyFlag() ) { 
+	if( GetAutoStoreSSHKeyFlag() ) {
 	    do_eventlog("Auto update host key") ;
-	    mbret=IDC_HK_ACCEPT ; 
+	    mbret=IDC_HK_ACCEPT ;
 	} else
 	    mbret = DialogBoxParam(
             hinst, MAKEINTRESOURCE(dlgid), wgs->term_hwnd,

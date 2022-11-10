@@ -2855,13 +2855,13 @@ void setup_config_box(struct controlbox *b, bool midsession,
 	s = ctrl_getset(b, "会话/脚本", "Start", NULL);
 	 ctrl_filesel(s, "脚本文件名：", 'f',
 		"Scr文件 (*.scr, *.txt)\0*.scr;*.txt\0所有文件 (*.*)\0*\0\0\0"
-		, TRUE, "为脚本重播选择文件名", HELPCTX(no_help),
+		, TRUE, "为脚本选择文件名", HELPCTX(no_help),
 		conf_filesel_handler, I(CONF_script_filename));
 	 ctrl_radiobuttons(s, NULL, 'm', 4, HELPCTX(no_help),
           conf_radiobutton_handler, I(CONF_script_mode),
           "关闭", I(SCRIPT_STOP),
-          "重播", I(SCRIPT_PLAY),
-          "记录", I(SCRIPT_RECORD),
+          "回放", I(SCRIPT_PLAY),
+          "录制", I(SCRIPT_RECORD),
           NULL);
 
    	s = ctrl_getset(b, "会话/脚本", "Scripting", NULL);
@@ -2875,21 +2875,21 @@ void setup_config_box(struct controlbox *b, bool midsession,
 	ctrl_editbox(s, "条件/注释行的开始：", 'l', 40, HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_script_cond_line), I(1));
 
-    ctrl_radiobuttons(s, "CR/LF处理：", 't', 4, HELPCTX(no_help),
+    ctrl_radiobuttons(s, "CR/LF转换：", 't', 4, HELPCTX(no_help),
           conf_radiobutton_handler,I(CONF_script_crlf),
           "关闭", I(SCRIPT_OFF),
-          "无LF", I(SCRIPT_NOLF),
+          "no LF", I(SCRIPT_NOLF),
           "CR", I(SCRIPT_CR),
           "Rec", I(SCRIPT_REC),
           NULL);
 
-	ctrl_editbox(s, "中断：", 'x', 80, HELPCTX(no_help),
+	ctrl_editbox(s, "停止在：", 'x', 80, HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_script_halton), I(1));
 	ctrl_checkbox(s, "等待主机响应", 'r', HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_script_enable));
-  ctrl_checkbox(s, "第一个命令例外", 's', HELPCTX(no_help),
+  ctrl_checkbox(s, "第一个命令除外", 's', HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_script_except));
-	ctrl_checkbox(s, "文件中的使用条件", 'v', HELPCTX(no_help),
+	ctrl_checkbox(s, "使用文件中的条件", 'v', HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_script_cond_use));
 
 	ctrl_editbox(s, "超时(秒)：", 'u', 40, HELPCTX(no_help),
@@ -2909,7 +2909,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
     ctrl_checkbox(s, "开启自动换行模式", 'w',
                   HELPCTX(terminal_autowrap),
                   conf_checkbox_handler, I(CONF_wrap_mode));
-    ctrl_checkbox(s, "开启DEC原点模式", 'd',
+    ctrl_checkbox(s, "开启DEC原始模式", 'd',
                   HELPCTX(terminal_decom),
                   conf_checkbox_handler, I(CONF_dec_om));
     ctrl_checkbox(s, "每个LF字符后面增加CR字符", 'r',
@@ -2943,7 +2943,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
               "强制关", I(FORCE_OFF), NULL);
 
     s = ctrl_getset(b, "终端", "printing", "远程打印：");
-    ctrl_combobox(s, "发送ANSI码输出到打印机：", 'p', 100,
+    ctrl_combobox(s, "发送ANSI码输出到打印机", 'p', 100,
 		  HELPCTX(terminal_printing),
 		  printerbox_handler, P(NULL), P(NULL));
 
@@ -2961,7 +2961,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
 		      I(CONF_bksp_is_delete),
 		      "Control-H", I(0), "Control-? (127)", I(1), NULL);
 #ifdef MOD_PERSO
-    ctrl_radiobuttons(s, "Enter键", 'y', 2,
+    ctrl_radiobuttons(s, "Enter回车键", 'y', 2,
 		      HELPCTX(no_help),
 		      conf_radiobutton_handler,
 		      I(CONF_enter_sends_crlf),
@@ -2993,7 +2993,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
 		      NULL);
 
     s = ctrl_getset(b, "终端/键盘", "appkeypad",
-		    "应用程序控制设置：");
+		    "控制应用程序设置：");
     ctrl_radiobuttons(s, "方向键的初始状态", 'r', 3,
 		      HELPCTX(keyboard_appcursor),
 		      conf_radiobutton_bool_handler,
@@ -3026,20 +3026,20 @@ void setup_config_box(struct controlbox *b, bool midsession,
 #endif
 
 s = ctrl_getset(b, "终端/提示音", "overload",
-                    "提示音重复设置：");
+                    "控制提示音重复设置：");
     ctrl_checkbox(s, "过度提醒时暂时禁用提示音", 'd',
                   HELPCTX(bell_overload),
                   conf_checkbox_handler, I(CONF_bellovl));
     ctrl_editbox(s, "判断提示音过度的最少次数", 'm', 20,
                  HELPCTX(bell_overload),
                  conf_editbox_handler, I(CONF_bellovl_n), I(-1));
-    ctrl_editbox(s, "统计提示音过度的时间间隔(s)", 't', 20,
+    ctrl_editbox(s, "统计提示音过度的间隔秒数", 't', 20,
                  HELPCTX(bell_overload),
                  conf_editbox_handler, I(CONF_bellovl_t),
                  I(-TICKSPERSEC));
     ctrl_text(s, "提示音禁用一段时间后可以重新启用",
               HELPCTX(bell_overload));
-    ctrl_editbox(s, "需要静默的时间是多少秒：", 's', 20,
+    ctrl_editbox(s, "需要静默的时间是多少秒", 's', 20,
                  HELPCTX(bell_overload),
                  conf_editbox_handler, I(CONF_bellovl_s),
                  I(-TICKSPERSEC));
@@ -3051,10 +3051,10 @@ s = ctrl_getset(b, "终端/提示音", "overload",
                   "启/禁用高级终端功能");
 
     s = ctrl_getset(b, "终端/高级设置", "main", NULL);
-    ctrl_checkbox(s, "禁用方向键应用模式", 'u',
+    ctrl_checkbox(s, "禁用应用程序方向键模式", 'u',
                   HELPCTX(features_application),
                   conf_checkbox_handler, I(CONF_no_applic_c));
-    ctrl_checkbox(s, "禁用数字小键盘应用模式", 'k',
+    ctrl_checkbox(s, "禁用应用程序数字小键盘模式", 'k',
                   HELPCTX(features_application),
                   conf_checkbox_handler, I(CONF_no_applic_k));
     ctrl_checkbox(s, "禁用xterm风格的鼠标接管", 'x',
@@ -3071,7 +3071,7 @@ s = ctrl_getset(b, "终端/提示音", "overload",
                   HELPCTX(features_retitle),
                   conf_checkbox_handler,
                   I(CONF_no_remote_wintitle));
-    ctrl_radiobuttons(s, "对远程查询标题的回应(涉及安全)：", 'q', 3,
+    ctrl_radiobuttons(s, "对远程标题查询的回应(涉及安全)：", 'q', 3,
                       HELPCTX(features_qtitle),
                       conf_radiobutton_handler,
                       I(CONF_remote_qtitle_action),
@@ -3082,7 +3082,7 @@ s = ctrl_getset(b, "终端/提示音", "overload",
 		  HELPCTX(features_clearscroll),
 		  conf_checkbox_handler,
 		  I(CONF_no_remote_clearscroll));
-    ctrl_checkbox(s, "禁用在服务器发送^?时，强制退格删除",'b',
+    ctrl_checkbox(s, "禁用在服务器发送^?时,强制退格删除",'b',
                   HELPCTX(features_dbackspace),
                   conf_checkbox_handler, I(CONF_no_dbackspace));
     ctrl_checkbox(s, "禁用远程控制设置字符集",
@@ -3216,7 +3216,7 @@ s = ctrl_getset(b, "终端/提示音", "overload",
     if( !GetPuttyFlag() && (GetIconeFlag()>0) ) {
     s = ctrl_getset(b, "窗口/外观", "icon",
 		    "自定义窗口图标：");
-    c = ctrl_editbox(s, "图标(内部资源0-43，0=随机)", NO_SHORTCUT, 40,
+    c = ctrl_editbox(s, "图标(内部资源0-50，0=随机)", NO_SHORTCUT, 40,
 			 HELPCTX(no_help),
 			 conf_editbox_handler, I(CONF_icone), I(-1) ) ;
     ctrl_filesel(s, "外部图标文件", NO_SHORTCUT,
@@ -3368,14 +3368,14 @@ if( !GetPuttyFlag() ) {
 		  codepage_handler, P(NULL), P(NULL));
 
     s = ctrl_getset(b, "窗口/字符转换", "tweaks", NULL);
-    ctrl_checkbox(s, "将不确定的字符处理为CJK字符", 'w',
+    ctrl_checkbox(s, "将模棱两可的字符视为CJK宽字符", 'w',
 		  HELPCTX(translation_cjk_ambig_wide),
 		  conf_checkbox_handler, I(CONF_cjk_ambig_wide));
 
-    str = dupprintf("调整%s的字符画线处理方式：", appname);
+    str = dupprintf("调整%s画线字符的处理方式：", appname);
     s = ctrl_getset(b, "窗口/字符转换", "linedraw", str);
     sfree(str);
-    ctrl_radiobuttons(s, "字符画线处理", NO_SHORTCUT,1,
+    ctrl_radiobuttons(s, "画线字符处理", NO_SHORTCUT,1,
 		      HELPCTX(translation_linedraw),
 		      conf_radiobutton_handler,
 		      I(CONF_vtmode),
@@ -3502,8 +3502,8 @@ if( !GetPuttyFlag() ) {
     str = dupprintf("自定义%s颜色显示：", appname);
     s = ctrl_getset(b, "窗口/颜色", "adjust", str);
     sfree(str);
-    ctrl_text(s, "从下表选择要改变颜色的表项，设置RGB"
-                 "值，然后点“修改”使其生效。",
+    ctrl_text(s, "请从下表中选择想要改变颜色的表项,设置RGB"
+                 "值,然后点\"修改\"使其生效",
 	      HELPCTX(colours_config));
     ctrl_columns(s, 2, 67, 33);
 #ifndef MOD_TUTTYCOLOR
@@ -3539,7 +3539,7 @@ if( !GetPuttyFlag() ) {
 
 	s = ctrl_getset(b, "连接", "keepalive",
                         "发送空数据包保持会话连接：");
-        ctrl_editbox(s, "空数据包发送间隔秒数(0表示关闭)", 'k', 20,
+        ctrl_editbox(s, "Keepalives的间隔秒数(0表示关闭)", 'k', 20,
 		     HELPCTX(connection_keepalive),
 		     conf_editbox_handler, I(CONF_ping_interval),
 		     I(-1));
@@ -3552,11 +3552,11 @@ if( !GetPuttyFlag() ) {
 	if (!midsession) {
 	    s = ctrl_getset(b, "连接", "tcp",
 			    "底层TCP连接选项：");
-	    ctrl_checkbox(s, "禁止Nagle算法(TCP_NODELAY参数)",
+	    ctrl_checkbox(s, "禁用 Nagle 算法(TCP_NODELAY选项)",
 			  'n', HELPCTX(connection_nodelay),
 			  conf_checkbox_handler,
 			  I(CONF_tcp_nodelay));
-	    ctrl_checkbox(s, "允许TCP保持会话连接(SO_KEEPALIVE参数)",
+	    ctrl_checkbox(s, "启用TCP Keepalives(SO_KEEPALIVE选项)",
 			  'p', HELPCTX(connection_tcpkeepalive),
 			  conf_checkbox_handler,
 			  I(CONF_tcp_keepalives));
@@ -3583,7 +3583,7 @@ if( !GetPuttyFlag() ) {
 
 	    {
                 const char *label = backend_vt_from_proto(PROT_SSH) ?
-                    "远程主机的注册名(用于SSH密钥查找)：" :
+                    "远程主机的注册名(用于SSH密钥查找)" :
 		    "Logical name of remote host:";
                 s = ctrl_getset(b, "连接", "identity",
                                 "远程主机：");
@@ -3596,12 +3596,12 @@ if( !GetPuttyFlag() ) {
      if( !GetPuttyFlag() ) {
 //    ctrl_settitle(b, "Connection/Port knocking", "Options controlling port knocking") ;
     s = ctrl_getset(b, "连接", "PortKnocking",
-			"Port Knocking 序列：");
-    ctrl_editbox(s, "顺序：",  NO_SHORTCUT, 100,
+			"Port Knocking(端口试探)序列：");
+    ctrl_editbox(s, "顺序",  NO_SHORTCUT, 100,
 		 HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_portknockingoptions), I(1));
-    ctrl_text(s, "用逗号作为分隔的“端口:协议”列表，TCP/UDP协议有效。",HELPCTX(no_help));
-    ctrl_text(s, "特殊情况's'用于测试的间隔停顿。",HELPCTX(no_help));
+    ctrl_text(s, "用逗号作为分隔的\"端口:协议\"列表,TCP/UDP协议有效.",HELPCTX(no_help));
+    ctrl_text(s, "特殊情况's'用于测试的间隔停顿.",HELPCTX(no_help));
     ctrl_text(s, "例如：2001:tcp, 1:s, 2002:udp",HELPCTX(no_help));
 	}
 #endif
@@ -3640,7 +3640,7 @@ if( !GetPuttyFlag() ) {
 #ifdef MOD_PERSO
 	if( !GetPuttyFlag() ) {
 #ifndef MOD_NOPASSWORD
-	c = ctrl_editbox(s, "密码自动登陆：", NO_SHORTCUT, 50,
+	c = ctrl_editbox(s, "自动登陆密码", NO_SHORTCUT, 50,
 		     HELPCTX(no_help),
 		     conf_editbox_handler, I(CONF_password), I(1) ) ;
 	//if( !debug_flag )
@@ -3654,7 +3654,7 @@ if( !GetPuttyFlag() ) {
 			 ,FALSE, "选择要加载的登陆脚本文件",
 			 HELPCTX(no_help),
 			 conf_scriptfilesel_handler, I(CONF_scriptfile) ) ;
-	ctrlScriptFileContentEdit = ctrl_editbox(s, "登陆脚本内容：", NO_SHORTCUT, 60,
+	ctrlScriptFileContentEdit = ctrl_editbox(s, "登陆脚本内容", NO_SHORTCUT, 60,
 		     HELPCTX(no_help),
 		     conf_editbox_handler, I(CONF_scriptfilecontent), I(1) ) ;
 	}
@@ -3662,7 +3662,7 @@ if( !GetPuttyFlag() ) {
 
 	    s = ctrl_getset(b, "连接/数据", "term",
                             "终端的详细资料：");
-            ctrl_editbox(s, "终端字符串类型", 't', 50,
+            ctrl_editbox(s, "终端类型字符串", 't', 50,
 			 HELPCTX(connection_termtype),
 			 conf_editbox_handler, I(CONF_termtype), I(1));
 	    ctrl_editbox(s, "终端速度", 's', 50,
@@ -3738,7 +3738,7 @@ if( !GetPuttyFlag() ) {
 			 I(-1));
 	c->generic.column = 1;
 	ctrl_columns(s, 1, 100);
-	ctrl_editbox(s, "排除的主机/IP (逗号分隔,*通配符)", 'e', 100,
+	ctrl_editbox(s, "排除主机/IP (逗号分隔,*通配符)", 'e', 100,
 		     HELPCTX(proxy_exclude),
 		     conf_editbox_handler,
 		     I(CONF_proxy_exclude_list), I(1));
@@ -3836,7 +3836,7 @@ if( !GetPuttyFlag() ) {
 	if (!midsession) {
 	    s = ctrl_getset(b, "连接/SSH", "sharing", "在PuTTY工具间共享SSH连接：");
 
-	    ctrl_checkbox(s, "尽可能共享SSH连接", 's',
+	    ctrl_checkbox(s, "如果可能,共享SSH连接", 's',
 			  HELPCTX(ssh_share),
 			  conf_checkbox_handler,
 			  I(CONF_ssh_connection_sharing));
@@ -3847,7 +3847,7 @@ if( !GetPuttyFlag() ) {
 			  HELPCTX(ssh_share),
 			  conf_checkbox_handler,
 			  I(CONF_ssh_connection_sharing_upstream));
-	    ctrl_checkbox(s, "下游(连接到上游PuTTY的))", 'd',
+	    ctrl_checkbox(s, "下游(连接到上游PuTTY的)", 'd',
 			  HELPCTX(ssh_share),
 			  conf_checkbox_handler,
 			  I(CONF_ssh_connection_sharing_downstream));
@@ -3871,10 +3871,10 @@ if( !GetPuttyFlag() ) {
 	 * downstream, or haven't decided yet.)
 	 */
 	if (protcfginfo != 1 && protcfginfo != -1) {
-	    ctrl_settitle(b, "连接/SSH/密钥",
+	    ctrl_settitle(b, "连接/SSH/密钥交换",
                           "SSH 密钥交换设置");
 
-	    s = ctrl_getset(b, "连接/SSH/密钥", "main",
+	    s = ctrl_getset(b, "连接/SSH/密钥交换", "main",
                             "密钥交换算法设置：");
             c = ctrl_draglist(s, "算法策略选择", 's',
 			      HELPCTX(ssh_kexlist),
@@ -3887,7 +3887,7 @@ if( !GetPuttyFlag() ) {
 			  I(CONF_try_gssapi_kex));
 #endif
 
-	    s = ctrl_getset(b, "连接/SSH/密钥", "repeat",
+	    s = ctrl_getset(b, "连接/SSH/密钥交换", "repeat",
                             "密钥重复交换选项：");
 
 	    ctrl_editbox(s, "密钥有效性分钟时长(0=无限制)", 't', 20,
@@ -3937,10 +3937,10 @@ if( !GetPuttyFlag() ) {
 	 */
 	if (!midsession) {
 	    s = ctrl_getset(b, "连接/SSH/主机密钥", "hostkeys",
-                            "为连接手动配置主机密钥：");
+                            "为此连接手动配置主机密钥：");
 
             ctrl_columns(s, 2, 75, 25);
-            c = ctrl_text(s, "要接受的主机密钥或指纹：",
+            c = ctrl_text(s, "要接受的主机密钥或指纹",
                           HELPCTX(ssh_kex_manual_hostkeys));
             c->generic.column = 0;
             /* You want to select from the list, _then_ hit Remove. So
@@ -4002,15 +4002,15 @@ if( !GetPuttyFlag() ) {
                           "SSH 身份认证设置");
 
             s = ctrl_getset(b, "连接/SSH/认证", "main", NULL);
-            ctrl_checkbox(s, "显示预设认证标志(SSH-2 only)",
+            ctrl_checkbox(s, "显示预设认证标志(仅SSH-2)",
                           'd', HELPCTX(ssh_auth_banner),
                           conf_checkbox_handler,
                           I(CONF_ssh_show_banner));
-            ctrl_checkbox(s, "完全绕过身份验证(SSH-2 only)", 'b',
+            ctrl_checkbox(s, "完全绕过身份验证(仅SSH-2)", 'b',
                           HELPCTX(ssh_auth_bypass),
                           conf_checkbox_handler,
                           I(CONF_ssh_no_userauth));
-            ctrl_checkbox(s, "仅连接无密码或密钥验证，则断开连接",
+            ctrl_checkbox(s, "仅连接无密码或密钥验证,则断开连接",
                           'n', HELPCTX(ssh_no_trivial_userauth),
                           conf_checkbox_handler,
                           I(CONF_ssh_no_trivial_userauth));
@@ -4021,11 +4021,11 @@ if( !GetPuttyFlag() ) {
                           HELPCTX(ssh_auth_pageant),
                           conf_checkbox_handler,
                           I(CONF_tryagent));
-            ctrl_checkbox(s, "尝试TIS或CryptoCard身份验证(SSH-1)", 'm',
+            ctrl_checkbox(s, "尝试TIS或CryptoCard认证(SSH-1)", 'm',
                           HELPCTX(ssh_auth_tis),
                           conf_checkbox_handler,
                           I(CONF_try_tis_auth));
-            ctrl_checkbox(s, "尝试\"键盘交互式\"身份验证(SSH-2)",
+            ctrl_checkbox(s, "尝试\"键盘交互式\"认证(SSH-2)",
 			  'i', HELPCTX(ssh_auth_ki),
 			  conf_checkbox_handler,
 			  I(CONF_try_ki_auth));
@@ -4053,7 +4053,7 @@ if( !GetPuttyFlag() ) {
 			  "GSSAPI 身份认证设置");
 	    s = ctrl_getset(b, "连接/SSH/认证/GSSAPI", "gssapi", NULL);
 
-	    ctrl_checkbox(s, "尝试GSSAPI身份认证(仅SSH-2)",
+	    ctrl_checkbox(s, "尝试GSSAPI身份验证(仅SSH-2)",
 			  't', HELPCTX(ssh_gssapi),
 			  conf_checkbox_handler,
 			  I(CONF_try_gssapi_auth));
@@ -4131,7 +4131,7 @@ if( !GetPuttyFlag() ) {
 	    td->listbox->listbox.percentages[0] = 40;
 	    td->listbox->listbox.percentages[1] = 60;
 	    ctrl_columns(s, 2, 75, 25);
-	    c = ctrl_text(s, "对于选定的模式，发送：", HELPCTX(ssh_ttymodes));
+	    c = ctrl_text(s, "对于选定的模式,发送：", HELPCTX(ssh_ttymodes));
 	    c->generic.column = 0;
 	    td->setbutton = ctrl_pushbutton(s, "设置", 's',
 					    HELPCTX(ssh_ttymodes),
@@ -4187,7 +4187,7 @@ if( !GetPuttyFlag() ) {
                       "SSH 端口转发设置");
 
 	s = ctrl_getset(b, "连接/SSH/隧道", "portfwd",
-			"转发端口：");
+			"端口转发：");
 	ctrl_checkbox(s, "本地端口接受来自其他主机的连接",'t',
 		      HELPCTX(ssh_tunnels_portfwd_localhost),
 		      conf_checkbox_handler,
@@ -4197,7 +4197,7 @@ if( !GetPuttyFlag() ) {
 		      conf_checkbox_handler,
 		      I(CONF_rport_acceptall));
 #ifdef MOD_PERSO
-	ctrl_checkbox(s, "在窗口标题中显示动态端口",NO_SHORTCUT,
+	ctrl_checkbox(s, "在窗口标题中显示端口动态",NO_SHORTCUT,
 		      HELPCTX(no_help),
 		      conf_checkbox_handler,
 		      I(CONF_ssh_tunnel_print_in_title));
@@ -4274,7 +4274,7 @@ if( !GetPuttyFlag() ) {
             ctrl_droplist(s, "阻塞SSH-2的忽略消息", '2', 20,
 			  HELPCTX(ssh_bugs_ignore2),
 			  sshbug_handler, I(CONF_sshbug_ignore2));
-	    ctrl_droplist(s, "错误的处理SSH-2密钥重新交换", 'k', 20,
+	    ctrl_droplist(s, "错误的处理SSH-2密钥重复交换", 'k', 20,
 			  HELPCTX(ssh_bugs_rekey2),
 			  sshbug_handler, I(CONF_sshbug_rekey2));
 	    ctrl_droplist(s, "PuTTY的SSH-2'winadj'请求阻塞", 'j',
@@ -4342,7 +4342,7 @@ if( !GetPuttyFlag() ) {
 			  HELPCTX(no_help),
 			  conf_checkbox_handler,
 			  I(CONF_scp_auto_pwd));
-	   ctrl_editbox(s, "远程目录(以前的单独设置)", NO_SHORTCUT, 100,
+	   ctrl_editbox(s, "远程目录(使用之前单独设置)", NO_SHORTCUT, 100,
 		 HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_pscpremotedir),
 		 I(1));
@@ -4423,8 +4423,8 @@ if( !GetPuttyFlag() ) {
 	if( !GetPuttyFlag() ) {
 		ctrl_settitle(b, "注释", "注释选项");
 		s = ctrl_getset(b, "注释", "freecomment",
-			"现在您可以在会话中添加注释");
-		ctrl_editbox(s, "注释：", NO_SHORTCUT, 100,
+			"现在您可以在会话中添加注释：");
+		ctrl_editbox(s, "注释", NO_SHORTCUT, 100,
 		 HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_comment),
 		 I(1));
@@ -4484,7 +4484,7 @@ if( !GetPuttyFlag() ) {
                         "Telnet协议调整：");
 
         if (!midsession) {
-            ctrl_radiobuttons(s, "OLD_ENVIRON参数歧义处理",
+            ctrl_radiobuttons(s, "处理OLD_ENVIRON参数歧义",
                               NO_SHORTCUT, 2,
                               HELPCTX(telnet_oldenviron),
                               conf_radiobutton_bool_handler,
@@ -4501,7 +4501,7 @@ if( !GetPuttyFlag() ) {
                       HELPCTX(telnet_specialkeys),
                       conf_checkbox_handler,
                       I(CONF_telnet_keyboard));
-        ctrl_checkbox(s, "返回键发送Telnet新行代码而不是 ^M",
+        ctrl_checkbox(s, "Return回车键发送Telnet新行代码而不是^M",
                       'm', HELPCTX(telnet_newline),
                       conf_checkbox_handler,
                       I(CONF_telnet_newline));
@@ -4544,7 +4544,7 @@ if( !GetPuttyFlag() ) {
                           "ITS", I(SUPDUP_CHARSET_ITS),
                           "WAITS", I(SUPDUP_CHARSET_WAITS), NULL);
 
-        ctrl_checkbox(s, "**更多**处理", 'm',
+        ctrl_checkbox(s, "**MORE** 处理", 'm',
                       HELPCTX(supdup_more),
                       conf_checkbox_handler,
                       I(CONF_supdup_more));

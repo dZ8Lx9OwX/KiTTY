@@ -788,6 +788,9 @@ void RestartSession( void ) {
 		SetTimer(wgs.term_hwnd, TIMER_RECONNECT, 10, NULL) ;
 	}
 
+#ifdef MOD_FAR2L
+    term->far2l_ext = 0;
+#endif	
 	PostMessage(wgs.term_hwnd,WM_KEYDOWN,VK_RETURN ,0) ;
 	PostMessage(wgs.term_hwnd,WM_KEYUP,VK_RETURN ,1) ;
 }
@@ -1706,7 +1709,7 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 	    AppendMenu(m, MF_SEPARATOR, 0, 0);
 	    AppendMenu(m, (conf_get_int(conf, CONF_resize_action)
 			   == RESIZE_DISABLED) ? MF_GRAYED : MF_ENABLED,
-		       IDM_FULLSCREEN, "全屏(&F)");
+		       IDM_FULLSCREEN, "全屏显示(&F)");
 #ifdef MOD_PERSO
     if( !PuttyFlag ) {
         // if( !IsWow64() ) { AppendMenu(m, MF_ENABLED, IDM_PRINT, "Print clip&board") ; }  // Le menu print clipboard avait été desactivé un temps sur les machine 64bits
@@ -1716,7 +1719,7 @@ TrayIcone.hWnd = wgs.term_hwnd ;
             AppendMenu(m, MF_ENABLED|MF_CHECKED, IDM_VISIBLE, "始终可见(&B)");
         else
             AppendMenu(m, MF_ENABLED, IDM_VISIBLE, "始终可见(&B)");
-        AppendMenu(m, MF_ENABLED, IDM_PROTECT, "保护(&C)");
+        AppendMenu(m, MF_ENABLED, IDM_PROTECT, "保护会话(&C)");
 //char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"信息",MB_OK);
         if( GetWinrolFlag() ) AppendMenu(m, MF_ENABLED, IDM_WINROL, "向上卷起(&P)");
 	HMENU FontMenu = CreateMenu();
@@ -1733,7 +1736,7 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 
 	AppendMenu(m, MF_SEPARATOR, 0, 0);
 
-	AppendMenu(m, MF_ENABLED, IDM_SCRIPTFILE, "发送脚步文件(&I)" ) ;
+	AppendMenu(m, MF_ENABLED, IDM_SCRIPTFILE, "发送脚本文件(&I)" ) ;
         if( PSCPPath!=NULL ) AppendMenu(m, MF_ENABLED, IDM_PSCP, "使用PSCP发送(&H)");
         else AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_PSCP, "使用PSCP发送(&H)");
         if( WinSCPPath!=NULL ) AppendMenu(m, MF_ENABLED, IDM_WINSCP, "启动 WinSCP(&S)");
@@ -7742,11 +7745,11 @@ static void wintw_set_title(TermWin *tw, const char *title_in) {
 		{ title[strlen(title)-12]='\0' ; }
 
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)
-	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + strlen( conf_get_filename(conf,CONF_bg_image_filename)->path ) + 4096 ) ; 
+	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + strlen( conf_get_filename(conf,CONF_bg_image_filename)->path ) + 4096 ) ;
 	if( GetBackgroundImageFlag() && GetImageViewerFlag() && (!PuttyFlag) ) { sprintf( buffer, "%s", conf_get_filename(conf,CONF_bg_image_filename)->path ) ; }
 	else
 #else
-	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + 4096 ) ; 
+	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + 4096 ) ;
 #endif
 	if( GetSizeFlag() && (!IsZoomed( MainHwnd )) ) {
 		if( strlen( title ) > 0 ) {
@@ -7766,8 +7769,8 @@ static void wintw_set_title(TermWin *tw, const char *title_in) {
 			sprintf( buffer, "%s - %s", conf_get_str(conf,CONF_host), appname ) ;
 		}
 	}
-	if( GetProtectFlag() ) if( strstr(buffer, " (PROTECTED)")==NULL ) { strcat( buffer, " (PROTECTED)" ) ; }
-	if( conf_get_bool(conf, CONF_alwaysontop) ) if( strstr(buffer, " (ONTOP)")==NULL ) { strcat( buffer, " (ONTOP)" ) ; }
+	if( GetProtectFlag() ) if( strstr(buffer, " (PROTECTED)")==NULL ) { strcat( buffer, " (保护中...)" ) ; }
+	if( conf_get_bool(conf, CONF_alwaysontop) ) if( strstr(buffer, " (ONTOP)")==NULL ) { strcat( buffer, " (置顶)" ) ; }
 	if( conf_get_bool(conf, CONF_ssh_tunnel_print_in_title) ) if( strstr(buffer, " (SOCKS: ")==NULL ) {
 		make_title( fmt, " (SOCKS: %s)", "%%d") ;
 		strcat( buffer, fmt ) ;

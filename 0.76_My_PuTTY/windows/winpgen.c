@@ -670,7 +670,7 @@ static void setupbigedit1(HWND hwnd, int id, int idstatic, RSAKey *key)
     char *buffer = ssh1_pubkey_str(key);
     SetDlgItemText(hwnd, id, buffer);
     SetDlgItemText(hwnd, idstatic,
-		   "用于粘贴到authorized_keys文件的公钥：");
+		   "用于粘贴到 authorized_keys 文件的公钥：");
     sfree(buffer);
 }
 
@@ -679,8 +679,8 @@ static void setupbigedit2(HWND hwnd, int id, int idstatic,
 {
     char *buffer = ssh2_pubkey_openssh_str(key);
     SetDlgItemText(hwnd, id, buffer);
-    SetDlgItemText(hwnd, idstatic, "用于粘贴到"
-                   "authorized_keys文件的OpenSSH公钥：");
+    SetDlgItemText(hwnd, idstatic, "用于粘贴到 "
+                   "OpenSSH authorized_keys 文件的公钥：");
     sfree(buffer);
 }
 
@@ -1253,7 +1253,7 @@ static INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT msg,
                        "使用经过验证且均匀分布的素数(最慢)");
             AppendMenu(menu1, MF_SEPARATOR, 0, 0);
             AppendMenu(menu1, MF_ENABLED, IDC_RSA_STRONG,
-                       "使用\"强\"素数作为RSA的关键因子");
+                       "使用\"强\"素数作为RSA密钥要素");
             AppendMenu(menu1, MF_SEPARATOR, 0, 0);
             AppendMenu(menu1, MF_ENABLED, IDC_PPK_PARAMS,
                        "设置保存密钥文件的参数");
@@ -1316,7 +1316,7 @@ static INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT msg,
 	    statictext(&cp2, "", 1, IDC_GENERATING);
 	    progressbar(&cp2, IDC_PROGRESS);
 	    bigeditctrl(&cp,
-			"用于粘贴到authorized_keys文件的公钥：",
+			"用于粘贴到 authorized_keys 文件的公钥：",
 			IDC_PKSTATIC, IDC_KEYDISPLAY, 5);
 	    SendDlgItemMessage(hwnd, IDC_KEYDISPLAY, EM_SETREADONLY, 1, 0);
 	    staticedit(&cp, "密钥指纹(&I):", IDC_FPSTATIC,

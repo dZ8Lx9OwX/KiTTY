@@ -304,15 +304,15 @@ void old_keyfile_warning(void)
  */
 void pgp_fingerprints(void)
 {
-    fputs("这些是PuTTY PGP主密钥指纹。它们可以\n"
-          "用于建立从这个可执行文件到另一个的信任路径\n"
-          "有关详细信息，请参考手册。\n"
-          "(注意：这些指纹与SSH无关！！)\n"
-          "\n"
-	  "PuTTY PGP主密钥 " PGP_MASTER_KEY_YEAR
+    fputs("These are the fingerprints of the PuTTY PGP Master Keys. They can\n"
+	  "be used to establish a trust path from this executable to another\n"
+	  "one. See the manual for more information.\n"
+	  "(Note: these fingerprints have nothing to do with SSH!)\n"
+	  "\n"
+	  "PuTTY Master Key as of " PGP_MASTER_KEY_YEAR
           " (" PGP_MASTER_KEY_DETAILS "):\n"
 	  "  " PGP_MASTER_KEY_FP "\n\n"
-	  "以前的PGP主密钥 (" PGP_PREV_MASTER_KEY_YEAR
+	  "Previous Master Key (" PGP_PREV_MASTER_KEY_YEAR
           ", " PGP_PREV_MASTER_KEY_DETAILS "):\n"
 	  "  " PGP_PREV_MASTER_KEY_FP "\n", stdout);
 }

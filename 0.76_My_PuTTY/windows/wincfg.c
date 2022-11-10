@@ -300,7 +300,7 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 		    "字体设置：");
     ctrl_checkbox(s, "允许选择可变间距字体", NO_SHORTCUT,
                   HELPCTX(appearance_font), variable_pitch_handler, I(0));
-    ctrl_radiobuttons(s, "字体效果：", 'q', 2,
+    ctrl_radiobuttons(s, "字体效果", 'q', 2,
 		      HELPCTX(appearance_font),
 		      conf_radiobutton_handler,
 		      I(CONF_font_quality),
@@ -349,11 +349,11 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 		c->radio.buttons =
 		    sresize(c->radio.buttons, c->radio.nbuttons, char *);
 		c->radio.buttons[c->radio.nbuttons-3] =
-		    dupstr("X Windows 字体编码");
+		    dupstr("X Windows 画线绘制");
 		c->radio.buttons[c->radio.nbuttons-2] =
-		    dupstr("ANSI/OEM 模式字体编码");
+		    dupstr("ANSI/OEM 模式画线");
 		c->radio.buttons[c->radio.nbuttons-1] =
-		    dupstr("仅OEM模式字体编码");
+		    dupstr("仅OEM模式编码绘制");
 		c->radio.buttondata =
 		    sresize(c->radio.buttondata, c->radio.nbuttons, intorptr);
 		c->radio.buttondata[c->radio.nbuttons-3] = I(VT_XWINDOWS);
@@ -392,7 +392,7 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      */
     s = ctrl_getset(b, "窗口/选择", "mouse",
 		    "Control use of mouse");
-    ctrl_radiobuttons(s, "鼠标按键动作：", 'm', 1,
+    ctrl_radiobuttons(s, "鼠标按键动作", 'm', 1,
 		      HELPCTX(selection_buttons),
 		      conf_radiobutton_handler,
 		      I(CONF_mouse_is_xterm),
@@ -517,16 +517,16 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 	ctrl_settitle(b, "窗口/超链接", "超链接行为设置");
 	s = ctrl_getset(b, "窗口/超链接", "general", "超链接常规设置：");
 
-	ctrl_radiobuttons(s, "超链接下划线：", 'u', 1,
+	ctrl_radiobuttons(s, "超链接下划线", 'u', 1,
 			HELPCTX(no_help),
 			  conf_radiobutton_handler,
 			  I(CONF_url_underline),
-			  "总是", I(URLHACK_UNDERLINE_ALWAYS),
+			  "总是显示", I(URLHACK_UNDERLINE_ALWAYS),
 			  "在悬停时", I(URLHACK_UNDERLINE_HOVER),
-			  "从不", I(URLHACK_UNDERLINE_NEVER),
+			  "从不显示", I(URLHACK_UNDERLINE_NEVER),
 			  NULL);
 
-	ctrl_checkbox(s, "使用 Ctrl+Click 启动超链接", 'l',
+	ctrl_checkbox(s, "使用 \"Ctrl+点击\" 启动超链接", 'l',
 		  HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_url_ctrl_click));
 
@@ -547,12 +547,12 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 		  HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_url_defregex));
 
-	ctrl_editbox(s, "或指定您自己的：", NO_SHORTCUT, 100,
+	ctrl_editbox(s, "或指定您自己的", NO_SHORTCUT, 100,
 		 HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_url_regex),
 		 I(1));
 
-	ctrl_text(s, "如果存在，将在链接前面裁剪单个空白",
+	ctrl_text(s, "如果存在,将在链接前面裁剪单个空白",
 		  HELPCTX(no_help));
 	}
 #endif

@@ -468,7 +468,7 @@ void mainchan_get_specials(
 {
     /* FIXME: this _does_ depend on whether these services are supported */
 
-    add_special(ctx, "中断", SS_BRK, 0);
+    add_special(ctx, "Break (中断)", SS_BRK, 0);
 
     #define SIGNAL_MAIN(name, desc) \
     add_special(ctx, "SIG" #name " (" desc ")", SS_SIG ## name, 0);
@@ -477,7 +477,7 @@ void mainchan_get_specials(
     #undef SIGNAL_MAIN
     #undef SIGNAL_SUB
 
-    add_special(ctx, "更短信号", SS_SUBMENU, 0);
+    add_special(ctx, "更多信号", SS_SUBMENU, 0);
 
     #define SIGNAL_MAIN(name, desc)
     #define SIGNAL_SUB(name) \

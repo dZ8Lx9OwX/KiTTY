@@ -426,7 +426,7 @@ static void keylist_update_callback(
     if (ext_flags & LIST_EXTENDED_FLAG_HAS_NO_CLEARTEXT_KEY) {
         strbuf_catf(listentry, "\t(加密的)");
     } else if (ext_flags & LIST_EXTENDED_FLAG_HAS_ENCRYPTED_KEY_FILE) {
-        strbuf_catf(listentry, "\t(可加密)");
+        strbuf_catf(listentry, "\t(已解密)");
 
         /* At least one key can be re-encrypted */
         ctx->enable_reencrypt_controls = true;
