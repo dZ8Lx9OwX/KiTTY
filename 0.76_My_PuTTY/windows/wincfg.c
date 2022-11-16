@@ -552,7 +552,7 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 		 conf_editbox_handler, I(CONF_url_regex),
 		 I(1));
 
-	ctrl_text(s, "如果存在,将在链接前面裁剪单个空白",
+	ctrl_text(s, "如果存在,链接前面的空白标志将被裁剪",
 		  HELPCTX(no_help));
 	}
 #endif

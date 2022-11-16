@@ -2639,7 +2639,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
      * The Load/Save panel is available even in mid-session.
      */
     s = ctrl_getset(b, "会话", "savedsessions",
-		    midsession ? "Save the current session settings" :
+		    midsession ? "---保存当前会话设置---" :
 		    "---加载/保存或者删除存储的会话---");
     ctrl_columns(s, 2, 75, 25);
     get_sesslist(&ssd->sesslist, true);
@@ -2852,6 +2852,8 @@ void setup_config_box(struct controlbox *b, bool midsession,
 #ifdef MOD_RUTTY
     if( !GetPuttyFlag() && (GetRuttyFlag()>0) ) {
 	ctrl_settitle(b, "会话/脚本", "脚本(RuTTY补丁)设置");
+  if (!midsession)
+  {
 	s = ctrl_getset(b, "会话/脚本", "Start", NULL);
 	 ctrl_filesel(s, "脚本文件名：", 'f',
 		"Scr文件 (*.scr, *.txt)\0*.scr;*.txt\0所有文件 (*.*)\0*\0\0\0"
@@ -2863,6 +2865,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
           "回放", I(SCRIPT_PLAY),
           "录制", I(SCRIPT_RECORD),
           NULL);
+  }
 
    	s = ctrl_getset(b, "会话/脚本", "Scripting", NULL);
 
@@ -3272,8 +3275,8 @@ s = ctrl_getset(b, "终端/提示音", "overload",
               "平铺", NO_SHORTCUT, I(0),  // TODO: Define shortcuts for these.
               "居中", NO_SHORTCUT, I(1),
               "拉伸", NO_SHORTCUT, I(2),
-              "固定坐标(X,Y)", NO_SHORTCUT, I(3),
-	      "空白背影", NO_SHORTCUT, I(4),
+              "固定坐标X/Y", NO_SHORTCUT, I(3),
+	      "空白背景", NO_SHORTCUT, I(4),
 	      "拉伸+", NO_SHORTCUT, I(5),
               NULL);
 

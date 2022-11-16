@@ -4,8 +4,9 @@
   record and replay putty, scripting the easy way
 */
 
-extern Ldisc *ldisc;  /* defined in window.c */
-extern HWND MainHwnd;    /* in winstuff.h */
+//extern void *ldisc;  /* defined in window.c */
+static Ldisc *ldisc;
+//extern HWND hwnd;    /* in winstuff.h */
 
 
 /* sort of copy of prompt_keyfile in winpgen.c
@@ -15,14 +16,14 @@ int prompt_scriptfile(HWND hwnd, char * filename)
     OPENFILENAME of;
     memset(&of, 0, sizeof(of));
     of.hwndOwner = hwnd;
-    of.lpstrFilter = "All Files (*.*)\0*\0\0\0";
+    of.lpstrFilter = "所有文件(*.*)\0*\0\0\0";
     of.lpstrCustomFilter = NULL;
     of.nFilterIndex = 1;
     of.lpstrFile = filename;
     *filename = '\0';
     of.nMaxFile = FILENAME_MAX;
     of.lpstrFileTitle = NULL;
-    of.lpstrTitle = "Select Script File ";
+    of.lpstrTitle = "选择脚本文件";
     of.Flags = 0;
     return request_file(NULL, &of, FALSE, 1);
 }
@@ -45,11 +46,11 @@ void script_menu(ScriptData * scriptdata)
   {
     if(scriptdata->runs)
     {
-      ModifyMenu(popup_menus[i].menu, IDM_SCRIPTSEND, MF_BYCOMMAND | MF_ENABLED, IDM_SCRIPTHALT, "Stop sending script");
+      ModifyMenu(popup_menus[i].menu, IDM_SCRIPTSEND, MF_BYCOMMAND | MF_ENABLED, IDM_SCRIPTHALT, "停止发送脚本");
     }
     else
     {
-      ModifyMenu(popup_menus[i].menu, IDM_SCRIPTHALT, MF_BYCOMMAND | MF_ENABLED, IDM_SCRIPTSEND, "Send script file");
+      ModifyMenu(popup_menus[i].menu, IDM_SCRIPTHALT, MF_BYCOMMAND | MF_ENABLED, IDM_SCRIPTSEND, "发送脚本文件");
     }
   }
 }

@@ -1270,10 +1270,10 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
 
     if (s->warn_kex) {
         s->dlgret = ssh2_transport_confirm_weak_crypto_primitive(
-            s, "key-exchange algorithm", s->kex_alg->name, s->kex_alg);
+            s, "密钥交换算法", s->kex_alg->name, s->kex_alg);
         crMaybeWaitUntilV(s->dlgret >= 0);
         if (s->dlgret == 0) {
-            ssh_user_close(s->ppl.ssh, "用户在 kex 警告中中止");
+            ssh_user_close(s->ppl.ssh, "用户在密钥交换警告中中止");
             return;
         }
     }
@@ -1324,7 +1324,7 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
                 /* If none exist, use the more general 'weak crypto'
                  * warning prompt */
                 s->dlgret = ssh2_transport_confirm_weak_crypto_primitive(
-                    s, "host key type", s->hostkey_alg->ssh_id,
+                    s, "主机密钥类型", s->hostkey_alg->ssh_id,
                     s->hostkey_alg);
         }
         crMaybeWaitUntilV(s->dlgret >= 0);
@@ -1336,22 +1336,22 @@ static void ssh2_transport_process_queue(PacketProtocolLayer *ppl)
 
     if (s->warn_cscipher) {
         s->dlgret = ssh2_transport_confirm_weak_crypto_primitive(
-            s, "client-to-server cipher", s->out.cipher->ssh2_id,
+            s, " client-to-server 加密", s->out.cipher->ssh2_id,
             s->out.cipher);
         crMaybeWaitUntilV(s->dlgret >= 0);
         if (s->dlgret == 0) {
-            ssh_user_close(s->ppl.ssh, "用户在密码警告中中止");
+            ssh_user_close(s->ppl.ssh, "用户在加密警告中中止");
             return;
         }
     }
 
     if (s->warn_sccipher) {
         s->dlgret = ssh2_transport_confirm_weak_crypto_primitive(
-            s, "server-to-client cipher", s->in.cipher->ssh2_id,
+            s, " server-to-client 加密", s->in.cipher->ssh2_id,
             s->in.cipher);
         crMaybeWaitUntilV(s->dlgret >= 0);
         if (s->dlgret == 0) {
-            ssh_user_close(s->ppl.ssh, "用户在密码警告中中止");
+            ssh_user_close(s->ppl.ssh, "用户在加密警告中中止");
             return;
         }
     }

@@ -275,7 +275,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		sprintf( buffer, "KiTTY - %s", BuildVersionTime ) ;
 		SetDlgItemText(hwnd,IDA_VERSION,buffer);
 
-		str = dupprintf("关于%s_v0.76.0.12.1 - 这是一个KiTTY中文版本！", appname);
+		str = dupprintf("关于%s_v0.76.0.13.1 - 这是一个KiTTY中文版本！", appname);
 		SetWindowText(hwnd, str);
 		sfree(str);
 
@@ -1414,7 +1414,7 @@ int win_seat_confirm_weak_crypto_primitive(
     static const char mbtitle[] = "%s 安全警报";
     static const char msg[] =
         "当前服务器支持的%s\n"
-        "为%s，低于配置的警告阀值。\n"
+        "为 %s，低于配置的警告阀值。\n"
         "您想继续这个连接吗？？？\n";
     char *message, *title;
     int mbret;
