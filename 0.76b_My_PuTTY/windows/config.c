@@ -147,19 +147,19 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 	 * Add the About and Help buttons to the standard panel.
 	 */
 	s = ctrl_getset(b, "", "", "");
-	c = ctrl_pushbutton(s, "About", 'a', HELPCTX(no_help),
+	c = ctrl_pushbutton(s, "关 于", 'a', HELPCTX(no_help),
 			    about_handler, P(hwndp));
 	c->generic.column = 0;
 #ifdef MOD_PERSO
 	if (has_help) {
-	    c = ctrl_pushbutton(s, "Help", 'h', HELPCTX(no_help),
+	    c = ctrl_pushbutton(s, "帮 助", 'h', HELPCTX(no_help),
 				help_handler, P(hwndp));
-		if( GetConfigBoxHeight() > 7 ) c->generic.column = 0 ; else 
+		if( GetConfigBoxHeight() > 7 ) c->generic.column = 0 ; else
 	    c->generic.column = 1;
 	}
 #ifndef FLJ
 	if( !get_param("PUTTY") ) {
-		c = ctrl_pushbutton(s, "Check Update", NO_SHORTCUT, HELPCTX(no_help),
+		c = ctrl_pushbutton(s, "检测更新", NO_SHORTCUT, HELPCTX(no_help),
 			    checkupdate_handler, P(hwndp));
 		if( GetConfigBoxHeight() > 7 ) c->generic.column = 0 ; else
 		c->generic.column = 2;
@@ -167,7 +167,7 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 #endif
 #else
 	if (has_help) {
-	    c = ctrl_pushbutton(s, "Help", 'h', HELPCTX(no_help),
+	    c = ctrl_pushbutton(s, "帮 助", 'h', HELPCTX(no_help),
 				help_handler, P(hwndp));
 	    c->generic.column = 1;
 	}
@@ -178,9 +178,9 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * Full-screen mode is a Windows peculiarity; hence
      * scrollbar_in_fullscreen is as well.
      */
-    s = ctrl_getset(b, "Window", "scrollback",
-		    "Control the scrollback in the window");
-    ctrl_checkbox(s, "Display scrollbar in full screen mode", 'i',
+    s = ctrl_getset(b, "窗口", "scrollback",
+		    "控制窗口中的滚动");
+    ctrl_checkbox(s, "在全屏模式下显示滚动条", 'i',
 		  HELPCTX(window_scrollback),
 		  conf_checkbox_handler,
 		  I(CONF_scrollbar_in_fullscreen));
@@ -213,12 +213,12 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * Windows has the AltGr key, which has various Windows-
      * specific options.
      */
-    s = ctrl_getset(b, "Terminal/Keyboard", "features",
-		    "Enable extra keyboard features:");
-    ctrl_checkbox(s, "AltGr acts as Compose key", 't',
+    s = ctrl_getset(b, "终端/键盘", "features",
+		    "启用额外的键盘功能：");
+    ctrl_checkbox(s, "AltGr充当Compose键", 't',
 		  HELPCTX(keyboard_compose),
 		  conf_checkbox_handler, I(CONF_compose_key));
-    ctrl_checkbox(s, "Control-Alt is different from AltGr", 'd',
+    ctrl_checkbox(s, "Control-Alt与AltGr不同", 'd',
 		  HELPCTX(keyboard_ctrlalt),
 		  conf_checkbox_handler, I(CONF_ctrlaltkeys));
 
@@ -227,7 +227,7 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * also the use of the PC speaker. For this we must search the
      * existing controlset for the radio-button set controlling the
      * `beep' option, and add extra buttons to it.
-     * 
+     *
      * Note that although this _looks_ like a hideous hack, it's
      * actually all above board. The well-defined interface to the
      * per-platform dialog box code is the _data structures_ `union
@@ -239,7 +239,7 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * the interface, and template creation code is under no actual
      * obligation to use them.
      */
-    s = ctrl_getset(b, "Terminal/Bell", "style", "Set the style of bell");
+    s = ctrl_getset(b, "终端/提示音", "style", "自定义设置");
     {
 	int i;
 	for (i = 0; i < s->ncontrols; i++) {
@@ -251,9 +251,9 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 		c->radio.buttons =
 		    sresize(c->radio.buttons, c->radio.nbuttons, char *);
 		c->radio.buttons[c->radio.nbuttons-1] =
-		    dupstr("Play a custom sound file");
+		    dupstr("播放自定义提示音");
 		c->radio.buttons[c->radio.nbuttons-2] =
-		    dupstr("Beep using the PC speaker");
+		    dupstr("PC蜂鸣器提示音");
 		c->radio.buttondata =
 		    sresize(c->radio.buttondata, c->radio.nbuttons, intorptr);
 		c->radio.buttondata[c->radio.nbuttons-1] = I(BELL_WAVEFILE);
@@ -268,8 +268,8 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 	    }
 	}
     }
-    ctrl_filesel(s, "Custom sound file to play as a bell:", NO_SHORTCUT,
-		 FILTER_WAVE_FILES, false, "Select bell sound file",
+    ctrl_filesel(s, "自定义提示音文件：", NO_SHORTCUT,
+		 FILTER_WAVE_FILES, false, "选择声音文件",
 		 HELPCTX(bell_style),
 		 conf_filesel_handler, I(CONF_bell_wavefile));
 
@@ -277,46 +277,46 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * While we've got this box open, taskbar flashing on a bell is
      * also Windows-specific.
      */
-    ctrl_radiobuttons(s, "Taskbar/caption indication on bell:", 'i', 3,
+    ctrl_radiobuttons(s, "任务栏/标题栏提示音标志：", 'i', 3,
 		      HELPCTX(bell_taskbar),
 		      conf_radiobutton_handler,
 		      I(CONF_beep_ind),
-		      "Disabled", I(B_IND_DISABLED),
-		      "Flashing", I(B_IND_FLASH),
-		      "Steady", I(B_IND_STEADY), NULL);
+		      "已禁用", I(B_IND_DISABLED),
+		      "闪烁", I(B_IND_FLASH),
+		      "常规", I(B_IND_STEADY), NULL);
 
     /*
      * The sunken-edge border is a Windows GUI feature.
      */
-    s = ctrl_getset(b, "Window/Appearance", "border",
-		    "Adjust the window border");
-    ctrl_checkbox(s, "Sunken-edge border (slightly thicker)", 's',
+    s = ctrl_getset(b, "窗口/外观", "border",
+		    "调整窗口边框：");
+    ctrl_checkbox(s, "下沉边框边缘(稍厚)", 's',
 		  HELPCTX(appearance_border),
 		  conf_checkbox_handler, I(CONF_sunken_edge));
 
     /*
      * Configurable font quality settings for Windows.
      */
-    s = ctrl_getset(b, "Window/Appearance", "font",
-		    "Font settings");
-    ctrl_checkbox(s, "Allow selection of variable-pitch fonts", NO_SHORTCUT,
+    s = ctrl_getset(b, "窗口/外观", "font",
+		    "字体设置：");
+    ctrl_checkbox(s, "允许选择可变间距字体", NO_SHORTCUT,
                   HELPCTX(appearance_font), variable_pitch_handler, I(0));
-    ctrl_radiobuttons(s, "Font quality:", 'q', 2,
+    ctrl_radiobuttons(s, "字体效果", 'q', 2,
 		      HELPCTX(appearance_font),
 		      conf_radiobutton_handler,
 		      I(CONF_font_quality),
-		      "Antialiased", I(FQ_ANTIALIASED),
-		      "Non-Antialiased", I(FQ_NONANTIALIASED),
+		      "抗锯齿", I(FQ_ANTIALIASED),
+		      "无抗锯齿", I(FQ_NONANTIALIASED),
 		      "ClearType", I(FQ_CLEARTYPE),
-		      "Default", I(FQ_DEFAULT), NULL);
+		      "默认", I(FQ_DEFAULT), NULL);
 
     /*
      * Cyrillic Lock is a horrid misfeature even on Windows, and
      * the least we can do is ensure it never makes it to any other
      * platform (at least unless someone fixes it!).
      */
-    s = ctrl_getset(b, "Window/Translation", "tweaks", NULL);
-    ctrl_checkbox(s, "Caps Lock acts as Cyrillic switch", 's',
+    s = ctrl_getset(b, "窗口/字符转换", "tweaks", NULL);
+    ctrl_checkbox(s, "大写锁定键用于Cyrillic切换", 's',
 		  HELPCTX(translation_cyrillic),
 		  conf_checkbox_handler,
 		  I(CONF_xlat_capslockcyr));
@@ -325,10 +325,10 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * On Windows we can use but not enumerate translation tables
      * from the operating system. Briefly document this.
      */
-    s = ctrl_getset(b, "Window/Translation", "trans",
-		    "Character set translation on received data");
-    ctrl_text(s, "(Codepages supported by Windows but not listed here, "
-	      "such as CP866 on many systems, can be entered manually)",
+    s = ctrl_getset(b, "窗口/字符转换", "trans",
+		    "接收数据的字符集转换");
+    ctrl_text(s, "Windows支持但未列出的字符集,"
+	      "比如很多系统上都有的CP866,可以手动输入)",
 	      HELPCTX(translation_codepage));
 
     /*
@@ -336,8 +336,8 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * additional options when working with line-drawing
      * characters.
      */
-    str = dupprintf("Adjust how %s displays line drawing characters", appname);
-    s = ctrl_getset(b, "Window/Translation", "linedraw", str);
+    str = dupprintf("调整%s处理字符的方式：", appname);
+    s = ctrl_getset(b, "窗口/字符转换", "linedraw", str);
     sfree(str);
     {
 	int i;
@@ -350,11 +350,11 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 		c->radio.buttons =
 		    sresize(c->radio.buttons, c->radio.nbuttons, char *);
 		c->radio.buttons[c->radio.nbuttons-3] =
-		    dupstr("Font has XWindows encoding");
+		    dupstr("X Windows 画线绘制");
 		c->radio.buttons[c->radio.nbuttons-2] =
-		    dupstr("Use font in both ANSI and OEM modes");
+		    dupstr("ANSI/OEM 模式画线");
 		c->radio.buttons[c->radio.nbuttons-1] =
-		    dupstr("Use font in OEM mode only");
+		    dupstr("仅OEM模式编码绘制");
 		c->radio.buttondata =
 		    sresize(c->radio.buttondata, c->radio.nbuttons, intorptr);
 		c->radio.buttondata[c->radio.nbuttons-3] = I(VT_XWINDOWS);
@@ -380,9 +380,9 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
     /*
      * RTF paste is Windows-specific.
      */
-    s = ctrl_getset(b, "Window/Selection/Copy", "format",
-		    "Formatting of copied characters");
-    ctrl_checkbox(s, "Copy to clipboard in RTF as well as plain text", 'f',
+    s = ctrl_getset(b, "窗口/选择/复制", "format",
+		    "复制字符的方式：");
+    ctrl_checkbox(s, "以RTF和纯文本格式复制", 'f',
 		  HELPCTX(copy_rtf),
 		  conf_checkbox_handler, I(CONF_rtf_paste));
 
@@ -391,15 +391,15 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * mode in which the more critical Paste action is available on
      * the right button instead.
      */
-    s = ctrl_getset(b, "Window/Selection", "mouse",
-		    "Control use of mouse");
-    ctrl_radiobuttons(s, "Action of mouse buttons:", 'm', 1,
+    s = ctrl_getset(b, "窗口/选择", "mouse",
+		    "控制鼠标的使用");
+    ctrl_radiobuttons(s, "鼠标按键动作", 'm', 1,
 		      HELPCTX(selection_buttons),
 		      conf_radiobutton_handler,
 		      I(CONF_mouse_is_xterm),
-		      "Windows (Middle extends, Right brings up menu)", I(2),
-		      "Compromise (Middle extends, Right pastes)", I(0),
-		      "xterm (Right extends, Middle pastes)", I(1), NULL);
+		      "Windows--中键扩展,右键菜单", I(2),
+		      "Compromise--中键扩展,右键粘贴", I(0),
+		      "xterm--右键扩展,中键粘贴", I(1), NULL);
     /*
      * This really ought to go at the _top_ of its box, not the
      * bottom, so we'll just do some shuffling now we've set it
@@ -412,12 +412,12 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
     /*
      * Logical palettes don't even make sense anywhere except Windows.
      */
-    s = ctrl_getset(b, "Window/Colours", "general",
-		    "General options for colour usage");
-    ctrl_checkbox(s, "Attempt to use logical palettes", 'l',
+    s = ctrl_getset(b, "窗口/颜色", "general",
+		    "颜色使用的常规选项");
+    ctrl_checkbox(s, "尝试使用逻辑调色板", 'l',
 		  HELPCTX(colours_logpal),
 		  conf_checkbox_handler, I(CONF_try_palette));
-    ctrl_checkbox(s, "Use system colours", 's',
+    ctrl_checkbox(s, "使用系统颜色", 's',
                   HELPCTX(colours_system),
                   conf_checkbox_handler, I(CONF_system_colour));
 
@@ -430,15 +430,15 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
     if (backvt)
         resize_forbidden = (backvt->flags & BACKEND_RESIZE_FORBIDDEN);
     if (!midsession || !resize_forbidden) {
-    s = ctrl_getset(b, "Window", "size", "Set the size of the window");
-    ctrl_radiobuttons(s, "When window is resized:", 'z', 1,
+    s = ctrl_getset(b, "窗口", "size", "设置窗口大小");
+    ctrl_radiobuttons(s, "调整窗口大小时：", 'z', 1,
 		      HELPCTX(window_resize),
 		      conf_radiobutton_handler,
 		      I(CONF_resize_action),
-		      "Change the number of rows and columns", I(RESIZE_TERM),
-		      "Change the size of the font", I(RESIZE_FONT),
-		      "Change font size only when maximised", I(RESIZE_EITHER),
-		      "Forbid resizing completely", I(RESIZE_DISABLED), NULL);
+		      "更改行列数", I(RESIZE_TERM),
+		      "更改字体大小", I(RESIZE_FONT),
+		      "仅在最大化时更改字体大小", I(RESIZE_EITHER),
+		      "完全禁止调整大小", I(RESIZE_DISABLED), NULL);
     }
 
     /*
@@ -446,65 +446,65 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * conventions which PuTTY can optionally disregard. Hence,
      * most of these options are Windows-specific.
      */
-    s = ctrl_getset(b, "Window/Behaviour", "main", NULL);
-    ctrl_checkbox(s, "Window closes on ALT-F4", '4',
+    s = ctrl_getset(b, "窗口/行为", "main", NULL);
+    ctrl_checkbox(s, "ALT-F4 关闭窗口", '4',
 		  HELPCTX(behaviour_altf4),
 		  conf_checkbox_handler, I(CONF_alt_f4));
 #ifdef MOD_TUTTY
     wbd = (struct window_behaviour_data *)ctrl_alloc(b,
 	    sizeof(struct window_behaviour_data));
     memset(wbd, 0, sizeof(*wbd));
-    wbd->has_sysmenu = ctrl_checkbox(s, "Window has system menu (in upper left corner)", NO_SHORTCUT,
+    wbd->has_sysmenu = ctrl_checkbox(s, "窗口显示系统菜单(左上角)", NO_SHORTCUT,
 		  HELPCTX(no_help),
 		  behaviour_handler, P(wbd));
-    wbd->window_closable = ctrl_checkbox(s, "Window has Close button", NO_SHORTCUT,
+    wbd->window_closable = ctrl_checkbox(s, "窗口显示关闭按钮", NO_SHORTCUT,
 		  HELPCTX(no_help),
 		  behaviour_handler, P(wbd));
-    wbd->window_minimizable = ctrl_checkbox(s, "Window has Minimize button", NO_SHORTCUT,
+    wbd->window_minimizable = ctrl_checkbox(s, "窗口显示最小化按钮", NO_SHORTCUT,
 		  HELPCTX(no_help),
 		  behaviour_handler, P(wbd));
-    wbd->window_maximizable = ctrl_checkbox(s, "Window has Maximize button", NO_SHORTCUT,
+    wbd->window_maximizable = ctrl_checkbox(s, "窗口显示最大化按钮", NO_SHORTCUT,
 		  HELPCTX(no_help),
 		  behaviour_handler, P(wbd));
-    wbd->sysmenu_alt_space = ctrl_checkbox(s, "System menu appears on ALT-Space", 'y',
+    wbd->sysmenu_alt_space = ctrl_checkbox(s, "ALT-Space 显示系统菜单", 'y',
 		  HELPCTX(no_help),
 		  behaviour_handler, P(wbd));
-    wbd->sysmenu_alt_only = ctrl_checkbox(s, "System menu appears on ALT alone", 'l',
+    wbd->sysmenu_alt_only = ctrl_checkbox(s, "ALT 显示系统菜单", 'l',
 		  HELPCTX(no_help),
 		  behaviour_handler, P(wbd));
 #else
-    ctrl_checkbox(s, "System menu appears on ALT-Space", 'y',
+    ctrl_checkbox(s, "ALT-Space 显示系统菜单", 'y',
 		  HELPCTX(behaviour_altspace),
 		  conf_checkbox_handler, I(CONF_alt_space));
-    ctrl_checkbox(s, "System menu appears on ALT alone", 'l',
+    ctrl_checkbox(s, "ALT 显示系统菜单", 'l',
 		  HELPCTX(behaviour_altonly),
 		  conf_checkbox_handler, I(CONF_alt_only));
 #endif
-    ctrl_checkbox(s, "Ensure window is always on top", 'e',
+    ctrl_checkbox(s, "窗口总是保持在顶部", 'e',
 		  HELPCTX(behaviour_alwaysontop),
 		  conf_checkbox_handler, I(CONF_alwaysontop));
 #ifdef MOD_PERSO
 	if( !get_param("PUTTY") ) {
-		ctrl_checkbox(s, "Send to tray on startup", NO_SHORTCUT,
+		ctrl_checkbox(s, "启动时发送到系统托盘", NO_SHORTCUT,
 		  HELPCTX(no_help),
-		  conf_checkbox_handler, I(CONF_sendtotray)); 
-		ctrl_checkbox(s, "Maximize on startup", NO_SHORTCUT,
+		  conf_checkbox_handler, I(CONF_sendtotray));
+		ctrl_checkbox(s, "启动时最大化", NO_SHORTCUT,
 		  HELPCTX(no_help),
-		  conf_checkbox_handler, I(CONF_maximize)); 
-		ctrl_checkbox(s, "Full screen on startup", NO_SHORTCUT,
+		  conf_checkbox_handler, I(CONF_maximize));
+		ctrl_checkbox(s, "启动时全屏", NO_SHORTCUT,
 		  HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_fullscreen));
-		ctrl_checkbox(s, "Save position and size on exit", NO_SHORTCUT,
+		ctrl_checkbox(s, "退出时保存位置和大小", NO_SHORTCUT,
 		  HELPCTX(no_help),
-		  conf_checkbox_handler, I(CONF_saveonexit)); 
+		  conf_checkbox_handler, I(CONF_saveonexit));
 		if (!midsession && GetCtrlTabFlag() )
-		ctrl_checkbox(s, "Switch PuTTY windows with Ctrl + TAB", NO_SHORTCUT,
+		ctrl_checkbox(s, "Ctrl+TAB 切换PuTTY窗口", NO_SHORTCUT,
 			HELPCTX(no_help),
 			conf_checkbox_handler,
 			I(CONF_ctrl_tab_switch));
 		}
 #endif
-    ctrl_checkbox(s, "Full screen on Alt-Enter", 'f',
+    ctrl_checkbox(s, "Alt-Enter 开启全屏", 'f',
 		  HELPCTX(behaviour_altenter),
 		  conf_checkbox_handler,
 		  I(CONF_fullscreenonaltenter));
@@ -515,45 +515,45 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 	 * HACK: PuttyTray / Nutty
 	 * Hyperlink stuff: The Window/Hyperlinks panel.
 	 */
-	ctrl_settitle(b, "Window/Hyperlinks", "Options controlling behaviour of hyperlinks");
-	s = ctrl_getset(b, "Window/Hyperlinks", "general", "General options for hyperlinks");
+	ctrl_settitle(b, "窗口/超链接", "超链接行为设置");
+	s = ctrl_getset(b, "窗口/超链接", "general", "超链接常规设置：");
 
-	ctrl_radiobuttons(s, "Underline hyperlinks:", 'u', 1,
+	ctrl_radiobuttons(s, "超链接下划线", 'u', 1,
 			HELPCTX(no_help),
 			  conf_radiobutton_handler,
 			  I(CONF_url_underline),
-			  "Always", I(URLHACK_UNDERLINE_ALWAYS),
-			  "When hovered upon", I(URLHACK_UNDERLINE_HOVER),
-			  "Never", I(URLHACK_UNDERLINE_NEVER),
+			  "总是显示", I(URLHACK_UNDERLINE_ALWAYS),
+			  "在悬停时", I(URLHACK_UNDERLINE_HOVER),
+			  "从不显示", I(URLHACK_UNDERLINE_NEVER),
 			  NULL);
 
-	ctrl_checkbox(s, "Use ctrl+click to launch hyperlinks", 'l',
+	ctrl_checkbox(s, "使用 \"Ctrl+点击\" 启动超链接", 'l',
 		  HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_url_ctrl_click));
 
-	s = ctrl_getset(b, "Window/Hyperlinks", "browser", "Browser application");
+	s = ctrl_getset(b, "窗口/超链接", "browser", "浏览器应用：");
 
-	ctrl_checkbox(s, "Use the default browser", 'b',
+	ctrl_checkbox(s, "使用默认浏览器", 'b',
 		  HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_url_defbrowser));
 
-	ctrl_filesel(s, "or specify an application to open hyperlinks with:", 's',
-		"Application (*.exe)\0*.exe\0All files (*.*)\0*.*\0\0", TRUE,
-		"Select executable to open hyperlinks with", HELPCTX(no_help),
+	ctrl_filesel(s, "或者指定一个应用程序来打开超链接", 's',
+		"应用(*.exe)\0*.exe\0所有文件(*.*)\0*.*\0\0", TRUE,
+		"选择可执行文件来打开超链接", HELPCTX(no_help),
 		 conf_filesel_handler, I(CONF_url_browser));
 
-	s = ctrl_getset(b, "Window/Hyperlinks", "regexp", "Regular expression");
+	s = ctrl_getset(b, "窗口/超链接", "regexp", "正则表达式：");
 
-	ctrl_checkbox(s, "Use the default regular expression", 'r',
+	ctrl_checkbox(s, "使用默认的正则表达式", 'r',
 		  HELPCTX(no_help),
 		  conf_checkbox_handler, I(CONF_url_defregex));
 
-	ctrl_editbox(s, "or specify your own:", NO_SHORTCUT, 100,
+	ctrl_editbox(s, "或指定您自己的", NO_SHORTCUT, 100,
 		 HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_url_regex),
 		 I(1));
 
-	ctrl_text(s, "The single white space will be cropped in front of the link, if exists.",
+	ctrl_text(s, "如果存在,链接前面的空白标志将被裁剪",
 		  HELPCTX(no_help));
 	}
 #endif
@@ -564,7 +564,7 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      */
     if (!midsession) {
 	int i;
-        s = ctrl_getset(b, "Connection/Proxy", "basics", NULL);
+        s = ctrl_getset(b, "连接/代理", "basics", NULL);
 	for (i = 0; i < s->ncontrols; i++) {
 	    c = s->ctrls[i];
 	    if (c->generic.type == CTRL_RADIO &&
@@ -574,7 +574,7 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 		c->radio.buttons =
 		    sresize(c->radio.buttons, c->radio.nbuttons, char *);
 		c->radio.buttons[c->radio.nbuttons-1] =
-		    dupstr("Local");
+		    dupstr("本地");
 		c->radio.buttondata =
 		    sresize(c->radio.buttondata, c->radio.nbuttons, intorptr);
 		c->radio.buttondata[c->radio.nbuttons-1] = I(PROXY_CMD);
@@ -588,8 +588,8 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 		c->generic.context.i == CONF_proxy_telnet_command) {
 		assert(c->generic.handler == conf_editbox_handler);
 		sfree(c->generic.label);
-		c->generic.label = dupstr("Telnet command, or local"
-					  " proxy command");
+		c->generic.label = dupstr("Telnet命令或者本地"
+                                          "代理命令：");
 		break;
 	    }
 	}
@@ -600,22 +600,22 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
      * means to override it.
      */
     if (!midsession && backend_vt_from_proto(PROT_SSH)) {
-	s = ctrl_getset(b, "Connection/SSH/X11", "x11", "X11 forwarding");
-	ctrl_filesel(s, "X authority file for local display", 't',
-		     NULL, false, "Select X authority file",
+	s = ctrl_getset(b, "连接/SSH/X11", "x11", "X11转发");
+	ctrl_filesel(s, "用于本地显示的X授权文件：", 't',
+		     NULL, false, "选择授权文件",
 		     HELPCTX(ssh_tunnels_xauthority),
 		     conf_filesel_handler, I(CONF_xauthfile));
     }
 #ifdef MOD_PERSO
 	if( !GetPuttyFlag() && 0 ) {
 
-	ctrl_settitle(b, get_param_str("NAME"), "Specific program options");
-	s = ctrl_getset(b, get_param_str("NAME"), "general", "PATH definitions");
+	ctrl_settitle(b, get_param_str("NAME"), "具体程序选项：");
+	s = ctrl_getset(b, get_param_str("NAME"), "general", "路径定义");
 
-	ctrl_filesel(s, "Full path to scp", 's',
-		"Application (*.exe)\0*.exe\0All files (*.*)\0*.*\0\0", TRUE,
-		"Select executable to scp/sftp transfer", HELPCTX(no_help),
-		conf_filesel_handler, I(CONF_url_browser)); 
+	ctrl_filesel(s, "SCP完整路径", 's',
+		"应用程序(*.exe)\0*.exe\0All files (*.*)\0*.*\0\0", TRUE,
+		"选择SCP/SFTP传输可执行文件", HELPCTX(no_help),
+		conf_filesel_handler, I(CONF_url_browser));
 	}
 
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)

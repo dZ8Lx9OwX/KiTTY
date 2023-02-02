@@ -36,8 +36,8 @@
 #define DLGWIDTH 168
 #define STATICHEIGHT 8
 #define TITLEHEIGHT 12
-#define CHECKBOXHEIGHT 8
-#define RADIOHEIGHT 8
+#define CHECKBOXHEIGHT 9
+#define RADIOHEIGHT 9
 #define EDITHEIGHT 12
 #define LISTHEIGHT 11
 #define LISTINCREMENT 8
@@ -273,12 +273,12 @@ static void radioline_common(struct ctlpos *cp, char *text, int id,
  * (you might want this not to equal the number of buttons if you
  * needed to line up some 2s and some 3s to look good in the same
  * panel).
- * 
+ *
  * There's a bit of a hack in here to ensure that if nacross
  * exceeds the actual number of buttons, the rightmost button
  * really does get all the space right to the edge of the line, so
  * you can do things like
- * 
+ *
  * (*) Button1  (*) Button2  (*) ButtonWithReallyLongTitle
  */
 void radioline(struct ctlpos *cp, char *text, int id, int nacross, ...)
@@ -956,7 +956,7 @@ void prefslist(struct prefslist *hdl, struct ctlpos *cp, int lines,
             doctl(cp, r, "BUTTON",
                   BS_NOTIFY | WS_CHILD | WS_VISIBLE |
 		  WS_TABSTOP | BS_PUSHBUTTON,
-                  0, "&Up", upbid);
+                  0, "上移", upbid);
 
             r.left = left; r.right = wid;
             r.top = cp->ypos + buttonpos + PUSHBTNHEIGHT + GAPBETWEEN;
@@ -964,7 +964,7 @@ void prefslist(struct prefslist *hdl, struct ctlpos *cp, int lines,
             doctl(cp, r, "BUTTON",
                   BS_NOTIFY | WS_CHILD | WS_VISIBLE |
 		  WS_TABSTOP | BS_PUSHBUTTON,
-                  0, "&Down", dnbid);
+                  0, "下移", dnbid);
 
             break;
 
@@ -1041,7 +1041,7 @@ int pl_itemfrompt(HWND hwnd, POINT cursor, bool scroll)
 
 /*
  * Handler for prefslist above.
- * 
+ *
  * Return value has bit 0 set if the dialog box procedure needs to
  * return true from handling this message; it has bit 1 set if a
  * change may have been made in the contents of the list.
@@ -1179,7 +1179,7 @@ void progressbar(struct ctlpos *cp, int id)
  * places a single (unescaped) ampersand in front of the first
  * occurrence of the given shortcut character (which may be
  * NO_SHORTCUT).
- * 
+ *
  * Return value is a malloc'ed copy of the processed version of the
  * string.
  */
@@ -1675,7 +1675,7 @@ void winctrl_layout(struct dlgparam *dp, struct winctrls *wc,
 				      ctrl->fileselect.shortcut);
 	    shortcuts[nshortcuts++] = ctrl->fileselect.shortcut;
 	    editbutton(&pos, escaped, base_id, base_id+1,
-		       "Bro&wse...", base_id+2);
+		       "浏览...", base_id+2);
 #if (defined MOD_PERSO) && (!defined MOD_ZMODEM)
 	    if(GetZModemFlag()) { shortcuts[nshortcuts++] = 'w'; }
 #endif
@@ -1688,7 +1688,7 @@ void winctrl_layout(struct dlgparam *dp, struct winctrls *wc,
 				      ctrl->fontselect.shortcut);
 	    shortcuts[nshortcuts++] = ctrl->fontselect.shortcut;
 	    statictext(&pos, escaped, 1, base_id);
-	    staticbtn(&pos, "", base_id+1, "Change...", base_id+2);
+	    staticbtn(&pos, "", base_id+1, "修改...", base_id+2);
             data = fontspec_new("", false, 0, 0);
 	    sfree(escaped);
 	    break;
@@ -1699,7 +1699,7 @@ void winctrl_layout(struct dlgparam *dp, struct winctrls *wc,
 				      ctrl->fileselect.shortcut);
 	    shortcuts[nshortcuts++] = ctrl->fileselect.shortcut;
 	    editbutton(&pos, escaped, base_id, base_id+1,
-		       "Bro&wse...", base_id+2);
+		       "浏览...", base_id+2);
 	    sfree(escaped);
 	    break;
 #endif
@@ -1998,7 +1998,7 @@ bool winctrl_handle_command(struct dlgparam *dp, UINT msg,
 	    if (ctrl->fileselect.filter)
 		of.lpstrFilter = ctrl->fileselect.filter;
 	    else
-		of.lpstrFilter = "All Files (*.*)\0*\0\0\0";
+		of.lpstrFilter = "所有文件(*.*)\0*\0\0\0";
 	    of.lpstrCustomFilter = NULL;
 	    of.nFilterIndex = 1;
 	    of.lpstrFile = filename;
@@ -2347,7 +2347,7 @@ int dlg_listbox_gettext(union control *ctrl, void *dlg, int index, char * pstr, 
 	//GetDlgItemText( dp->hwnd, c->base_id+1, pstr, maxcount );
 	SendMessage(GetDlgItem( dp->hwnd, c->base_id+1 ), LB_GETTEXT, index, (LPARAM)pstr);
 	//SendDlgItemMessage(dp->hwnd, c->base_id+1, LB_GETTEXT, (LPARAM)pstr, 1024);
-	}	
+	}
 #endif
 
 bool dlg_listbox_issel(union control *ctrl, dlgparam *dp, int index)
@@ -2450,13 +2450,13 @@ void dlg_fontsel_set(union control *ctrl, dlgparam *dp, FontSpec *fs)
     fontspec_free((FontSpec *)c->data);
     c->data = fontspec_copy(fs);
 
-    boldstr = (fs->isbold ? "bold, " : "");
+    boldstr = (fs->isbold ? "粗体, " : "");
     if (fs->height == 0)
-	buf = dupprintf("Font: %s, %sdefault height", fs->name, boldstr);
+	buf = dupprintf("字体：%s, %s默认高度", fs->name, boldstr);
     else
-	buf = dupprintf("Font: %s, %s%d-%s", fs->name, boldstr,
+	buf = dupprintf("字体：%s, %s%d %s", fs->name, boldstr,
 			(fs->height < 0 ? -fs->height : fs->height),
-			(fs->height < 0 ? "pixel" : "point"));
+			(fs->height < 0 ? "像素" : "点"));
     SetDlgItemText(dp->hwnd, c->base_id+1, buf);
     sfree(buf);
 

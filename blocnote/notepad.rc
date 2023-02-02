@@ -20,34 +20,34 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-	NOTEPAD_STR_FILE	"&File"
-	NOTEPAD_STR_NEW		"&New\tCtrl+N"
-	NOTEPAD_STR_OPEN 	"&Open...\tCtrl+O"
-	NOTEPAD_STR_SAVE 	"&Save\tCtrl+S"
-	NOTEPAD_STR_SAVEAS 	"S&ave as...\tCtrl+Shift+S"
-	NOTEPAD_STR_QUIT 	"&Quit\tCtrl+Q"
+	NOTEPAD_STR_FILE	"文件(&F)"
+	NOTEPAD_STR_NEW		"新建(&N)\tCtrl+N"
+	NOTEPAD_STR_OPEN 	"打开(&O)...\tCtrl+O"
+	NOTEPAD_STR_SAVE 	"保存(&S)\tCtrl+S"
+	NOTEPAD_STR_SAVEAS 	"另存为(&A)...\tCtrl+Shift+S"
+	NOTEPAD_STR_QUIT 	"退出(&Q)\tCtrl+Q"
 
-	NOTEPAD_STR_EDIT	"&Edit"
-	NOTEPAD_STR_CUT		"&Cut\tCtrl+X"
-	NOTEPAD_STR_COPY	"C&opy\tCtrl+C"
-	NOTEPAD_STR_PASTE	"&Paste\tCtrl+V"
-	NOTEPAD_STR_SELECTALL	"&Select All\tCtrl+A"
-	NOTEPAD_STR_UNDO	"Undo\tCtrl+Z"
-	NOTEPAD_STR_SETFONT	"Format"
+	NOTEPAD_STR_EDIT	"编辑(&E)"
+	NOTEPAD_STR_CUT		"剪切(&C)\tCtrl+X"
+	NOTEPAD_STR_COPY	"复制(&O)\tCtrl+C"
+	NOTEPAD_STR_PASTE	"粘贴(&P)\tCtrl+V"
+	NOTEPAD_STR_SELECTALL	"选择所有(&S)\tCtrl+A"
+	NOTEPAD_STR_UNDO	"取消(&U)\tCtrl+Z"
+	NOTEPAD_STR_SETFONT	"字体(&F)"
 
-	NOTEPAD_STR_SEND	"&Send (F12)"
-	NOTEPAD_STR_SEND_ALL	"Send All"
+	NOTEPAD_STR_SEND	"发送-F12(&S)"
+	NOTEPAD_STR_SEND_ALL	"全部发送"
 
-	NOTEPAD_STR_DELIM	"&Delimiter"
-	NOTEPAD_STR_CRLF	"&Carriage return"
-	NOTEPAD_STR_SCOLON	"&Semicolon"
-	NOTEPAD_STR_SLASH	"S&lash"
-	NOTEPAD_STR_TILDE	"&Tilde"
+	NOTEPAD_STR_DELIM	"分隔符(&D)"
+	NOTEPAD_STR_CRLF	"回车换行(&C)"
+	NOTEPAD_STR_SCOLON	"分号(&S)"
+	NOTEPAD_STR_SLASH	"斜线(&L)"
+	NOTEPAD_STR_TILDE	"波浪线(&T)"
 
 	NOTEPAD_STR_HELP	"&?"
-	NOTEPAD_STR_ABOUT	"&About"
+	NOTEPAD_STR_ABOUT	"关于(&A)"
 
-	NOTEPAD_FILE_FILTER	"Text files, (*.txt, *.ini)|*.txt;*.ini|C/C++ files, (*.c, *.cpp, *.h, *.rc)|*.c;*.cpp;*.h;*.rc|Script files, (*.ksh, *.sh)|*.ksh;*.sh\0SQL files, (*.sql)|*.sql|All files, (*.*)|*.*\0"
+	NOTEPAD_FILE_FILTER	"文本文件, (*.txt, *.ini)|*.txt;*.ini|C/C++文件, (*.c, *.cpp, *.h, *.rc)|*.c;*.cpp;*.h;*.rc|脚本文件, (*.ksh, *.sh)|*.ksh;*.sh\0SQL文件, (*.sql)|*.sql|所有文件, (*.*)|*.*\0"
 
-	NOTEPAD_STR_LICENCE "                mNotepad 1.0\nwritten by Cyd, 2022, for the Telnet/SSH client TTY"
+	NOTEPAD_STR_LICENCE "mNotepad 1.0\n\n由Cyd编写, 2022, 用于Telnet/SSH客户端TTY."
 END

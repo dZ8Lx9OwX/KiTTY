@@ -107,7 +107,7 @@ struct ssh2_userauth_state {
     PacketProtocolLayer ppl;
 };
 
-static void ssh2_userauth_free(PacketProtocolLayer *); 
+static void ssh2_userauth_free(PacketProtocolLayer *);
 static void ssh2_userauth_process_queue(PacketProtocolLayer *);
 static bool ssh2_userauth_get_specials(
     PacketProtocolLayer *ppl, add_special_fn_t add_special, void *ctx);
@@ -427,16 +427,16 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
      * beginning to try another username, if this is configured on.
      * (If they specify a username in the config, they are never
      * asked, even if they do give a wrong password.)
-     * 
+     *
      * I think this best serves the needs of
-     * 
+     *
      *  - the people who have no configuration, no keys, and just
      *    want to try repeated (username,password) pairs until they
      *    type both correctly
-     * 
+     *
      *  - people who have keys and configuration but occasionally
      *    need to fall back to passwords
-     * 
+     *
      *  - people with a key held in Pageant, who might not have
      *    logged in to a particular machine before; so they want to
      *    type a username, and then _either_ their key will be
@@ -460,7 +460,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
             s->cur_prompt->to_server = true;
             s->cur_prompt->from_server = false;
             s->cur_prompt->name = dupstr("SSH login name");
-            add_prompt(s->cur_prompt, dupstr("login as: "), true); 
+            add_prompt(s->cur_prompt, dupstr("login as: "), true);
             s->userpass_ret = seat_get_userpass_input(
                 s->ppl.seat, s->cur_prompt, NULL);
             while (1) {
@@ -482,7 +482,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                  * Terminate.
                  */
                 free_prompts(s->cur_prompt);
-                ssh_user_close(s->ppl.ssh, "No username provided");
+                ssh_user_close(s->ppl.ssh, "未提供用户名");
                 return;
             }
             sfree(s->locally_allocated_username); /* for change_username */
@@ -579,9 +579,9 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 
             if (pktin && pktin->type != SSH2_MSG_USERAUTH_FAILURE &&
                 s->type != AUTH_TYPE_GSSAPI) {
-                ssh_proto_error(s->ppl.ssh, "Received unexpected packet "
-                                "in response to authentication request, "
-                                "type %d (%s)", pktin->type,
+                ssh_proto_error(s->ppl.ssh, "响应身份验证请求时，"
+                                "收到意外的数据包，"
+                                "类型：%d (%s)", pktin->type,
                                 ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                               s->ppl.bpp->pls->actx,
                                               pktin->type));
@@ -982,8 +982,8 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                             ssh_bpp_queue_disconnect(
                                 s->ppl.bpp, "Unable to authenticate",
                                 SSH2_DISCONNECT_AUTH_CANCELLED_BY_USER);
-                            ssh_user_close(s->ppl.ssh, "User aborted at "
-                                           "passphrase prompt");
+                            ssh_user_close(s->ppl.ssh, "用户在密码提示时"
+                                           "中止");
                             return;
                         }
                         passphrase =
@@ -1020,7 +1020,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                             break; /* try something else */
                         }
 #ifdef MOD_PERSO
-	ManagePassPhrase("");	
+	ManagePassPhrase("");
 #endif
                     } else {
                         /* FIXME: if we ever support variable signature
@@ -1248,10 +1248,10 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                                 (pktin = ssh2_userauth_pop(s)) != NULL);
                             if (pktin->type != SSH2_MSG_USERAUTH_FAILURE) {
                                 ssh_proto_error(
-                                    s->ppl.ssh, "Received unexpected packet "
-                                    "after SSH_MSG_USERAUTH_GSSAPI_ERRTOK "
-                                    "(expected SSH_MSG_USERAUTH_FAILURE): "
-                                    "type %d (%s)", pktin->type,
+                                    s->ppl.ssh, "收到意外的数据包，"
+                                    "在 SSH_MSG_USERAUTH_GSSAPI_ERRTOK 之后"
+                                    "(预期为 SSH_MSG_USERAUTH_FAILURE): "
+                                    "类型：%d (%s)", pktin->type,
                                     ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                                   s->ppl.bpp->pls->actx,
                                                   pktin->type));
@@ -1309,7 +1309,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                 put_stringz(s->pktout, "");     /* lang */
                 put_stringz(s->pktout, "");     /* submethods */
                 pq_push(s->ppl.out_pq, s->pktout);
-                
+
                 ppl_logevent("Attempting keyboard-interactive authentication");
 
                 if (!s->ki_scc_initialised) {
@@ -1364,8 +1364,8 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 
                         if (get_err(pktin)) {
                             ssh_proto_error(
-                                s->ppl.ssh, "Server sent truncated "
-                                "SSH_MSG_USERAUTH_INFO_REQUEST packet");
+                                s->ppl.ssh, "服务器发送不完整的 "
+                                "SSH_MSG_USERAUTH_INFO_REQUEST 数据包");
                             return;
                         }
 
@@ -1452,16 +1452,16 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                      * Our prompts_t is fully constructed now. Get the
                      * user's response(s).
                      */
-    
+
 #ifdef MOD_PERSO
 	auth_loop_num++ ;
-//char b[128];sprintf(b,"%d",auth_loop_num);MessageBox(NULL,b,"info",MB_OK);
+//char b[128];sprintf(b,"%d",auth_loop_num);MessageBox(NULL,b,"信息",MB_OK);
 	if( debug_flag && !IsPasswordInConf() ) { debug_logevent( "No password in configuration" ) ; }
 	if( (auth_loop_num==1) && IsPasswordInConf() ) {
 		GetPasswordInConfig(bufpass) ;
-		while( ((bufpass[strlen(bufpass)-1]=='n')&&(bufpass[strlen(bufpass)-2]=='\\')) || ((bufpass[strlen(bufpass)-1]=='r')&&(bufpass[strlen(bufpass)-2]=='\\')) ) { 
-			bufpass[strlen(bufpass)-2]='\0'; 
-			bufpass[strlen(bufpass)-1]='\0'; 
+		while( ((bufpass[strlen(bufpass)-1]=='n')&&(bufpass[strlen(bufpass)-2]=='\\')) || ((bufpass[strlen(bufpass)-1]=='r')&&(bufpass[strlen(bufpass)-2]=='\\')) ) {
+			bufpass[strlen(bufpass)-2]='\0';
+			bufpass[strlen(bufpass)-1]='\0';
 		}
 		    //if( debug_flag ) { debug_logevent( "Raw password: %s", bufpass ) ; }
 		iso8859_1_to_utf8( bufpass, 1024 ) ;
@@ -1471,7 +1471,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 		bufchain_add(&bc, bufpass, strlen(bufpass));
 		    bufchain_add(&bc,"\n",1);
 		s->userpass_ret = seat_get_userpass_input( s->ppl.seat, s->cur_prompt, &bc ) ;
-		
+
 		SetPasswordInConfig("");
 		CleanPassword(bufpass);
 		{ // Log de l'envoi du password
@@ -1483,7 +1483,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 			if(seat_verbose(s->ppl.seat) && seat_interactive(s->ppl.seat)) {
 				ppl_printf("%s\r\n",userlog);
 			}
-	
+
 			sfree(userlog);
 		}
 	} else
@@ -1514,8 +1514,8 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                         ssh_bpp_queue_disconnect(
                             s->ppl.bpp, "Unable to authenticate",
                             SSH2_DISCONNECT_AUTH_CANCELLED_BY_USER);
-                        ssh_user_close(s->ppl.ssh, "User aborted during "
-                                       "keyboard-interactive authentication");
+                        ssh_user_close(s->ppl.ssh, "用户在"
+                                       "键盘交互式身份验证期间中止");
                         return;
                     }
 
@@ -1529,12 +1529,12 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 #ifdef MOD_PERSO
 	ppl_logevent("Sent a password");
 	if( (auth_loop_num==1) && !GetUserPassSSHNoSave() ) {
-		if(s!=NULL) 
-		if(s->cur_prompt->prompts!=NULL)  
+		if(s!=NULL)
+		if(s->cur_prompt->prompts!=NULL)
 		if(s->cur_prompt->prompts[i]->result!=NULL) {
 			ppl_logevent("Save a password");
-			//SetPasswordInConfig( (const char *) s->cur_prompt->prompts[i]->result ) ; 
-			SetPasswordInConfig( (const char *) prompt_get_result_ref(s->cur_prompt->prompts[i]) ) ; 
+			//SetPasswordInConfig( (const char *) s->cur_prompt->prompts[i]->result ) ;
+			SetPasswordInConfig( (const char *) prompt_get_result_ref(s->cur_prompt->prompts[i]) ) ;
 		}
 	}
 #endif
@@ -1567,7 +1567,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                     ssh2_userauth_antispoof_msg(
                         s, "End of keyboard-interactive prompts from server");
                 }
-	
+
                 /*
                  * We should have SUCCESS or FAILURE now.
                  */
@@ -1593,7 +1593,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                 s->userpass_ret = seat_get_userpass_input(
                     s->ppl.seat, s->cur_prompt, NULL);
 #ifdef MOD_PERSO
-		if( !IsPasswordInConf() ) 
+		if( !IsPasswordInConf() )
 #endif
                 while (1) {
                     while (s->userpass_ret < 0 &&
@@ -1616,8 +1616,8 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                     ssh_bpp_queue_disconnect(
                         s->ppl.bpp, "Unable to authenticate",
                         SSH2_DISCONNECT_AUTH_CANCELLED_BY_USER);
-                    ssh_user_close(s->ppl.ssh, "User aborted during password "
-                                   "authentication");
+                    ssh_user_close(s->ppl.ssh, "用户在密码验证期间"
+                                   "中止");
                     return;
                 }
                 /*
@@ -1648,9 +1648,9 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
         if( debug_flag && !IsPasswordInConf() ) { debug_logevent( "No password in configuration" ) ; }
 	if( IsPasswordInConf() ) {
 		GetPasswordInConfig(bufpass);
-		while( ((bufpass[strlen(bufpass)-1]=='n')&&(bufpass[strlen(bufpass)-2]=='\\')) || ((bufpass[strlen(bufpass)-1]=='r')&&(bufpass[strlen(bufpass)-2]=='\\')) ) { 
-			bufpass[strlen(bufpass)-2]='\0'; 
-			bufpass[strlen(bufpass)-1]='\0'; 
+		while( ((bufpass[strlen(bufpass)-1]=='n')&&(bufpass[strlen(bufpass)-2]=='\\')) || ((bufpass[strlen(bufpass)-1]=='r')&&(bufpass[strlen(bufpass)-2]=='\\')) ) {
+			bufpass[strlen(bufpass)-2]='\0';
+			bufpass[strlen(bufpass)-1]='\0';
 		}
 		char bufpass2[1024];
 		strcpy(bufpass2,bufpass);
@@ -1659,7 +1659,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 			//if( debug_flag ) { debug_logevent( "UTF-8 password: %s", bufpass2 ) ; }
 		put_stringz(s->pktout, bufpass2);
 		memset(bufpass2,0,1024);
-	
+
 		SetPasswordInConfig("");
 		{ // Log de l'envoi du password
 			char *userlog = dupprintf("Send automatic password" );
@@ -1711,7 +1711,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 
                 while (pktin->type == SSH2_MSG_USERAUTH_PASSWD_CHANGEREQ) {
 
-                    /* 
+                    /*
                      * We're being asked for a new password
                      * (perhaps not for the first time).
                      * Loop until the server accepts it.
@@ -1719,7 +1719,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 
                     bool got_new = false; /* not live over crReturn */
                     ptrlen prompt;  /* not live over crReturn */
-                    
+
                     {
                         const char *msg;
                         if (changereq_first_time)
@@ -1790,8 +1790,8 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                             ssh_bpp_queue_disconnect(
                                 s->ppl.bpp, "Unable to authenticate",
                                 SSH2_DISCONNECT_AUTH_CANCELLED_BY_USER);
-                            ssh_user_close(s->ppl.ssh, "User aborted during "
-                                           "password changing");
+                            ssh_user_close(s->ppl.ssh, "用户在修改"
+                                           "密码期间中止");
                             return;
                         }
 
@@ -1839,7 +1839,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                     s->pktout->minlen = 256;
                     pq_push(s->ppl.out_pq, s->pktout);
                     ppl_logevent("Sent new password");
-                    
+
                     /*
                      * Now see what the server has to say about it.
                      * (If it's CHANGEREQ again, it's not happy with the
@@ -1877,8 +1877,8 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
                     s->ppl.bpp,
                     "No supported authentication methods available",
                     SSH2_DISCONNECT_NO_MORE_AUTH_METHODS_AVAILABLE);
-                ssh_sw_abort(s->ppl.ssh, "No supported authentication methods "
-                             "available (server sent: %s)",
+                ssh_sw_abort(s->ppl.ssh, "没有可用的受支持的"
+                             "身份验证方法 (服务器发送：%s)",
                              s->last_methods_string->s);
                 return;
             }
@@ -1893,8 +1893,8 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
     auth_loop_num=0;
 #endif
     if (s->notrivialauth && s->is_trivial_auth) {
-        ssh_proto_error(s->ppl.ssh, "Authentication was trivial! "
-                        "Abandoning session as specified in configuration.");
+        ssh_proto_error(s->ppl.ssh, "身份验证过于简单！"
+                        "放弃配置中指定的会话。");
         return;
     }
 

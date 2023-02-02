@@ -26,117 +26,117 @@ int RefreshWinList( HWND hwnd ) ;
 #endif
 
 // Creation de bitmap coche
-HBITMAP GetMyCheckBitmaps(UINT fuCheck) 
-{ 
-    COLORREF crBackground;  // background color                  
-    HBRUSH hbrBackground;   // background brush                  
-    HBRUSH hbrTargetOld;    // original background brush         
-    HDC hdcSource;          // source device context             
-    HDC hdcTarget;          // target device context             
-    HBITMAP hbmpCheckboxes; // handle to check-box bitmap        
-    BITMAP bmCheckbox;      // structure for bitmap data         
-    HBITMAP hbmpSourceOld;  // handle to original source bitmap  
-    HBITMAP hbmpTargetOld;  // handle to original target bitmap  
-    HBITMAP hbmpCheck;      // handle to check-mark bitmap       
-    RECT rc;                // rectangle for check-box bitmap    
-    WORD wBitmapX;          // width of check-mark bitmap        
-    WORD wBitmapY;          // height of check-mark bitmap       
- 
-    // Get the menu background color and create a solid brush 
-    // with that color. 
- 
-    crBackground = GetSysColor(COLOR_MENU); 
-    hbrBackground = CreateSolidBrush(crBackground); 
- 
-    // Create memory device contexts for the source and 
-    // destination bitmaps. 
- 
-    hdcSource = CreateCompatibleDC((HDC) NULL); 
-    hdcTarget = CreateCompatibleDC(hdcSource); 
- 
-    // Get the size of the system default check-mark bitmap and 
-    // create a compatible bitmap of the same size. 
- 
-    wBitmapX = GetSystemMetrics(SM_CXMENUCHECK); 
-    wBitmapY = GetSystemMetrics(SM_CYMENUCHECK); 
- 
-    hbmpCheck = CreateCompatibleBitmap(hdcSource, wBitmapX, 
-        wBitmapY); 
- 
-    // Select the background brush and bitmap into the target DC. 
- 
-    hbrTargetOld = SelectObject(hdcTarget, hbrBackground); 
-    hbmpTargetOld = SelectObject(hdcTarget, hbmpCheck); 
- 
-    // Use the selected brush to initialize the background color 
-    // of the bitmap in the target device context. 
- 
-    PatBlt(hdcTarget, 0, 0, wBitmapX, wBitmapY, PATCOPY); 
- 
-    // Load the predefined check box bitmaps and select it 
-    // into the source DC. 
- 
-    hbmpCheckboxes = LoadBitmap((HINSTANCE) NULL, 
-        (LPTSTR) OBM_CHECKBOXES); 
- 
-    hbmpSourceOld = SelectObject(hdcSource, hbmpCheckboxes); 
- 
-    // Fill a BITMAP structure with information about the 
-    // check box bitmaps, and then find the upper-left corner of 
-    // the unchecked check box or the checked check box. 
- 
-    GetObject(hbmpCheckboxes, sizeof(BITMAP), &bmCheckbox); 
- 
-    if (fuCheck == 2 /*UNCHECK*/) 
-    { 
-        rc.left = 0; 
-        rc.right = (bmCheckbox.bmWidth / 4); 
-    } 
-    else 
-    { 
-        rc.left = (bmCheckbox.bmWidth / 4); 
-        rc.right = (bmCheckbox.bmWidth / 4) * 2; 
-    } 
- 
-    rc.top = 0; 
-    rc.bottom = (bmCheckbox.bmHeight / 3); 
- 
-    // Copy the appropriate bitmap into the target DC. If the 
-    // check-box bitmap is larger than the default check-mark 
-    // bitmap, use StretchBlt to make it fit; otherwise, just 
-    // copy it. 
- 
-    if (((rc.right - rc.left) > (int) wBitmapX) || 
-            ((rc.bottom - rc.top) > (int) wBitmapY)) 
+HBITMAP GetMyCheckBitmaps(UINT fuCheck)
+{
+    COLORREF crBackground;  // background color
+    HBRUSH hbrBackground;   // background brush
+    HBRUSH hbrTargetOld;    // original background brush
+    HDC hdcSource;          // source device context
+    HDC hdcTarget;          // target device context
+    HBITMAP hbmpCheckboxes; // handle to check-box bitmap
+    BITMAP bmCheckbox;      // structure for bitmap data
+    HBITMAP hbmpSourceOld;  // handle to original source bitmap
+    HBITMAP hbmpTargetOld;  // handle to original target bitmap
+    HBITMAP hbmpCheck;      // handle to check-mark bitmap
+    RECT rc;                // rectangle for check-box bitmap
+    WORD wBitmapX;          // width of check-mark bitmap
+    WORD wBitmapY;          // height of check-mark bitmap
+
+    // Get the menu background color and create a solid brush
+    // with that color.
+
+    crBackground = GetSysColor(COLOR_MENU);
+    hbrBackground = CreateSolidBrush(crBackground);
+
+    // Create memory device contexts for the source and
+    // destination bitmaps.
+
+    hdcSource = CreateCompatibleDC((HDC) NULL);
+    hdcTarget = CreateCompatibleDC(hdcSource);
+
+    // Get the size of the system default check-mark bitmap and
+    // create a compatible bitmap of the same size.
+
+    wBitmapX = GetSystemMetrics(SM_CXMENUCHECK);
+    wBitmapY = GetSystemMetrics(SM_CYMENUCHECK);
+
+    hbmpCheck = CreateCompatibleBitmap(hdcSource, wBitmapX,
+        wBitmapY);
+
+    // Select the background brush and bitmap into the target DC.
+
+    hbrTargetOld = SelectObject(hdcTarget, hbrBackground);
+    hbmpTargetOld = SelectObject(hdcTarget, hbmpCheck);
+
+    // Use the selected brush to initialize the background color
+    // of the bitmap in the target device context.
+
+    PatBlt(hdcTarget, 0, 0, wBitmapX, wBitmapY, PATCOPY);
+
+    // Load the predefined check box bitmaps and select it
+    // into the source DC.
+
+    hbmpCheckboxes = LoadBitmap((HINSTANCE) NULL,
+        (LPTSTR) OBM_CHECKBOXES);
+
+    hbmpSourceOld = SelectObject(hdcSource, hbmpCheckboxes);
+
+    // Fill a BITMAP structure with information about the
+    // check box bitmaps, and then find the upper-left corner of
+    // the unchecked check box or the checked check box.
+
+    GetObject(hbmpCheckboxes, sizeof(BITMAP), &bmCheckbox);
+
+    if (fuCheck == 2 /*UNCHECK*/)
     {
-        StretchBlt(hdcTarget, 0, 0, wBitmapX, wBitmapY, 
-            hdcSource, rc.left, rc.top, rc.right - rc.left, 
-            rc.bottom - rc.top, SRCCOPY); 
+        rc.left = 0;
+        rc.right = (bmCheckbox.bmWidth / 4);
     }
- 
-    else 
+    else
     {
-        BitBlt(hdcTarget, 0, 0, rc.right - rc.left, 
-            rc.bottom - rc.top, 
-            hdcSource, rc.left, rc.top, SRCCOPY); 
+        rc.left = (bmCheckbox.bmWidth / 4);
+        rc.right = (bmCheckbox.bmWidth / 4) * 2;
     }
- 
-    // Select the old source and destination bitmaps into the 
-    // source and destination DCs, and then delete the DCs and 
-    // the background brush. 
- 
-    SelectObject(hdcSource, hbmpSourceOld); 
-    SelectObject(hdcTarget, hbrTargetOld); 
-    hbmpCheck = SelectObject(hdcTarget, hbmpTargetOld); 
- 
-    DeleteObject(hbrBackground); 
-    DeleteObject(hdcSource); 
-    DeleteObject(hdcTarget); 
- 
-    // Return a handle to the new check-mark bitmap.  
- 
-    return hbmpCheck; 
-} 
+
+    rc.top = 0;
+    rc.bottom = (bmCheckbox.bmHeight / 3);
+
+    // Copy the appropriate bitmap into the target DC. If the
+    // check-box bitmap is larger than the default check-mark
+    // bitmap, use StretchBlt to make it fit; otherwise, just
+    // copy it.
+
+    if (((rc.right - rc.left) > (int) wBitmapX) ||
+            ((rc.bottom - rc.top) > (int) wBitmapY))
+    {
+        StretchBlt(hdcTarget, 0, 0, wBitmapX, wBitmapY,
+            hdcSource, rc.left, rc.top, rc.right - rc.left,
+            rc.bottom - rc.top, SRCCOPY);
+    }
+
+    else
+    {
+        BitBlt(hdcTarget, 0, 0, rc.right - rc.left,
+            rc.bottom - rc.top,
+            hdcSource, rc.left, rc.top, SRCCOPY);
+    }
+
+    // Select the old source and destination bitmaps into the
+    // source and destination DCs, and then delete the DCs and
+    // the background brush.
+
+    SelectObject(hdcSource, hbmpSourceOld);
+    SelectObject(hdcTarget, hbrTargetOld);
+    hbmpCheck = SelectObject(hdcTarget, hbmpTargetOld);
+
+    DeleteObject(hbrBackground);
+    DeleteObject(hdcSource);
+    DeleteObject(hdcTarget);
+
+    // Return a handle to the new check-mark bitmap.
+
+    return hbmpCheck;
+}
 
 // Procedure de creation de menu à partir d'une clé de registre
 HMENU InitLauncherMenu( char * Key ) {
@@ -144,10 +144,10 @@ HMENU InitLauncherMenu( char * Key ) {
 	menu = CreatePopupMenu() ;
 	char KeyName[1024] ;
 	int nbitem = 0,i ;
-	
+
 	DeleteObject( bmpCheck ) ; bmpCheck = GetMyCheckBitmaps( 1 ) ;
 	DeleteObject( bmpUnCheck ) ; bmpUnCheck = GetMyCheckBitmaps( 2 ) ;
-	
+
 	if( (IniFileFlag == SAVEMODE_REG)||(IniFileFlag == SAVEMODE_FILE) ) {
 		sprintf( KeyName, "%s\\%s", TEXT(PUTTY_REG_POS), Key ) ;
 		ReadSpecialMenu( menu, KeyName, &nbitem, 0 ) ;
@@ -162,52 +162,52 @@ HMENU InitLauncherMenu( char * Key ) {
 	DestroyMenu( HideMenu ) ;
 	HideMenu = CreatePopupMenu() ;
 	if( !IsUnique ) {
-		AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+3, "&Hide all" ) ;
-		AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+4, "&Unhide all" ) ;
-		//AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+5, "&Refresh list" ) ;
-		AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+6, "&Window unique" ) ;
+		AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+3, "全部隐藏(&H)" ) ;
+		AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+4, "取消隐藏(&U)" ) ;
+		//AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+5, "刷新列表(&R)" ) ;
+		AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+6, "单一窗口(&W)" ) ;
 		CheckMenuItem( HideMenu, IDM_LAUNCHER+6, MF_BYCOMMAND | MF_UNCHECKED) ;
 	} else {
-		AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+6, "&Window unique" ) ;
+		AppendMenu( HideMenu, MF_ENABLED, IDM_LAUNCHER+6, "单一窗口(&W)" ) ;
 		CheckMenuItem( HideMenu, IDM_LAUNCHER+6, MF_BYCOMMAND | MF_CHECKED) ;
 	}
-	//AppendMenu( HideMenu, MF_ENABLED, IDM_GONEXT, "&Next" ) ;
-	//AppendMenu( HideMenu, MF_ENABLED, IDM_GOPREVIOUS, "&Previous" ) ;
+	//AppendMenu( HideMenu, MF_ENABLED, IDM_GONEXT, "下一个(&N)" ) ;
+	//AppendMenu( HideMenu, MF_ENABLED, IDM_GOPREVIOUS, "上一个(&P)" ) ;
 	if( RefreshWinList( MainHwnd ) > 0 ) {
 		AppendMenu( HideMenu, MF_SEPARATOR, 0, 0 ) ;
 		for( i=0 ; i<NbWin ; i++ ) {
 			AppendMenu( HideMenu, MF_ENABLED, IDM_GOHIDE+i, TabWin[i].name ) ;
 			SetMenuItemBitmaps ( HideMenu, IDM_GOHIDE+i, MF_BYCOMMAND, bmpUnCheck, bmpCheck ) ;
-			if( IsWindowVisible( TabWin[i].hwnd ) ) 
+			if( IsWindowVisible( TabWin[i].hwnd ) )
 				CheckMenuItem( HideMenu, IDM_GOHIDE+i, MF_BYCOMMAND | MF_CHECKED) ;
-			else 
+			else
 				CheckMenuItem( HideMenu, IDM_GOHIDE+i, MF_BYCOMMAND | MF_UNCHECKED) ;
 		}
 	}
 	AppendMenu( HideMenu, MF_SEPARATOR, 0, 0 ) ;
-	AppendMenu( HideMenu, MF_ENABLED, IDM_ABOUT, "&About" ) ;
-	AppendMenu( HideMenu, MF_ENABLED, IDM_QUIT, "&Quit" ) ;
+	AppendMenu( HideMenu, MF_ENABLED, IDM_ABOUT, "关于(&A)" ) ;
+	AppendMenu( HideMenu, MF_ENABLED, IDM_QUIT, "退出(&Q)" ) ;
 
-	
-	AppendMenu( menu, MF_POPUP, (UINT_PTR)HideMenu, "&Opened sessions" ) ;
+
+	AppendMenu( menu, MF_POPUP, (UINT_PTR)HideMenu, "打开会话(&O)" ) ;
 	AppendMenu( menu, MF_SEPARATOR, 0, 0 ) ;
-	
-	AppendMenu( menu, MF_ENABLED, IDM_LAUNCHER+7, "&Refresh" ) ;
-	AppendMenu( menu, MF_ENABLED, IDM_LAUNCHER+1, "&Configuration" ) ;
-	AppendMenu( menu, MF_ENABLED, IDM_LAUNCHER+2, "&TTY-ed" ) ;
+
+	AppendMenu( menu, MF_ENABLED, IDM_LAUNCHER+7, "刷新(&R)" ) ;
+	AppendMenu( menu, MF_ENABLED, IDM_LAUNCHER+1, "设置(&C)" ) ;
+	AppendMenu( menu, MF_ENABLED, IDM_LAUNCHER+2, "TTY-ed(&T)" ) ;
 	AppendMenu( menu, MF_SEPARATOR, 0, 0 ) ;
-	AppendMenu( menu, MF_ENABLED, IDM_ABOUT, "&About" ) ;
-	AppendMenu( menu, MF_ENABLED, IDM_QUIT, "&Quit" ) ;
+	AppendMenu( menu, MF_ENABLED, IDM_ABOUT, "关于(&A)" ) ;
+	AppendMenu( menu, MF_ENABLED, IDM_QUIT, "退出(&Q)" ) ;
 
 	return menu ;
 }
 
 void RefreshMenuLauncher( void ) {
-	DestroyMenu( MenuLauncher ) ; 
+	DestroyMenu( MenuLauncher ) ;
 	MenuLauncher = NULL ;
 	MenuLauncher = InitLauncherMenu( "Launcher" ) ;
 }
-	
+
 // Nettoie les noms de folder en remplaçant les "/" par des "\" et les " \ " par des " \"
 // Deplace dans kitty_commun.c
 /*
@@ -216,8 +216,8 @@ void CleanFolderName( char * folder ) {
 	if( folder == NULL ) return ;
 	if( strlen( folder ) == 0 ) return ;
 	for( i=0 ; i<strlen(folder) ; i++ ) if( folder[i]=='/' ) folder[i]='\\' ;
-	for( i=0 ; i<(strlen(folder)-1) ; i++ ) 
-		if( folder[i]=='\\' ) 
+	for( i=0 ; i<(strlen(folder)-1) ; i++ )
+		if( folder[i]=='\\' )
 			while( folder[i+1]==' ' ) for( j=i+1 ; j<strlen(folder) ; j++ ) folder[j]=folder[j+1] ;
 	for( i=(strlen(folder)-1) ; i>0 ; i-- )
 		if( folder[i]=='\\' )
@@ -236,7 +236,7 @@ void DelDir( const char * directory ) {
 	char fullpath[MAX_VALUE_NAME] ;
 
 	if( (dir=opendir(directory)) != NULL ) {
-		while( (de=readdir( dir ) ) != NULL ) 
+		while( (de=readdir( dir ) ) != NULL )
 		if( strcmp(de->d_name,".") && strcmp(de->d_name,"..") ) {
 			sprintf( fullpath, "%s\\%s", directory, de->d_name ) ;
 			if( GetFileAttributes( fullpath ) & FILE_ATTRIBUTE_DIRECTORY ) { DelDir( fullpath ) ; }
@@ -254,7 +254,7 @@ void InitLauncherDir( const char * directory ) {
 	DIR * dir ;
 	struct dirent * de ;
 	FILE * fp ;
-	
+
 	if( strlen(directory)>0 ) {
 		sprintf( fullpath, "%s\\Sessions\\%s", ConfigDirectory, directory ) ;
 		sprintf( buffer, "%s\\Launcher\\%s", ConfigDirectory, directory ) ;
@@ -262,12 +262,12 @@ void InitLauncherDir( const char * directory ) {
 		sprintf( fullpath, "%s\\Sessions", ConfigDirectory ) ;
 		sprintf( buffer, "%s\\Launcher", ConfigDirectory ) ;
 	}
-	if( !MakeDir( buffer ) ) { 
-		//MessageBox(NULL,buffer,"Error",MB_OK|MB_ICONERROR); 
-		MessageBox(NULL,"Unable to create the menu launcher directory","Error",MB_OK|MB_ICONERROR); 
+	if( !MakeDir( buffer ) ) {
+		//MessageBox(NULL,buffer,"Error",MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"无法创建菜单启动程序目录","启动器错误",MB_OK|MB_ICONERROR);
 	}
 	if( (dir=opendir(fullpath)) != NULL ) {
-		while( (de=readdir(dir)) != NULL ) 
+		while( (de=readdir(dir)) != NULL )
 		if( strcmp(de->d_name,".") && strcmp(de->d_name,"..") )	{
 			sprintf( fullpath, "%s\\Sessions\\%s\\%s", ConfigDirectory, directory, de->d_name ) ;
 			if( !(GetFileAttributes( fullpath ) & FILE_ATTRIBUTE_DIRECTORY) ) {
@@ -275,7 +275,7 @@ void InitLauncherDir( const char * directory ) {
 				if( (fp=fopen(buffer,"wb")) != NULL ) {
 					unmungestr( de->d_name, buffer, MAX_VALUE_NAME) ;
 					fprintf( fp, "%s\\%s\\", buffer, directory ) ;
-					fclose( fp ) ; 
+					fclose( fp ) ;
 					}
 				}
 			else if( (GetFileAttributes( fullpath ) & FILE_ATTRIBUTE_DIRECTORY) ) {
@@ -294,13 +294,13 @@ void InitLauncherRegistry( void ) {
 	HKEY hKey ;
 	char buffer[MAX_VALUE_NAME] ;
 	int i;
-	
+
 	if( (IniFileFlag == SAVEMODE_REG)||(IniFileFlag == SAVEMODE_FILE) ) {
 		TCHAR folder[MAX_VALUE_NAME], achClass[MAX_PATH] = TEXT("");
 		DWORD   cchClassName=MAX_PATH,cSubKeys=0,cbMaxSubKey,cchMaxClass;
 		DWORD	cValues,cchMaxValue,cbMaxValueData,cbSecurityDescriptor;
 		FILETIME ftLastWriteTime;
-	
+
 		sprintf( buffer, "%s\\Launcher", PUTTY_REG_POS ) ;
 		RegDelTree (HKEY_CURRENT_USER, buffer ) ;
 		RegTestOrCreate( HKEY_CURRENT_USER, buffer, NULL, NULL ) ;
@@ -311,16 +311,16 @@ void InitLauncherRegistry( void ) {
 
 		if( cSubKeys>0 )
 			for (i=0; i<cSubKeys; i++) {
-				DWORD cchValue = MAX_VALUE_NAME; 
+				DWORD cchValue = MAX_VALUE_NAME;
 				char lpData[4096] ;
 				if( RegEnumKeyEx(hKey, i, lpData, &cchValue, NULL, NULL, NULL, &ftLastWriteTime) == ERROR_SUCCESS ) {
 					sprintf( buffer,"%s\\Sessions\\%s", TEXT(PUTTY_REG_POS), lpData ) ;
-					if( !GetValueData(HKEY_CURRENT_USER, buffer, "Folder", folder ) ) 
+					if( !GetValueData(HKEY_CURRENT_USER, buffer, "Folder", folder ) )
 						{ strcpy( folder, "Default" ) ; }
 					CleanFolderName( folder ) ;
-					if( !strcmp( folder, "Default" ) || (strlen(folder)<=0) ) 
+					if( !strcmp( folder, "Default" ) || (strlen(folder)<=0) )
 						sprintf( buffer, "%s\\Launcher", TEXT(PUTTY_REG_POS) ) ;
-					else 
+					else
 						sprintf( buffer, "%s\\Launcher\\%s", TEXT(PUTTY_REG_POS), folder ) ;
 					strcpy( folder, "" ) ;
 					unmungestr( lpData, folder, MAX_VALUE_NAME ) ;
@@ -336,10 +336,10 @@ void InitLauncherRegistry( void ) {
 		FILE * fp ;
 		sprintf( fullpath, "%s\\Launcher", ConfigDirectory ) ;
 		DelDir( fullpath ) ;
-		if(!MakeDir( fullpath ) ) { MessageBox(NULL,"Unable to create the menu launcher directory","Error",MB_OK|MB_ICONERROR); }
+		if(!MakeDir( fullpath ) ) { MessageBox(NULL,"无法创建菜单启动程序目录","启动器错误",MB_OK|MB_ICONERROR); }
 		sprintf( fullpath, "%s\\Sessions", ConfigDirectory ) ;
 		if( (dir=opendir(fullpath)) != NULL ) {
-			while( (de=readdir(dir)) != NULL ) 
+			while( (de=readdir(dir)) != NULL )
 			if( strcmp(de->d_name,".") && strcmp(de->d_name,"..") )	{
 				sprintf( fullpath, "%s\\Sessions\\%s", ConfigDirectory, de->d_name ) ;
 				if( !(GetFileAttributes( fullpath ) & FILE_ATTRIBUTE_DIRECTORY) ) {
@@ -355,7 +355,7 @@ void InitLauncherRegistry( void ) {
 					if( (fp=fopen(buffer,"wb")) != NULL ) {
 						unmungestr( de->d_name, buffer, MAX_VALUE_NAME) ;
 						fprintf( fp, "%s\\%s\\", buffer, buffer ) ;
-						fclose( fp ) ; 
+						fclose( fp ) ;
 					}
 				}
 			}
@@ -365,7 +365,7 @@ void InitLauncherRegistry( void ) {
 		char fullpath[MAX_VALUE_NAME] ;
 		sprintf( fullpath, "%s\\Launcher", ConfigDirectory ) ;
 		DelDir( fullpath ) ;
-		if( !MakeDir( fullpath ) ) { MessageBox(NULL,"Unable to create the menu launcher directory","Error",MB_OK|MB_ICONERROR); }
+		if( !MakeDir( fullpath ) ) { MessageBox(NULL,"无法创建菜单启动程序目录","启动器错误",MB_OK|MB_ICONERROR); }
 		InitLauncherDir( "" ) ;
 	}
 }
@@ -373,12 +373,12 @@ void InitLauncherRegistry( void ) {
 void DisplayContextMenu( HWND hwnd, HMENU menu ) {
 	HMENU hMenuPopup = menu ;
 	POINT pt;
-	
+
 	SetForegroundWindow( hwnd ) ;
 	GetCursorPos (&pt);
 	TrackPopupMenu (hMenuPopup, TPM_LEFTALIGN, pt.x, pt.y, 0, hwnd, NULL);
 }
-	
+
 // Gestion Hide/UnHide all
 static int CurrentVisibleWin = -1 ; /* -1 = toutes visibles */
 
@@ -388,7 +388,7 @@ void ManageUnHideOne( HWND hwnd ) { PostMessage( hwnd, WM_COMMAND, IDM_UNHIDE, 0
 BOOL CALLBACK RefreshWinListProc( HWND hwnd, LPARAM lParam ) {
 	char buffer[256] ;
 	GetClassName( hwnd, buffer, 256 ) ;
-	
+
 	if( !strcmp( buffer, KiTTYClassName ) )
 	if( hwnd != MainHwnd ) {
 		TabWin[NbWin].hwnd=hwnd ;
@@ -404,10 +404,10 @@ int RefreshWinList( HWND hwnd ) {
 	EnumWindows( RefreshWinListProc, 0 ) ;
 	return NbWin ;
 }
-	
+
 void GoNext( HWND hwnd ) {
 	int i ;
-	if( RefreshWinList( hwnd ) > 1 ) 
+	if( RefreshWinList( hwnd ) > 1 )
 	for( i=0 ; i<NbWin ; i++ ) {
 		if( hwnd == TabWin[i].hwnd ) {
 			ManageHideOne( hwnd ) ;
@@ -425,7 +425,7 @@ void GoNext( HWND hwnd ) {
 
 void GoPrevious( HWND hwnd ) {
 	int i ;
-	if( RefreshWinList( hwnd ) > 1 ) 
+	if( RefreshWinList( hwnd ) > 1 )
 	for( i=0 ; i<NbWin ; i++ ) {
 		if( hwnd == TabWin[i].hwnd ) {
 			ManageHideOne( hwnd ) ;
@@ -458,7 +458,7 @@ void ManageUnHideAll( HWND hwnd ) {
 	}
 	CurrentVisibleWin = -1 ;
 }
-	
+
 void ManageGoNext( HWND hwnd ) {
 	if( CurrentVisibleWin == -1 ) return ;
 	ManageHideOne( TabWin[CurrentVisibleWin].hwnd ) ;
@@ -474,7 +474,7 @@ void ManageGoPrevious( HWND hwnd ) {
 	if( CurrentVisibleWin<0 ) CurrentVisibleWin=NbWin-1 ;
 	ManageUnHideOne( TabWin[CurrentVisibleWin].hwnd ) ;
 }
-	
+
 void ManageGo( const int n ) {
 	if( CurrentVisibleWin == -1 ) return ;
 	if( (n<0)||(n>=100) ) return ;
@@ -482,23 +482,23 @@ void ManageGo( const int n ) {
 	CurrentVisibleWin = n ;
 	ManageUnHideOne( TabWin[CurrentVisibleWin].hwnd ) ;
 }
-	
-void ManageSwitch( const int n ) { 
-	SendMessage( TabWin[n].hwnd, WM_COMMAND, IDM_SWITCH_HIDE, 0 ) ; 
+
+void ManageSwitch( const int n ) {
+	SendMessage( TabWin[n].hwnd, WM_COMMAND, IDM_SWITCH_HIDE, 0 ) ;
 	SetForegroundWindow( TabWin[n].hwnd ) ;
 	SetFocus( TabWin[n].hwnd ) ;
 }
-	
+
 // Procedures principales du launcher
 LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	int ResShell ;
 	static UINT s_uTaskbarRestart;
-	
+
 	switch( uMsg ) {
 		case WM_CREATE:
 		s_uTaskbarRestart = RegisterWindowMessage(TEXT("TaskbarCreated"));
 		MenuLauncher = InitLauncherMenu( "Launcher" ) ;
-        
+
 	// Initialisation de la structure NOTIFYICONDATA
 	TrayIcone.cbSize = sizeof(TrayIcone);	// On alloue la taille nécessaire pour la structure
 	if( oldIconFlag ) {
@@ -515,7 +515,7 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	TrayIcone.szTip[1024] = (TCHAR*)"PuTTY\0" ;			// Le tooltip par défaut, soit rien
 #else
 	//TrayIcone.szTip[1024] = "KiTTY That\'s all folks!\0" ;			// Le tooltip par défaut, soit rien
-	strcpy( TrayIcone.szTip, "KiTTY That\'s all folks!\0" ) ;			// Le tooltip par défaut, soit rien
+	strcpy( TrayIcone.szTip, "KiTTY启动器\0" ) ;			// Le tooltip par défaut, soit rien
 #endif
 	TrayIcone.hWnd = hwnd ;
 	ResShell = Shell_NotifyIcon(NIM_ADD, &TrayIcone);
@@ -523,20 +523,20 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 #ifdef FLJ
 		strcpy( TrayIcone.szTip, "PuTTY\0" ) ;
 #else
-		strcpy( TrayIcone.szTip, "KiTTY That\'s all folks!\0" ) ;
+		strcpy( TrayIcone.szTip, "KiTTY启动器\0" ) ;
 #endif
 		ResShell = Shell_NotifyIcon(NIM_MODIFY, &TrayIcone);
 		if (IsWindowVisible(hwnd)) ShowWindow(hwnd, SW_HIDE);
 		//SendMessage(hwnd, WM_SYSCOMMAND, SC_MINIMIZE, 0);
 		return 1 ;
-	} else 
+	} else
 		return 0 ;
 			break ;
-	
+
 		case KLWM_NOTIFYICON :
 			switch (lParam)	{
 				/*
-				case WM_LBUTTONDBLCLK : 
+				case WM_LBUTTONDBLCLK :
 					ShowWindow(hwnd, SW_SHOWNORMAL);
 					SetForegroundWindow( hwnd ) ;
 					int ResShell;
@@ -553,7 +553,7 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 						}
 					}
 				break ;
-				case WM_LBUTTONUP: 
+				case WM_LBUTTONUP:
 					{
 					if ( (wParam == IDI_PUTTY_LAUNCH) || (wParam == IDI_BLACKBALL) ) {
 						RefreshMenuLauncher() ;
@@ -563,8 +563,8 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				break ;
 				}
 			break ;
-	
-		case WM_DESTROY: 
+
+		case WM_DESTROY:
 			ManageUnHideAll( hwnd ) ;
 			PostQuitMessage( 0 ) ;
 			break ;
@@ -574,7 +574,7 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		case WM_COMMAND: {//Commandes du menu
 			switch( LOWORD(wParam) ) {
 				case IDM_ABOUT:
-					MessageBox(hwnd,"     TTY Launcher\nSession launcher for TTY terminal emulator\n(c), 2009-2022","About", MB_OK ) ;
+					MessageBox(hwnd,"TTY启动器\n\n会话启动器来自TTY终端仿真\n(c), 2009-2023","关于启动器", MB_OK ) ;
 					break ;
 				case IDM_QUIT:
 					ResShell = Shell_NotifyIcon(NIM_DELETE, &TrayIcone) ;
@@ -582,7 +582,7 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 					PostQuitMessage( 0 ) ;
 					break ;
 				case IDM_LAUNCHER:
-					DestroyMenu( MenuLauncher ) ; 
+					DestroyMenu( MenuLauncher ) ;
 					MenuLauncher = NULL ;
 					MenuLauncher = InitLauncherMenu( "Launcher" ) ;
 					Shell_NotifyIcon(NIM_DELETE, &TrayIcone);
@@ -625,7 +625,7 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				nb = LOWORD(wParam)-IDM_USERCMD ;
 				if( ( nb >= 0 ) && ( nb<NB_MENU_MAX ) ) {
 					if( SpecialMenu[nb]!= NULL )
-					//if( strlen( SpecialMenu[nb] ) > 0 ) 
+					//if( strlen( SpecialMenu[nb] ) > 0 )
 						{
 						if( DirectoryBrowseFlag ) {
 							char buffer[1024]="" ;
@@ -640,8 +640,8 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				nb = LOWORD(wParam)-IDM_GOHIDE ;
 				if( ( nb >= 0 ) && ( nb<100 ) ) {
 					if( !IsUnique )	ManageSwitch( nb ) ;
-					else { 
-						ManageHideAll( hwnd ) ; 
+					else {
+						ManageHideAll( hwnd ) ;
 						ManageUnHideOne( TabWin[nb].hwnd ) ;
 						}
 					RefreshMenuLauncher() ;
@@ -659,26 +659,26 @@ LRESULT CALLBACK Launcher_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	}
 	return -1 ;
 }
-	
+
 int WINAPI Launcher_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show) {
 	hinst = inst ;
 	WNDCLASS wndclass ;
 	MSG msg;
 	char buffer[4096] ;
 	char className[1024] = "KiTTYLauncher" ;
-	
+
 	if( strcmp(KiTTYClassName,appname) ) { strcpy(className,KiTTYClassName) ; }
 	else if( strcmp(KiTTYClassName,"KiTTY") ) { strcpy(className,KiTTYClassName) ; }
 	if( ReadParameter( "Launcher", "classname", buffer ) ) {
 		buffer[1023]='\0' ;
 		if( strlen(buffer)>0 ) { strcpy(className,buffer) ; }
 	}
-	
+
 	if( FindWindow(className,className) ) {
 		if( ReadParameter( "Launcher", "alreadyRunCheck", buffer ) ) {
 			if( !stricmp( buffer, "yes" ) ) return 0 ;
-		} else { 
-			return 0 ; 
+		} else {
+			return 0 ;
 		}
 	}
 
@@ -689,7 +689,7 @@ int WINAPI Launcher_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int s
 	wndclass.cbClsExtra = 0;
 	wndclass.cbWndExtra = 0;
 	wndclass.hInstance = inst;
-	if( strstr( cmdline, "-oldicon" ) != NULL ) { oldIconFlag = 1 ; } 
+	if( strstr( cmdline, "-oldicon" ) != NULL ) { oldIconFlag = 1 ; }
 	if( oldIconFlag ) { wndclass.hIcon = LoadIcon(inst, MAKEINTRESOURCE(IDI_BLACKBALL) ); }
 	else { wndclass.hIcon = LoadIcon(inst, MAKEINTRESOURCE(IDI_PUTTY_LAUNCH) ); }
 	wndclass.hCursor = LoadCursor(NULL, IDC_IBEAM) ;
@@ -703,13 +703,13 @@ int WINAPI Launcher_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int s
 		if( !stricmp( buffer, "NO" ) ) LauncherConfReload = 0 ;
 	}
 	if( LauncherConfReload ) InitLauncherRegistry() ;
-		
+
 	MainHwnd = CreateWindowEx(0, className, "KiTTYLauncher",
 				0,//WS_OVERLAPPEDWINDOW,
 				CW_USEDEFAULT, CW_USEDEFAULT,
 				CW_USEDEFAULT, CW_USEDEFAULT,
 				NULL, NULL, inst, NULL);
-	
+
 	//ShowWindow(hwnd, show) ; UpdateWindow(hwnd) ;
 
 	while (GetMessage(&msg, NULL, 0, 0)) {
@@ -732,12 +732,12 @@ void RunConfig( Conf * conf ) {
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 	HANDLE filemap = NULL;
-	
+
 	char bufpass[1024] ;
 	strcpy( bufpass, conf_get_str(conf,CONF_password)) ;
 	MASKPASS(GetCryptSaltFlag(),bufpass) ;
 	conf_set_str(conf,CONF_password,bufpass) ;
-	
+
 	if (restricted_acl) {
 		argprefix = "&R";
 	} else {
@@ -774,11 +774,11 @@ void RunConfig( Conf * conf ) {
 	inherit_handles = true;
 	cl = dupprintf("putty %s&%p:%u", argprefix,
 		filemap, (unsigned)size);
-		    
+
 	MASKPASS(GetCryptSaltFlag(),bufpass);
 	conf_set_str(conf,CONF_password,bufpass);
 	memset(bufpass,0,strlen(bufpass));
-		    
+
 	GetModuleFileName(NULL, b, sizeof(b) - 1);
 	si.cb = sizeof(si);
 	si.lpReserved = NULL;
@@ -799,11 +799,11 @@ void RunConfig( Conf * conf ) {
 
 void RunPuTTY( HWND hwnd, char * param ) {
 	char buffer[4096]="",shortname[1024]="" ; ;
-	if( GetModuleFileName( NULL, (LPTSTR)buffer, 1023 ) ) 
+	if( GetModuleFileName( NULL, (LPTSTR)buffer, 1023 ) )
 		if( GetShortPathName( buffer, shortname, 1023 ) ) {
-			if( strlen(param) > 0 ) 
+			if( strlen(param) > 0 )
 				sprintf( buffer, "%s %s", shortname, param ) ;
-			else 
+			else
 				strcpy( buffer, shortname ) ;
 			RunCommand( hwnd, buffer ) ;
 		}
@@ -813,15 +813,15 @@ int RunSession( HWND hwnd, const char * folder_in, char * session_in ) {
 	char buffer[4096]="", shortname[1024]="" ;
 	char *session=NULL ;
 	int return_code=0 ;
-	
+
 	if( session_in==NULL ) return 0 ;
 	if( strlen(session_in) <= 0 ) return 0 ;
-		
+
 	if( !GetModuleFileName( NULL, (LPTSTR)buffer, 1023 ) ) return 0 ;
 	if( !GetShortPathName( buffer, shortname, 1023 ) ) return 0 ;
 
 	session = (char*)malloc(strlen(session_in)+100) ;
-	
+
 	if( (IniFileFlag==SAVEMODE_REG)||(IniFileFlag==SAVEMODE_FILE) ) {
 		mungestr(session_in, session) ;
 		sprintf( buffer, "%s\\Sessions\\%s", TEXT(PUTTY_REG_POS), session ) ;
@@ -838,8 +838,8 @@ int RunSession( HWND hwnd, const char * folder_in, char * session_in ) {
 			}
 			RunCommand( hwnd, buffer ) ;
 			return_code = 1 ;
-		} else { 
-			RunCommand( hwnd, session_in ) ; 
+		} else {
+			RunCommand( hwnd, session_in ) ;
 		}
 	} else if( IniFileFlag==SAVEMODE_DIR ) {
 		if( DirectoryBrowseFlag ) {

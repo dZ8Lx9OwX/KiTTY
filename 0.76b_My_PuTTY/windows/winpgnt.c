@@ -114,7 +114,7 @@ void modalfatalbox(const char *fmt, ...)
     va_start(ap, fmt);
     buf = dupvprintf(fmt, ap);
     va_end(ap);
-    MessageBox(traywindow, buf, "Pageant Fatal Error",
+    MessageBox(traywindow, buf, "cnKageant致命错误",
 	       MB_SYSTEMMODAL | MB_ICONERROR | MB_OK);
     sfree(buf);
     exit(1);
@@ -166,9 +166,9 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
       case WM_INITDIALOG: {
         char *buildinfo_text = buildinfo("\r\n");
         char *text = dupprintf
-            ("Pageant\r\n\r\n%s\r\n\r\n%s\r\n\r\n%s",
+            ("cnKageant\r\n\r\n%s\r\n\r\n%s\r\n\r\n%s",
              ver, buildinfo_text,
-             "\251 " SHORT_COPYRIGHT_DETAILS ". All rights reserved.");
+             "(C)" SHORT_COPYRIGHT_DETAILS "保留所有权利。");
         sfree(buildinfo_text);
         SetDlgItemText(hwnd, IDC_ABOUT_TEXTBOX, text);
         MakeDlgItemBorderless(hwnd, IDC_ABOUT_TEXTBOX);
@@ -329,17 +329,15 @@ static INT_PTR CALLBACK PassphraseProc(HWND hwnd, UINT msg,
  */
 void old_keyfile_warning(void)
 {
-    static const char mbtitle[] = "PuTTY Key File Warning";
+    static const char mbtitle[] = "cnKiTTY密钥文件警告";
     static const char message[] =
-	"You are loading an SSH-2 private key which has an\n"
-	"old version of the file format. This means your key\n"
-	"file is not fully tamperproof. Future versions of\n"
-	"PuTTY may stop supporting this private key format,\n"
-	"so we recommend you convert your key to the new\n"
-	"format.\n"
-	"\n"
-	"You can perform this conversion by loading the key\n"
-	"into PuTTYgen and then saving it again.";
+        "您正在加载一个旧版本的SSH-2私钥文件。\n"
+        "这意味着当前密钥文件不是完全防篡改的。\n"
+        "未来版本的程序可能会停止支持这种私钥，\n"
+        "所有我们建议您将密钥转换为新的格式。\n"
+        "\n"
+        "将密钥加载到cnKiTTYgen中，只需要再次保\n"
+        "存即可完成转换。";
 
     MessageBox(NULL, message, mbtitle, MB_OK);
 }
@@ -426,9 +424,9 @@ static void keylist_update_callback(
     }
 
     if (ext_flags & LIST_EXTENDED_FLAG_HAS_NO_CLEARTEXT_KEY) {
-        strbuf_catf(listentry, "\t(encrypted)");
+        strbuf_catf(listentry, "\t(加密的)");
     } else if (ext_flags & LIST_EXTENDED_FLAG_HAS_ENCRYPTED_KEY_FILE) {
-        strbuf_catf(listentry, "\t(re-encryptable)");
+        strbuf_catf(listentry, "\t(已解密)");
 
         /* At least one key can be re-encrypted */
         ctx->enable_reencrypt_controls = true;
@@ -500,7 +498,7 @@ static void win_add_keyfile(Filename *filename, bool encrypted)
 	if( strlen(pphrase)>0 ) {
 	    pps.passphrase=(char*)malloc(strlen(pphrase)+1);
 	    strcpy(pps.passphrase,pphrase);
-        } 
+        }
 	else
 #endif
         dlgret = DialogBoxParam(
@@ -543,7 +541,7 @@ static void prompt_add_keyfile(bool encrypted)
 {
     OPENFILENAME of;
     char *filelist = snewn(8192, char);
-	
+
     if (!keypath) keypath = filereq_new();
     memset(&of, 0, sizeof(of));
     of.hwndOwner = traywindow;
@@ -554,7 +552,7 @@ static void prompt_add_keyfile(bool encrypted)
     *filelist = '\0';
     of.nMaxFile = 8192;
     of.lpstrFileTitle = NULL;
-    of.lpstrTitle = "Select Private Key File";
+    of.lpstrTitle = "选择私钥文件";
     of.Flags = OFN_ALLOWMULTISELECT | OFN_EXPLORER;
     if (request_file(keypath, &of, true, false)) {
 	if(strlen(filelist) > of.nFileOffset) {
@@ -671,14 +669,14 @@ static INT_PTR CALLBACK KeyListProc(HWND hwnd, UINT msg,
 		int i;
 		int rCount, sCount;
 		int *selectedArray;
-		
+
 		/* our counter within the array of selected items */
 		int itemNum;
-		
+
 		/* get the number of items selected in the list */
                 int numSelected = SendDlgItemMessage(
                     hwnd, IDC_KEYLIST_LISTBOX, LB_GETSELCOUNT, 0, 0);
-		
+
 		/* none selected? that was silly */
 		if (numSelected == 0) {
 		    MessageBeep(0);
@@ -689,12 +687,12 @@ static INT_PTR CALLBACK KeyListProc(HWND hwnd, UINT msg,
 		selectedArray = snewn(numSelected, int);
                 SendDlgItemMessage(hwnd, IDC_KEYLIST_LISTBOX, LB_GETSELITEMS,
 				numSelected, (WPARAM)selectedArray);
-		
+
 		itemNum = numSelected - 1;
 		rCount = pageant_count_ssh1_keys();
 		sCount = pageant_count_ssh2_keys();
-		
-		/* go through the non-rsakeys until we've covered them all, 
+
+		/* go through the non-rsakeys until we've covered them all,
 		 * and/or we're out of selected items to check. note that
 		 * we go *backwards*, to avoid complications from deleting
 		 * things hence altering the offset of subsequent items
@@ -712,7 +710,7 @@ static INT_PTR CALLBACK KeyListProc(HWND hwnd, UINT msg,
                         itemNum--;
                     }
 		}
-		
+
 		/* do the same for the rsa keys */
 		for (i = rCount - 1; (itemNum >= 0) && (i >= 0); i--) {
                     if(selectedArray[itemNum] == i) {
@@ -728,7 +726,7 @@ static INT_PTR CALLBACK KeyListProc(HWND hwnd, UINT msg,
                     }
 		}
 
-		sfree(selectedArray); 
+		sfree(selectedArray);
 		keylist_update();
 	    }
 	    return 0;
@@ -802,9 +800,9 @@ static BOOL AddTrayIcon(HWND hwnd)
     tnid.hIcon = hicon = LoadIcon(hinst, MAKEINTRESOURCE(201));
 #endif
 #ifdef MOD_PERSO
-    strcpy(tnid.szTip, "Kageant (KiTTY authentication agent)");
+    strcpy(tnid.szTip, "Kageant(cnKiTTY身份验证代理)");
 #else
-    strcpy(tnid.szTip, "Pageant (PuTTY authentication agent)");
+    strcpy(tnid.szTip, "Pageant(PuTTY身份验证代理)");
 #endif
 
     res = Shell_NotifyIcon(NIM_ADD, &tnid);
@@ -814,7 +812,7 @@ static BOOL AddTrayIcon(HWND hwnd)
 #endif
 
     if (hicon) DestroyIcon(hicon);
-    
+
     return res;
 }
 
@@ -825,11 +823,11 @@ static BOOL AddTrayIcon(HWND hwnd)
 // Teste l'existance d'un repertoire
 int existdirectory( const char * filename ) {
 	struct _stat statBuf ;
-	
+
 	if( filename == NULL ) return 0 ;
 	if( strlen(filename)==0 ) return 0 ;
 	if( _stat( filename, &statBuf ) == -1 ) return 0 ;
-	
+
 	if( ( statBuf.st_mode & _S_IFMT ) == _S_IFDIR ) { return 1 ; }
 	else { return 0 ; }
 }
@@ -846,7 +844,7 @@ int MakeSessionMenu( HMENU session_menu, const int start_menuitem, const char * 
 			sprintf( buffer, ".\\Sessions" ) ;
 		}
 		if( (dir=opendir(buffer)) != NULL ) {
-			while( (de=readdir(dir)) != NULL ) 
+			while( (de=readdir(dir)) != NULL )
 			if( strcmp(de->d_name, ".")&&strcmp(de->d_name, "..") ) {
 				unmungestr( de->d_name, fList, MAX_PATH ) ;
 				char *newpath;
@@ -906,7 +904,7 @@ static void update_sessions(void)
 	num_entries > initial_menuitems_count;
 	num_entries--)
 	RemoveMenu(session_menu, 0, MF_BYPOSITION);
-    
+
 	index_menu = 0;
         index_menu = MakeSessionMenu( session_menu, index_menu, "" ) ;
 
@@ -954,7 +952,7 @@ static void update_sessions(void)
 	mii.fMask = MIIM_TYPE | MIIM_STATE;
 	mii.fType = MFT_STRING;
 	mii.fState = MFS_GRAYED;
-	mii.dwTypeData = _T("(No sessions)");
+	mii.dwTypeData = _T("(暂无会话)");
 	InsertMenuItem(session_menu, index_menu, true, &mii);
     }
 }
@@ -1129,7 +1127,7 @@ static char *answer_filemapping_message(const char *mapname)
 
     maphandle = OpenFileMapping(FILE_MAP_ALL_ACCESS, false, mapname);
     if (maphandle == NULL || maphandle == INVALID_HANDLE_VALUE) {
-        err = dupprintf("OpenFileMapping(\"%s\"): %s",
+        err = dupprintf("打开文件映射(\"%s\"): %s",
                         mapname, win_strerror(GetLastError()));
         goto cleanup;
     }
@@ -1143,20 +1141,20 @@ static char *answer_filemapping_message(const char *mapname)
         DWORD retd;
 
         if ((expectedsid = get_user_sid()) == NULL) {
-            err = dupstr("unable to get user SID");
+            err = dupstr("无法获取用户SID");
             goto cleanup;
         }
 
         if ((expectedsid_bc = get_default_sid()) == NULL) {
-            err = dupstr("unable to get default SID");
+            err = dupstr("无法获取默认SID");
             goto cleanup;
         }
 
         if ((retd = p_GetSecurityInfo(
                  maphandle, SE_KERNEL_OBJECT, OWNER_SECURITY_INFORMATION,
                  &mapsid, NULL, NULL, NULL, &psd) != ERROR_SUCCESS)) {
-            err = dupprintf("unable to get owner of file mapping: "
-                            "GetSecurityInfo returned: %s",
+            err = dupprintf("无法获取文件映射的所有者: "
+                            "GetSecurityInfo返回: %s",
                             win_strerror(retd));
             goto cleanup;
         }
@@ -1177,7 +1175,7 @@ static char *answer_filemapping_message(const char *mapname)
 
         if (!EqualSid(mapsid, expectedsid) &&
             !EqualSid(mapsid, expectedsid_bc)) {
-            err = dupstr("wrong owning SID of file mapping");
+            err = dupstr("文件映射的SID出现错误");
             goto cleanup;
         }
     } else
@@ -1190,7 +1188,7 @@ static char *answer_filemapping_message(const char *mapname)
 
     mapaddr = MapViewOfFile(maphandle, FILE_MAP_WRITE, 0, 0, 0);
     if (!mapaddr) {
-        err = dupprintf("unable to obtain view of file mapping: %s",
+        err = dupprintf("无法获得文件映射视图: %s",
                         win_strerror(GetLastError()));
         goto cleanup;
     }
@@ -1203,14 +1201,14 @@ static char *answer_filemapping_message(const char *mapname)
         MEMORY_BASIC_INFORMATION mbi;
         size_t mbiSize = VirtualQuery(mapaddr, &mbi, sizeof(mbi));
         if (mbiSize == 0) {
-            err = dupprintf("unable to query view of file mapping: %s",
+            err = dupprintf("无法查询文件映射视图: %s",
                             win_strerror(GetLastError()));
             goto cleanup;
         }
         if (mbiSize < (offsetof(MEMORY_BASIC_INFORMATION, RegionSize) +
                        sizeof(mbi.RegionSize))) {
-            err = dupstr("VirtualQuery returned too little data to get "
-                         "region size");
+            err = dupstr("返回的数据太少，无法获取"
+                         "区域大小");
             goto cleanup;
         }
 
@@ -1220,7 +1218,7 @@ static char *answer_filemapping_message(const char *mapname)
     debug("region size = %"SIZEu"\n", mapsize);
 #endif
     if (mapsize < 5) {
-        err = dupstr("mapping smaller than smallest possible request");
+        err = dupstr("映射小于可能的最小请求");
         goto cleanup;
     }
 
@@ -1290,7 +1288,7 @@ static LRESULT CALLBACK TrayWndProc(HWND hwnd, UINT message,
 	    AddTrayIcon(hwnd);
         }
         break;
-        
+
       case WM_SYSTRAY:
 	if (lParam == WM_RBUTTONUP) {
 	    POINT cursorpos;
@@ -1327,8 +1325,8 @@ static LRESULT CALLBACK TrayWndProc(HWND hwnd, UINT message,
 
                 if((INT_PTR)ShellExecute(hwnd, NULL, putty_path, cmdline,
                                          _T(""), SW_SHOW) <= 32) {
-                    MessageBox(NULL, "Unable to execute PuTTY!",
-                               "Error", MB_OK | MB_ICONERROR);
+                    MessageBox(NULL, "无法执行cnKiTTY！！",
+                               "错误", MB_OK | MB_ICONERROR);
                 }
 	    break;
           }
@@ -1339,7 +1337,7 @@ static LRESULT CALLBACK TrayWndProc(HWND hwnd, UINT message,
 	    break;
 	  case IDM_VIEWKEYS:
             create_keylist_window();
-	    /* 
+	    /*
 	     * Sometimes the window comes up minimised / hidden for
 	     * no obvious reason. Prevent this. This also brings it
 	     * to the front if it's already present (the user
@@ -1372,7 +1370,7 @@ static LRESULT CALLBACK TrayWndProc(HWND hwnd, UINT message,
                 aboutbox = CreateDialog(hinst, MAKEINTRESOURCE(IDD_ABOUT),
 					NULL, AboutProc);
 		ShowWindow(aboutbox, SW_SHOWNORMAL);
-		/* 
+		/*
 		 * Sometimes the window comes up minimised / hidden
 		 * for no obvious reason. Prevent this.
 		 */
@@ -1403,7 +1401,7 @@ static LRESULT CALLBACK TrayWndProc(HWND hwnd, UINT message,
 //MessageBox(NULL,param,"Launching",MB_OK) ;
 		    if((INT_PTR)ShellExecute(hwnd, NULL, putty_path, param,
 					 _T(""), SW_SHOW) <= 32) {
-			MessageBox(NULL, "Unable to execute PuTTY!", "Error",
+			MessageBox(NULL, "无法执行cnKiTTY！！", "错误",
 				   MB_OK | MB_ICONERROR);
 		    }
 		}
@@ -1477,7 +1475,7 @@ void spawn_cmd(const char *cmdline, const char *args, int show)
     if (ShellExecute(NULL, _T("open"), cmdline,
 		     args, NULL, show) <= (HINSTANCE) 32) {
 	char *msg;
-	msg = dupprintf("Failed to run \"%s\": %s", cmdline,
+	msg = dupprintf("运行失败\"%s\": %s", cmdline,
 			win_strerror(GetLastError()));
 	MessageBox(NULL, msg, APPNAME, MB_OK | MB_ICONEXCLAMATION);
 	sfree(msg);
@@ -1487,7 +1485,7 @@ void spawn_cmd(const char *cmdline, const char *args, int show)
 #ifndef MOD_INTEGRATED_AGENT
 void logevent(LogContext *logctx, const char *event)
 {
-    unreachable("Pageant can't create a LogContext, so this can't be called");
+    unreachable("cnKageant不能创建LogContext，所用不能调用这个");
 }
 
 void noise_ultralight(NoiseSourceId id, unsigned long data)
@@ -1558,16 +1556,16 @@ int WINAPI Agent_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show
 	 */
         if (!got_advapi()) {
 	    MessageBox(NULL,
-		       "Unable to access security APIs. Pageant will\n"
-		       "not run, in case it causes a security breach.",
-		       "Pageant Fatal Error", MB_ICONERROR | MB_OK);
+               "无法安全访问API，cnKageant会\n"
+               "禁止运行，以防导致安全漏洞",
+               "cnKageant致命错误", MB_ICONERROR | MB_OK);
 	    return 1;
 	}
 #else
 	MessageBox(NULL,
-		   "This program has been compiled for Win9X and will\n"
-		   "not run on NT, in case it causes a security breach.",
-		   "Pageant Fatal Error", MB_ICONERROR | MB_OK);
+		   "这个程序是为 Win9X 编译的，不会\n"
+		   "在NT上运行，以防引起安全漏洞。",
+		   "cnKageant致命错误", MB_ICONERROR | MB_OK);
 	return 1;
 #endif
     }
@@ -1605,8 +1603,20 @@ int WINAPI Agent_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show
 			if ( (fp = fopen(b, "r")) != NULL) {
 				putty_path = dupstr(b);
 				fclose(fp);
-			} else putty_path = NULL;
-		}
+			 } else {
+                  strcpy(r, "cnkitty.exe");
+                  if ( (fp = fopen(b, "r")) != NULL) {
+                      putty_path = dupstr(b);
+                      fclose(fp);
+                  } else {
+                      strcpy(r, "cnkitty_portable.exe");
+			          if ( (fp = fopen(b, "r")) != NULL) {
+				          putty_path = dupstr(b);
+				          fclose(fp);
+                    } else putty_path = NULL;
+                }
+            }
+        }
 	}
 #else
         } else
@@ -1675,9 +1685,9 @@ int WINAPI Agent_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show
             } else if (!strcmp(p, "--")) {
                 doing_opts = false;
             } else {
-                char *msg = dupprintf("unrecognised command-line option\n"
+                char *msg = dupprintf("无法识别的命令选项\n"
                                       "'%s'", p);
-                MessageBox(NULL, msg, "Pageant command-line syntax error",
+                MessageBox(NULL, msg, "cnKageant命令行语法错误",
                            MB_ICONERROR | MB_OK);
                 exit(1);
             }
@@ -1715,7 +1725,7 @@ int WINAPI Agent_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show
      */
     if (already_running) {
 	if (!command && !added_keys) {
-	    MessageBox(NULL, "Pageant is already running", "Pageant Error",
+	    MessageBox(NULL, "已经存在运行中的身份代理程序。", "cnKageant错误",
 		       MB_ICONERROR | MB_OK);
 	}
 	return 0;
@@ -1735,10 +1745,10 @@ int WINAPI Agent_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show
         char *pipename = agent_named_pipe_name();
         Socket *sock = new_named_pipe_listener(pipename, pl_plug);
         if (sk_socket_error(sock)) {
-            char *err = dupprintf("Unable to open named pipe at %s "
-                                  "for SSH agent:\n%s", pipename,
+            char *err = dupprintf("无法在%s打开命名管道"
+                                  "用于SSH代理:\n%s", pipename,
                                   sk_socket_error(sock));
-            MessageBox(NULL, err, "Pageant Error", MB_ICONERROR | MB_OK);
+            MessageBox(NULL, err, "cnKageant错误", MB_ICONERROR | MB_OK);
             return 1;
         }
         pageant_listener_got_socket(pl, sock);
@@ -1792,27 +1802,27 @@ int WINAPI Agent_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show
     systray_menu = CreatePopupMenu();
     if (putty_path) {
 	session_menu = CreateMenu();
-	AppendMenu(systray_menu, MF_ENABLED, IDM_PUTTY, "&New Session");
+	AppendMenu(systray_menu, MF_ENABLED, IDM_PUTTY, "新建会话(&N)");
 	AppendMenu(systray_menu, MF_POPUP | MF_ENABLED,
-		   (UINT_PTR) session_menu, "&Saved Sessions");
+		   (UINT_PTR) session_menu, "保存会话(&S)");
 	AppendMenu(systray_menu, MF_SEPARATOR, 0, 0);
     }
     AppendMenu(systray_menu, MF_ENABLED, IDM_VIEWKEYS,
-	   "&View Keys");
-    AppendMenu(systray_menu, MF_ENABLED, IDM_ADDKEY, "Add &Key");
+	   "查看密钥(&V)");
+    AppendMenu(systray_menu, MF_ENABLED, IDM_ADDKEY, "添加密钥(&K)");
     AppendMenu(systray_menu, MF_ENABLED, IDM_ADDKEY_ENCRYPTED,
-               "Add key (encrypted)");
+               "添加加密密钥");
     AppendMenu(systray_menu, MF_SEPARATOR, 0, 0);
     AppendMenu(systray_menu, MF_ENABLED, IDM_REMOVE_ALL,
-               "Remove All Keys");
+               "删除所有密钥");
     AppendMenu(systray_menu, MF_ENABLED, IDM_REENCRYPT_ALL,
-               "Re-encrypt All Keys");
+               "重新加密所有密钥");
     AppendMenu(systray_menu, MF_SEPARATOR, 0, 0);
     if (has_help())
-	AppendMenu(systray_menu, MF_ENABLED, IDM_HELP, "&Help");
-    AppendMenu(systray_menu, MF_ENABLED, IDM_ABOUT, "&About");
+	AppendMenu(systray_menu, MF_ENABLED, IDM_HELP, "帮助(&H)");
+    AppendMenu(systray_menu, MF_ENABLED, IDM_ABOUT, "关于(&A)");
     AppendMenu(systray_menu, MF_SEPARATOR, 0, 0);
-    AppendMenu(systray_menu, MF_ENABLED, IDM_CLOSE, "E&xit");
+    AppendMenu(systray_menu, MF_ENABLED, IDM_CLOSE, "退出(&X)");
     initial_menuitems_count = GetMenuItemCount(session_menu);
 
     /* Set the default menu item. */

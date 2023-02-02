@@ -146,8 +146,8 @@ static void ssh1_bpp_handle_input(BinaryPacketProtocol *bpp)
 
         if (s->len < 5 || s->len > 262144) { /* SSH1.5-mandated max size */
             ssh_sw_abort(s->bpp.ssh,
-                         "Out-of-range packet length from remote suggests"
-                         " data stream corruption");
+                         "来自远端的数据包长度超出范围，"
+                         "数据流可能遭到损坏。");
             crStopV;
         }
 
@@ -171,7 +171,7 @@ static void ssh1_bpp_handle_input(BinaryPacketProtocol *bpp)
         if (s->cipher_in && detect_attack(s->crcda_ctx,
                                           s->data, s->biglen, s->iv)) {
             ssh_sw_abort(s->bpp.ssh,
-                         "Network attack (CRC compensation) detected!");
+                         "检测到网络攻击(CRC 补偿)！");
             crStopV;
         }
         /* Save the last cipher block, to be passed to the next call
@@ -185,7 +185,7 @@ static void ssh1_bpp_handle_input(BinaryPacketProtocol *bpp)
         s->realcrc = crc32_ssh1(make_ptrlen(s->data, s->biglen - 4));
         s->gotcrc = GET_32BIT_MSB_FIRST(s->data + s->biglen - 4);
         if (s->gotcrc != s->realcrc) {
-            ssh_sw_abort(s->bpp.ssh, "Incorrect CRC received on packet");
+            ssh_sw_abort(s->bpp.ssh, "在数据包上收到不正确的CRC");
             crStopV;
         }
 
@@ -196,7 +196,7 @@ static void ssh1_bpp_handle_input(BinaryPacketProtocol *bpp)
                     s->decompctx, s->data + s->pad, s->length + 1,
                     &decompblk, &decomplen)) {
                 ssh_sw_abort(s->bpp.ssh,
-                             "Zlib decompression encountered invalid data");
+                             "Zlib 解压遇到无效数据");
                 crStopV;
             }
 
@@ -275,9 +275,9 @@ static void ssh1_bpp_handle_input(BinaryPacketProtocol *bpp)
   eof:
     if (!s->bpp.expect_close) {
         ssh_remote_error(s->bpp.ssh,
-                         "Remote side unexpectedly closed network connection");
+                         "远程端意外关闭网络连接");
     } else {
-        ssh_remote_eof(s->bpp.ssh, "Remote side closed network connection");
+        ssh_remote_eof(s->bpp.ssh, "远端关闭网络连接");
     }
     return;  /* avoid touching s now it's been freed */
 

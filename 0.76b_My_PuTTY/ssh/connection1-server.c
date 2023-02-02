@@ -234,8 +234,8 @@ bool ssh1_handle_direction_specific_packet(
 
       case SSH1_CMSG_EXIT_CONFIRMATION:
         if (!s->sent_exit_status) {
-            ssh_proto_error(s->ppl.ssh, "Received SSH1_CMSG_EXIT_CONFIRMATION"
-                            " without having sent SSH1_SMSG_EXIT_STATUS");
+            ssh_proto_error(s->ppl.ssh, "收到 SSH1_CMSG_EXIT_CONFIRMATION"
+                            " 在未发送 SSH1_SMSG_EXIT_STATUS 时");
             return true;
         }
         ppl_logevent("Client sent exit confirmation");
@@ -246,8 +246,8 @@ bool ssh1_handle_direction_specific_packet(
     }
 
   unexpected_setup_packet:
-    ssh_proto_error(s->ppl.ssh, "Received unexpected setup packet after the "
-                    "setup phase, type %d (%s)", pktin->type,
+    ssh_proto_error(s->ppl.ssh, "在设置阶段结束后，意外收到设置数据"
+                    "数据包，类型：%d (%s)", pktin->type,
                     ssh1_pkt_type(pktin->type));
     /* FIXME: ensure caller copes with us just having freed the whole layer */
     return true;
@@ -255,7 +255,7 @@ bool ssh1_handle_direction_specific_packet(
 
 SshChannel *ssh1_session_open(ConnectionLayer *cl, Channel *chan)
 {
-    unreachable("Should never be called in the server");
+    unreachable("永远不应该在服务器中调用");
 }
 
 struct ssh_rportfwd *ssh1_rportfwd_alloc(

@@ -136,7 +136,7 @@ static bool font_dualwidth, font_varpitch;
 static int offset_width, offset_height;
 static bool was_zoomed = false;
 static int prev_rows, prev_cols;
-  
+
 static void flash_window(int mode);
 static void sys_cursor_update(void);
 static bool get_fullscreen_rect(RECT * ss);
@@ -200,7 +200,7 @@ static struct sesslist sesslist;       /* for saved-session menu */
 #define FONT_OEMBOLD 	0x41
 #define FONT_OEMUND 	0x42
 #define FONT_OEMBOLDUND 0x43
- 
+
 #define FONT_MAXNO 	0x4F
 #define FONT_SHIFT	6
 static int use_italics;
@@ -286,7 +286,7 @@ void SendStrToTerminal( const char * str, const int len ) {
 		}
 	}
 // resize en convertissant en nombre de lignes et colonnes
-void resize( int height, int width ) { 
+void resize( int height, int width ) {
 	int w,h;
 
 	if( width!=-1 ) {
@@ -303,15 +303,15 @@ void resize( int height, int width ) {
 		w = prev_cols ;
 		}
 
-	term_size(term, h, w, conf_get_int(conf,CONF_savelines)) ; 
+	term_size(term, h, w, conf_get_int(conf,CONF_savelines)) ;
 	reset_window(0);
 
 	w = (width-conf_get_int(conf,CONF_window_border)*2) / font_width ;
 	if (w < 1) w = 1;
 	h = (height-conf_get_int(conf,CONF_window_border)*2) / font_height ;
 	if (h < 1) h = 1;
-	conf_set_int(conf,CONF_height,h); 
-	conf_set_int(conf,CONF_width,w); 
+	conf_set_int(conf,CONF_height,h);
+	conf_set_int(conf,CONF_width,w);
 	}
 int Convert1Reg( const char * filename ) ;
 int get_param( const char * val ) ;
@@ -402,7 +402,7 @@ void RunSessionWithCurrentSettings( HWND hwnd, Conf * oldconf, const char * host
 	if( host != NULL ) { conf_set_str(newconf,CONF_host,host) ; }
 	if( user != NULL ) { conf_set_str(newconf,CONF_username,user) ; }
 	if( pass != NULL ) { conf_set_str(newconf,CONF_password,pass) ; }
-	
+
 #ifndef MOD_NOPASSWORD
 	char pst[4096] ;
 	strcpy( pst, conf_get_str(newconf, CONF_password ) ) ;
@@ -413,13 +413,13 @@ void RunSessionWithCurrentSettings( HWND hwnd, Conf * oldconf, const char * host
 #else
 	conf_set_str( newconf, CONF_password, "" ) ;
 #endif
-	
-	
-	
+
+
+
 	if( remotepath != NULL ) {
 		char *buf=(char*)malloc(strlen(remotepath)+5);
 		sprintf(buf,"cd %s",remotepath);
-		conf_set_str(newconf,CONF_autocommand,buf) ; 
+		conf_set_str(newconf,CONF_autocommand,buf) ;
 	} //else { conf_set_str(newconf,CONF_autocommand,"") ; }
 	//if( port != 0 ) { conf_set_int(newconf,CONF_port,port) ; } else { conf_set_int(newconf,CONF_port,22) ; }
 
@@ -460,12 +460,12 @@ static void close_session(void *ignored_context);
 #define IDM_SCRIPTSEND (0x5110)
 #define IDM_SCRIPTHALT (0x5120)
 
-#include "script.h" 
-ScriptData scriptdata; 
+#include "script.h"
+ScriptData scriptdata;
 
 #include "script_win.c"
 #include "script_ahk.c"
-#include "script.c" 
+#include "script.c"
 /* rutty */
 #endif
 #ifdef MOD_PROXY
@@ -640,7 +640,7 @@ static WinGuiSeat wgs = { .seat.vt = &win_seat_vt,
 Terminal* GetTerminal() { return term ; }
 void do_eventlog( const char * st ) { lp_eventlog(&wgs.logpolicy,st); }
 #endif
-			  
+
 static void start_backend(void)
 {
     const struct BackendVtable *vt;
@@ -653,8 +653,8 @@ static void start_backend(void)
      */
     vt = backend_vt_from_proto(conf_get_int(conf, CONF_protocol));
     if (!vt) {
-	char *str = dupprintf("%s Internal Error", appname);
-	MessageBox(NULL, "Unsupported protocol number found",
+	char *str = dupprintf("%s 内部错误", appname);
+	MessageBox(NULL, "找不到支持的协议号",
 		   str, MB_OK | MB_ICONEXCLAMATION);
 	sfree(str);
 	cleanup_exit(1);
@@ -669,12 +669,12 @@ static void start_backend(void)
                          conf_get_bool(conf, CONF_tcp_keepalives));
     if (error) {
 #ifdef MOD_RECONNECT
-	char *str = dupprintf("%s Error", appname);
-        char *msg = dupprintf("Unable to open connection to\n%s\n%s",
+	char *str = dupprintf("%s 错误", appname);
+        char *msg = dupprintf("无法打开连接到：\n%s\n%s",
                               conf_dest(conf), error);
         sfree(error);
 	if( GetAutoreconnectFlag() && conf_get_int(conf,CONF_failure_reconnect) && is_backend_first_connected ) {
-	    lp_eventlog(&wgs.logpolicy, msg) ; 
+	    lp_eventlog(&wgs.logpolicy, msg) ;
         } else {
 	    if( GetAutoreconnectFlag() && conf_get_int(conf,CONF_failure_reconnect) ) {
 		if( MessageBox(NULL, msg, str, MB_ICONERROR | MB_RETRYCANCEL | MB_DEFBUTTON2) == IDCANCEL ) {
@@ -696,14 +696,14 @@ static void start_backend(void)
 	    SetSSHConnected(0) ;
 	    queue_toplevel_callback(close_session, NULL);
 	    session_closed = true;
-	    lp_eventlog(&wgs.logpolicy, "Unable to connect, trying to reconnect...") ; 
-	    SetTimer(wgs.term_hwnd, TIMER_RECONNECT, GetReconnectDelay()*1000, NULL) ; 
+	    lp_eventlog(&wgs.logpolicy, "Unable to connect, trying to reconnect...") ;
+	    SetTimer(wgs.term_hwnd, TIMER_RECONNECT, GetReconnectDelay()*1000, NULL) ;
 	    return ;
 	}
 	else
 #else
-	char *str = dupprintf("%s Error", appname);
-        char *msg = dupprintf("Unable to open connection to\n%s\n%s",
+	char *str = dupprintf("%s 错误", appname);
+        char *msg = dupprintf("无法打开连接到：\n%s\n%s",
                               conf_dest(conf), error);
         sfree(error);
 	MessageBox(NULL, msg, str, MB_ICONERROR | MB_OK);
@@ -755,9 +755,9 @@ static void close_session(void *ignored_context)
     int i;
 
     session_closed = true;
-    newtitle = dupprintf("%s (inactive)", appname);
+    newtitle = dupprintf("%s (不活跃)", appname);
 #ifdef MOD_PERSO
-	newtitle = dupprintf("%s (inactive)", conf_get_str(conf,CONF_wintitle));
+	newtitle = dupprintf("%s (不活跃)", conf_get_str(conf,CONF_wintitle));
 #endif
     win_set_icon_title(wintw, newtitle);
     win_set_title(wintw, newtitle);
@@ -781,23 +781,23 @@ static void close_session(void *ignored_context)
     for (i = 0; i < lenof(popup_menus); i++) {
 	DeleteMenu(popup_menus[i].menu, IDM_RESTART, MF_BYCOMMAND);
 	InsertMenu(popup_menus[i].menu, IDM_DUPSESS, MF_BYCOMMAND | MF_ENABLED,
-		   IDM_RESTART, "&Restart Session");
+		   IDM_RESTART, "重启会话(&R)");
     }
 }
 
 #ifdef MOD_RECONNECT
 void RestartSession( void ) {
-	if( backend ) { 
-		SetSSHConnected(0) ; 
-		queue_toplevel_callback(close_session, NULL) ; backend = NULL ; 
+	if( backend ) {
+		SetSSHConnected(0) ;
+		queue_toplevel_callback(close_session, NULL) ; backend = NULL ;
 	}
 	if( GetAutoreconnectFlag() ) {
 		lp_eventlog(&wgs.logpolicy, "User request session restart..." ) ;
 	} else {
-		win_seat_connection_fatal(  &wgs.seat, "User request session restart..." ) ;
+		win_seat_connection_fatal(  &wgs.seat, "用户请求重启会话..." ) ;
 		SetTimer(wgs.term_hwnd, TIMER_RECONNECT, 10, NULL) ;
 	}
-	
+
 #ifdef MOD_FAR2L
     term->far2l_ext = 0;
 #endif
@@ -818,7 +818,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
     MSG msg;
     HRESULT hr;
     int guess_width, guess_height;
-	
+
     dll_hijacking_protection();
 #ifdef MOD_ZMODEM
 	struct netscheduler_tag *netsc = NULL ;
@@ -878,8 +878,8 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
      */
     hr = CoInitialize(NULL);
     if (hr != S_OK && hr != S_FALSE) {
-        char *str = dupprintf("%s Fatal Error", appname);
-	MessageBox(NULL, "Failed to initialize COM subsystem",
+        char *str = dupprintf("%s 致命错误", appname);
+	MessageBox(NULL, "初始化COM子系统失败！",
 		   str, MB_OK | MB_ICONEXCLAMATION);
 	sfree(str);
 	return 1;
@@ -979,7 +979,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
                 BinarySource src[1];
                 BinarySource_BARE_INIT(src, cp, cpsize);
 		if (!conf_deserialise(conf, src))
-                    modalfatalbox("Serialised configuration data was invalid");
+                    modalfatalbox("序列化配置数据无效");
 		UnmapViewOfFile(cp);
 		CloseHandle(filemap);
             } else if (!do_config(conf)) {
@@ -997,7 +997,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 	     */
 	    int argc, i;
 	    char **argv;
-	    
+
 	    split_into_argv(cmdline, &argc, &argv, NULL);
 
 	    for (i = 0; i < argc; i++) {
@@ -1007,7 +1007,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 		ret = cmdline_process_param(p, i+1<argc?argv[i+1]:NULL,
 					    1, conf);
 		if (ret == -2) {
-		    cmdline_error("option \"%s\" requires an argument", p);
+		    cmdline_error("选项 \"%s\" 需要一个参数", p);
 		} else if (ret == 2) {
 		    i++;	       /* skip next argument */
 		} else if (ret == 1) {
@@ -1084,10 +1084,10 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 			if( existfile(argv[i]) ) {
 				LoadFile = (char*) malloc( strlen(argv[i])+1 ) ;
 				strcpy( LoadFile, argv[i] ) ;
-				RunPuttyEd( wgs.term_hwnd, LoadFile ) ; 
+				RunPuttyEd( wgs.term_hwnd, LoadFile ) ;
 				free( LoadFile ) ;
 			} else {
-				MessageBox(wgs.term_hwnd,"Unable to find requested file","Error",MB_OK|MB_ICONERROR) ;
+				MessageBox(wgs.term_hwnd,"找不到请求的文件！","错误",MB_OK|MB_ICONERROR) ;
 			}
 			exit( 0 ) ;
 		} else if( !strcmp(p, "-folder") ) {
@@ -1140,16 +1140,16 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 			conf_set_int(conf,CONF_failure_reconnect, 1) ;
 #endif
 #ifdef MOD_SAVEDUMP
-		} else if( !strcmp(p, "-savedump") ) {			
+		} else if( !strcmp(p, "-savedump") ) {
 			SaveDump() ;
 			return 0;
 #endif
-#ifdef MOD_RUTTY	
-		} else if( !strcmp(p, "-norutty") ) {			
+#ifdef MOD_RUTTY
+		} else if( !strcmp(p, "-norutty") ) {
 			SetRuttyFlag( 0 ) ;
 #endif
-#ifdef MOD_ADB	
-		} else if( !strcmp(p, "-adb") ) {			
+#ifdef MOD_ADB
+		} else if( !strcmp(p, "-adb") ) {
 			SetADBFlag( 1 ) ;
 #endif
 #ifdef MOD_ZMODEM
@@ -1170,14 +1170,14 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 #endif
 		} else if( !strcmp(p, "-xpos") ) {
 			i++ ;
-			if( atoi(argv[i])>=0 ) { 
+			if( atoi(argv[i])>=0 ) {
 				conf_set_int( conf, CONF_xpos,atoi(argv[i]));
 				if( conf_get_int( conf, CONF_ypos)<0 ) conf_set_int( conf, CONF_ypos,0);
 				conf_set_bool( conf, CONF_save_windowpos, true ) ;
 				}
 		} else if( !strcmp(p, "-ypos") ) {
 			i++ ;
-			if( atoi(argv[i])>=0 ) { 
+			if( atoi(argv[i])>=0 ) {
 				conf_set_int( conf, CONF_ypos, atoi(argv[i]));
 				if( conf_get_int( conf, CONF_xpos)<0) conf_set_int( conf, CONF_xpos,0);
 				conf_set_bool( conf, CONF_save_windowpos, true ) ;
@@ -1210,7 +1210,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 			SetNoKittyFileFlag( 1 ) ;
 			HyperlinkFlag = 0 ;
 			SetIconeFlag( -1 ) ;
-			SethInstIcons( hinst ) ; 
+			SethInstIcons( hinst ) ;
 			SetTransparencyFlag( 0 ) ;
 			conf_set_int(conf,CONF_transparencynumber, -1) ;
 			SetShortcutsFlag( 0 ) ;
@@ -1259,7 +1259,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 				sprintf(buffer, "%s|%s|%s|0", (char*)get_param_str("INI"), (char*)get_param_str("SAV"), argv[i] ) ;
 				return Notepad_WinMain(inst, prev, buffer, show) ;
 			} else {
-				MessageBox(wgs.term_hwnd,"Unable to find requested file","Error",MB_OK|MB_ICONERROR) ;
+				MessageBox(wgs.term_hwnd,"找不到请求的文件！","错误",MB_OK|MB_ICONERROR) ;
 			}
 			exit(0);
 		} else if( !strcmp(p, "-help") || !strcmp(p, "-h") ) {
@@ -1270,7 +1270,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 				strcat(hmsg,"\r\nDebug Mode\r\n\r\n");
 				strcat(hmsg,"* -mungestr\r\n");
 				strcat(hmsg,"* -unmungestr\r\n");
-				
+
 			} else {
 				hmsg = GetHelpMessage() ;
 			}
@@ -1340,15 +1340,15 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
 		     * and delete the random seed file.
 		     */
 		    char *s1, *s2;
-		    s1 = dupprintf("This procedure will remove ALL Registry entries\n"
-				   "associated with %s, and will also remove\n"
-				   "the random seed file. (This only affects the\n"
-				   "currently logged-in user.)\n"
-				   "\n"
-				   "THIS PROCESS WILL DESTROY YOUR SAVED SESSIONS.\n"
-				   "Are you really sure you want to continue?",
+		    s1 = dupprintf("此过程将删除所有注册表项，\n"
+                            "与%s相关联的随机种子文件，\n"
+                            "也将被删除(这只影响当前登\n"
+                            "录的用户。)\n"
+                            "\n"
+                            "这个过程会破坏您保存的会话。\n"
+                            "你确定要继续吗？",
 				   appname);
-		    s2 = dupprintf("%s Warning", appname);
+		    s2 = dupprintf("%s 警告", appname);
                     if (message_box(NULL, s1, s2,
 				    MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2,
 				    HELPCTXID(option_cleanup)) == IDYES) {
@@ -1361,9 +1361,9 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
                     pgp_fingerprints_msgbox(NULL);
 		    exit(1);
 		} else if (*p != '-') {
-		    cmdline_error("unexpected argument \"%s\"", p);
+		    cmdline_error("出乎意料的问题 \"%s\"", p);
 		} else {
-		    cmdline_error("unknown option \"%s\"", p);
+		    cmdline_error("未知选项 \"%s\"", p);
 		}
 	    }
 	}
@@ -1398,7 +1398,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
       }
     }
 	HICON icon_m ;
-	if( GetIconeFlag() > 0 ) 
+	if( GetIconeFlag() > 0 )
 		icon_m = LoadIcon( GethInstIcons(), MAKEINTRESOURCE(IDI_MAINICON_0 + GetIconeNum() ) );
 	else
 		icon_m = LoadIcon(inst, MAKEINTRESOURCE(IDI_MAINICON));
@@ -1409,14 +1409,14 @@ int xpos_init=0, ypos_init=0 ;
 		ypos_init=conf_get_int(conf,CONF_ypos) ;
 		}
 
-while( conf_get_int(conf,CONF_icone) > GetNumberOfIcons() ) { 
+while( conf_get_int(conf,CONF_icone) > GetNumberOfIcons() ) {
     conf_set_int( conf, CONF_icone, conf_get_int( conf, CONF_icone) - GetNumberOfIcons() ) ;
 }
-    
+
 if( conf_get_int(conf,CONF_icone) == 0 ) {
-	if( GetIconeFlag() > 0 ) SetIconeNum( ( GetCurrentProcessId() * time( NULL ) ) % GetNumberOfIcons() ) ; else SetIconeNum( 0 ) ; 
+	if( GetIconeFlag() > 0 ) SetIconeNum( ( GetCurrentProcessId() * time( NULL ) ) % GetNumberOfIcons() ) ; else SetIconeNum( 0 ) ;
 } else{
-	if( GetIconeFlag() > 0 ) SetIconeNum( conf_get_int(conf,CONF_icone) - 1 ) ; else SetIconeNum( 0 ) ; 
+	if( GetIconeFlag() > 0 ) SetIconeNum( conf_get_int(conf,CONF_icone) - 1 ) ; else SetIconeNum( 0 ) ;
 }
 #endif
 
@@ -1445,7 +1445,7 @@ if( conf_get_int(conf,CONF_icone) == 0 ) {
 #else
 	wndclass.lpszClassName = dup_mb_to_wc(DEFAULT_CODEPAGE, 0, appname);
 #endif
-	    
+
 	RegisterClassW(&wndclass);
     }
 
@@ -1547,12 +1547,12 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 			      NULL, NULL, inst, NULL);
 			      init_dc_blend();
 		}
-	else 
+	else
 		wgs.term_hwnd = CreateWindowExW(exwinmode|WS_EX_ACCEPTFILES, uappname, uappname,
 			      winmode, CW_USEDEFAULT, CW_USEDEFAULT,
 			      guess_width, guess_height,
 			      NULL, NULL, inst, NULL);
-			      
+
 	if( GetBackgroundImageFlag() ) init_dc_blend() ;
 #else
 	wgs.term_hwnd = CreateWindowExW(exwinmode|WS_EX_ACCEPTFILES, uappname, uappname,
@@ -1618,7 +1618,7 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 		 SWP_NOMOVE | SWP_NOREDRAW | SWP_NOZORDER);
 #ifdef MOD_PERSO
     if( !PuttyFlag )
-    if( (conf_get_bool(conf,CONF_saveonexit)||conf_get_bool(conf,CONF_save_windowpos)) 
+    if( (conf_get_bool(conf,CONF_saveonexit)||conf_get_bool(conf,CONF_save_windowpos))
 	/*&& (xpos_init>=0) && (ypos_init>=0)*/ ) {
 	MoveWindow(wgs.term_hwnd, xpos_init, ypos_init, guess_width, guess_height, TRUE );
 	}
@@ -1672,8 +1672,8 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 	EnableMenuItem(popup_menus[SYSMENU].menu, SC_CLOSE, conf_get_int(conf,CONF_window_closable) ? MF_ENABLED : MF_GRAYED);
 #endif
 	popup_menus[CTXMENU].menu = CreatePopupMenu();
-	AppendMenu(popup_menus[CTXMENU].menu, MF_ENABLED, IDM_COPY, "&Copy");
-	AppendMenu(popup_menus[CTXMENU].menu, MF_ENABLED, IDM_PASTE, "&Paste");
+	AppendMenu(popup_menus[CTXMENU].menu, MF_ENABLED, IDM_COPY, "复制(&C)");
+	AppendMenu(popup_menus[CTXMENU].menu, MF_ENABLED, IDM_PASTE, "粘贴(&P)");
 
 	savedsess_menu = CreateMenu();
 	get_sesslist(&sesslist, true);
@@ -1686,78 +1686,78 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 #ifdef MOD_PERSO
 		if( !PuttyFlag ) InitSpecialMenu( m, conf_get_str(conf,CONF_folder), conf_get_str(conf,CONF_sessionname) ) ;
 #endif
-#ifdef MOD_RUTTY 
+#ifdef MOD_RUTTY
 /* rutty: */
-        AppendMenu(m, MF_ENABLED, IDM_SCRIPTSEND, "Send recorded &script file" ) ;
+        AppendMenu(m, MF_ENABLED, IDM_SCRIPTSEND, "发送录制的脚本文件(&S)" ) ;
         AppendMenu(m, MF_SEPARATOR, 0, 0);
-/* rutty */  
+/* rutty */
 #endif
-	    AppendMenu(m, MF_ENABLED, IDM_SHOWLOG, "&Event Log");
+	    AppendMenu(m, MF_ENABLED, IDM_SHOWLOG, "事件日志(&E)");
 #ifdef MOD_PERSO
-	AppendMenu(m, MF_ENABLED, IDM_EXPORTSETTINGS, "Export &current settings" ) ;
+	AppendMenu(m, MF_ENABLED, IDM_EXPORTSETTINGS, "导出当前设置(&C)" ) ;
 #endif
 	    AppendMenu(m, MF_SEPARATOR, 0, 0);
-	    AppendMenu(m, MF_ENABLED, IDM_NEWSESS, "Ne&w Session...");
-	    AppendMenu(m, MF_ENABLED, IDM_DUPSESS, "&Duplicate Session");
+	    AppendMenu(m, MF_ENABLED, IDM_NEWSESS, "新建会话(&W)...");
+	    AppendMenu(m, MF_ENABLED, IDM_DUPSESS, "复制会话(&D)");
 #ifdef MOD_RECONNECT
-	AppendMenu(m, MF_ENABLED, IDM_NEWDUPSESS, "New duplicated session...");
-	AppendMenu(m, MF_ENABLED, IDM_RESTARTSESSION, "Close+Restart") ;
+	AppendMenu(m, MF_ENABLED, IDM_NEWDUPSESS, "新建重复会话...");
+	AppendMenu(m, MF_ENABLED, IDM_RESTARTSESSION, "关闭+重启") ;
 #endif
 	    AppendMenu(m, MF_POPUP | MF_ENABLED, (UINT_PTR) savedsess_menu,
-		       "Sa&ved Sessions");
-	    AppendMenu(m, MF_ENABLED, IDM_RECONF, "Chan&ge Settings...");
+		       "保存会话(&V)");
+	    AppendMenu(m, MF_ENABLED, IDM_RECONF, "修改设置(&G)...");
 	    AppendMenu(m, MF_SEPARATOR, 0, 0);
-	    AppendMenu(m, MF_ENABLED, IDM_COPYALL, "C&opy All to Clipboard");
-	    AppendMenu(m, MF_ENABLED, IDM_CLRSB, "C&lear Scrollback");
+	    AppendMenu(m, MF_ENABLED, IDM_COPYALL, "复制所有内容到剪切板(&O)");
+	    AppendMenu(m, MF_ENABLED, IDM_CLRSB, "清除回滚(&L)");
 #ifdef MOD_PERSO
 	if( conf_get_int(conf, CONF_logtype)!=LGTYP_NONE ) {
-		AppendMenu(m, MF_ENABLED, IDM_CLEARLOGFILE, "Clear log file");
+		AppendMenu(m, MF_ENABLED, IDM_CLEARLOGFILE, "清除日志文件");
 	} else {
-		AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_CLEARLOGFILE, "Clear log file");
+		AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_CLEARLOGFILE, "清除日志文件");
 	}
 #endif
-	    AppendMenu(m, MF_ENABLED, IDM_RESET, "Rese&t Terminal");
+	    AppendMenu(m, MF_ENABLED, IDM_RESET, "重启终端(&T)");
 	    AppendMenu(m, MF_SEPARATOR, 0, 0);
 	    AppendMenu(m, (conf_get_int(conf, CONF_resize_action)
 			   == RESIZE_DISABLED) ? MF_GRAYED : MF_ENABLED,
-		       IDM_FULLSCREEN, "&Full Screen");
+		       IDM_FULLSCREEN, "全屏显示(&F)");
 #ifdef MOD_PERSO
     if( !PuttyFlag ) {
         // if( !IsWow64() ) { AppendMenu(m, MF_ENABLED, IDM_PRINT, "Print clip&board") ; }  // Le menu print clipboard avait été desactivé un temps sur les machine 64bits
-	AppendMenu(m, MF_ENABLED, IDM_PRINT, "Print clip&board") ;
-        AppendMenu(m, MF_ENABLED, IDM_TOTRAY, "Send to tra&y");
+	AppendMenu(m, MF_ENABLED, IDM_PRINT, "打印剪贴板内容(&B)") ;
+        AppendMenu(m, MF_ENABLED, IDM_TOTRAY, "发送到托盘(&Y)");
         if( conf_get_bool(conf,CONF_alwaysontop) )
-            AppendMenu(m, MF_ENABLED|MF_CHECKED, IDM_VISIBLE, "Always visi&ble");
+            AppendMenu(m, MF_ENABLED|MF_CHECKED, IDM_VISIBLE, "始终可见(&B)");
         else
-            AppendMenu(m, MF_ENABLED, IDM_VISIBLE, "Always visi&ble");
-        AppendMenu(m, MF_ENABLED, IDM_PROTECT, "Prote&ct");
-//char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"info",MB_OK);
-        if( GetWinrolFlag() ) AppendMenu(m, MF_ENABLED, IDM_WINROL, "Roll-u&p");
-	HMENU FontMenu = CreateMenu(); 
-		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTUP, "Font up");
-		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTDOWN, "Font down");
-		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTNEGATIVE, "Negative");
-		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTBLACKANDWHITE, "Black and White");
-	AppendMenu(m, MF_POPUP | MF_ENABLED, (UINT) FontMenu, "Font settings");
-	
+            AppendMenu(m, MF_ENABLED, IDM_VISIBLE, "始终可见(&B)e");
+        AppendMenu(m, MF_ENABLED, IDM_PROTECT, "保护会话(&C)");
+//char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"信息",MB_OK);
+        if( GetWinrolFlag() ) AppendMenu(m, MF_ENABLED, IDM_WINROL, "向上卷起(&P)");
+	HMENU FontMenu = CreateMenu();
+		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTUP, "字体放大");
+		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTDOWN, "字体缩小");
+		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTNEGATIVE, "半透明");
+		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTBLACKANDWHITE, "黑白倒置");
+	AppendMenu(m, MF_POPUP | MF_ENABLED, (UINT) FontMenu, "字体设置");
+
 	if( GetShortcutsFlag() )
-            AppendMenu(m, MF_ENABLED|MF_CHECKED, IDM_SHORTCUTSTOGGLE, "Shortcuts toggle");
+            AppendMenu(m, MF_ENABLED|MF_CHECKED, IDM_SHORTCUTSTOGGLE, "快捷方式切换");
         else
-            AppendMenu(m, MF_ENABLED, IDM_SHORTCUTSTOGGLE, "Shortcuts toggle");
-	    
+            AppendMenu(m, MF_ENABLED, IDM_SHORTCUTSTOGGLE, "快捷方式切换");
+
 	AppendMenu(m, MF_SEPARATOR, 0, 0);
-	
-	AppendMenu(m, MF_ENABLED, IDM_SCRIPTFILE, "Send scr&ipt file" ) ;
-        if( PSCPPath!=NULL ) AppendMenu(m, MF_ENABLED, IDM_PSCP, "Send wit&h pscp");
-        else AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_PSCP, "Send wit&h pscp");
-        if( WinSCPPath!=NULL ) AppendMenu(m, MF_ENABLED, IDM_WINSCP, "&Start WinSCP");
-        else AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_WINSCP, "&Start WinSCP");
-	
-	
-        AppendMenu(m, MF_ENABLED, IDM_SHOWPORTFWD, "Po&rt forwarding");
+
+	AppendMenu(m, MF_ENABLED, IDM_SCRIPTFILE, "发送脚本文件(&I)" ) ;
+        if( PSCPPath!=NULL ) AppendMenu(m, MF_ENABLED, IDM_PSCP, "使用PSCP发送(&H)");
+        else AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_PSCP, "使用PSCP发送(&H)");
+        if( WinSCPPath!=NULL ) AppendMenu(m, MF_ENABLED, IDM_WINSCP, "启动 WinSCP(&S)P");
+        else AppendMenu(m, MF_DISABLED|MF_GRAYED, IDM_WINSCP, "启动 WinSCP(&S)");
+
+
+        AppendMenu(m, MF_ENABLED, IDM_SHOWPORTFWD, "转发端口(&R)");
 #ifdef MOD_PORTKNOCKING
 	if( strlen(conf_get_str(conf,CONF_portknockingoptions))>0 ) {
-		AppendMenu(m, MF_ENABLED, IDM_PORTKNOCK, "Port &knock");
+		AppendMenu(m, MF_ENABLED, IDM_PORTKNOCK, "端口试探(&K)");
 	}
 #endif
         }
@@ -1765,58 +1765,58 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 #ifdef MOD_ZMODEM
 	if( (!GetPuttyFlag()) && GetZModemFlag() ) {
 	    AppendMenu(m, MF_SEPARATOR, 0, 0);
-	    AppendMenu(m, term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZSTART, "&Zmodem Receive");
-	    AppendMenu(m, term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZUPLOAD, "Zmodem &Upload");
-	    AppendMenu(m, !term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZABORT, "Zmodem &Abort");
+	    AppendMenu(m, term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZSTART, "Zmodem 接收");
+	    AppendMenu(m, term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZUPLOAD, "Zmodem 上传");
+	    AppendMenu(m, !term->xyz_transfering?MF_GRAYED:MF_ENABLED, IDM_XYZABORT, "关于 Zmodem");
 	}
 #endif
 	    AppendMenu(m, MF_SEPARATOR, 0, 0);
 	    if (has_help())
-		AppendMenu(m, MF_ENABLED, IDM_HELP, "&Help");
-	    str = dupprintf("&About %s", appname);
+		AppendMenu(m, MF_ENABLED, IDM_HELP, "帮助(&H)");
+	    str = dupprintf("关于(&A) %s", appname);
 	    AppendMenu(m, MF_ENABLED, IDM_ABOUT, str);
 	    sfree(str);
 	}
     }
 #ifdef MOD_PERSO
 	// SETTINGS specifique a la session
-    
+
 	if( !PuttyFlag ) {
 		// Lancement automatique dans le Tray
 		if( conf_get_int(conf,CONF_sendtotray) ) SetAutoSendToTray( 1 ) ;
-			
+
 		// Charge le fichier de script d'initialisation si il existe
 		ScriptFileContent = NULL ;
 		ReadInitScript( NULL ) ;
-		
+
 		static char reg_buffer[4096];
-    
+
 		// Lancement du serveur de chat
 		if( ReadParameter( INIT_SECTION, "chat", reg_buffer ) ) {
 			int chat_flag = atoi( reg_buffer ) ;
 			if ( chat_flag > 0 ) {
-				//if( chat_flag != 1 ) PORT = chat_flag ; 
+				//if( chat_flag != 1 ) PORT = chat_flag ;
 				_beginthread( routine_server, 0, NULL ) ;
 			}
 		}
-		
+
 		// Parametrage specifique a la session
 		if( GetSessionField( conf_get_str(conf,CONF_sessionname), conf_get_str(conf,CONF_folder), "InitDelay", reg_buffer ) ) {
-			if( init_delay != (int)(1000*atof( reg_buffer ) ) ) { 
-					init_delay = (int)(1000*atof( reg_buffer ) ) ; 
-					conf_set_int(conf,CONF_initdelay,init_delay) ; 
+			if( init_delay != (int)(1000*atof( reg_buffer ) ) ) {
+					init_delay = (int)(1000*atof( reg_buffer ) ) ;
+					conf_set_int(conf,CONF_initdelay,init_delay) ;
 				}
 			}
 		if( GetSessionField( conf_get_str(conf,CONF_sessionname), conf_get_str(conf,CONF_folder), "BCDelay", reg_buffer ) ) {
-			if( between_char_delay != atof( reg_buffer ) ) { 
+			if( between_char_delay != atof( reg_buffer ) ) {
 				between_char_delay = atof( reg_buffer ) ;
-				conf_set_int(conf,CONF_bcdelay, atof( reg_buffer ) ); 
+				conf_set_int(conf,CONF_bcdelay, atof( reg_buffer ) );
 				}
 			}
 
 #ifndef MOD_NOTRANSPARENCY
 		if( GetTransparencyFlag() && conf_get_int(conf,CONF_transparencynumber) != -1 ) {
-			if( conf_get_int(conf,CONF_transparencynumber) > 0 ) { 
+			if( conf_get_int(conf,CONF_transparencynumber) > 0 ) {
 				SetTransparency( wgs.term_hwnd, 255-conf_get_int(conf,CONF_transparencynumber) ) ;
 				}
 			}
@@ -1830,14 +1830,14 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 			cryptstring( GetCryptSaltFlag(), reg_buffer, MASTER_PASSWORD ) ;
 			WriteParameter( INIT_SECTION, "KiLastSe", reg_buffer ) ;
 			}
-		
+
 		// Lancement des timer (changement image de fond, rafraichissement)
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)
-		if( (!GetBackgroundImageFlag()) || GetPuttyFlag() ) conf_set_int(conf,CONF_bg_type,0); 
+		if( (!GetBackgroundImageFlag()) || GetPuttyFlag() ) conf_set_int(conf,CONF_bg_type,0);
 		if( conf_get_int(conf,CONF_bg_type)!=0 ) {
 			if(conf_get_int(conf,CONF_bg_slideshow)>0)
 			SetTimer(wgs.term_hwnd, TIMER_SLIDEBG, (int)(conf_get_int(conf,CONF_bg_slideshow)*1000), NULL) ;
-			else 
+			else
 			if(ImageSlideDelay>0)
 			SetTimer(wgs.term_hwnd, TIMER_SLIDEBG, (int)(ImageSlideDelay*1000), NULL) ;
 			}
@@ -1872,7 +1872,7 @@ AddDynamicSFTPConnect( conf ) ;
 #endif
 
     if (restricted_acl()) {
-        lp_eventlog(&wgs.logpolicy, "Running with restricted process ACL");
+        lp_eventlog(&wgs.logpolicy, "运行ACL进程受限");
     }
 
     winselgui_set_hwnd(wgs.term_hwnd);
@@ -1889,7 +1889,7 @@ AddDynamicSFTPConnect( conf ) ;
 	if( !GetPuttyFlag() && GetHyperlinkFlag() ) {
 		if( strlen( conf_get_str(conf,CONF_url_regex))==0 ) { conf_set_str(conf,CONF_url_regex,"@°@°@NO REGEX--") ; }
 		if( strlen( conf_get_str(term->conf,CONF_url_regex))==0 ) { conf_set_str(term->conf,CONF_url_regex,"@°@°@NO REGEX--") ; }
-		
+
 		if( conf_get_int(term->conf,CONF_url_defregex) != 0 ) {
 			urlhack_set_regular_expression(URLHACK_REGEX_CLASSIC, conf_get_str(term->conf,CONF_url_regex) ) ;
 		} else {
@@ -2048,7 +2048,7 @@ void cleanup_exit(int code)
 	if( conf_get_bool(conf,CONF_saveonexit) ) { SaveWindowCoord( conf ) ; }
 
 	if( IniFileFlag == SAVEMODE_REG ) { // Mode de sauvegarde registry
-		//SaveRegistryKey() ; 
+		//SaveRegistryKey() ;
 		}
 	else if( IniFileFlag == SAVEMODE_FILE ) { // Mode de sauvegarde fichier
 		int nb ;
@@ -2065,8 +2065,8 @@ void cleanup_exit(int code)
 			InfoBoxClose( hdlg ) ;
 			}
 		}
-	
-	
+
+
 	/*
 	Embryon de mecanisme de retour a la config box en sortant d'une session.
 	Le probleme est que ca retourne a la config box aussi en sortant ... de la config box si une session est chargee ...
@@ -2074,7 +2074,7 @@ void cleanup_exit(int code)
 	if( !PuttyFlag && GetConfigBoxNoExitFlag() )
 	if( is_backend_connected && strlen(conf_get_str(conf,CONF_sessionname))>0 ) {
 		char buffer[4096]="",shortname[1024]="" ; ;
-		if( GetModuleFileName( NULL, (LPTSTR)buffer, 1023 ) ) 
+		if( GetModuleFileName( NULL, (LPTSTR)buffer, 1023 ) )
 			if( GetShortPathName( buffer, shortname, 1023 ) ) {
 				STARTUPINFO si ;
 				PROCESS_INFORMATION pi ;
@@ -2121,7 +2121,7 @@ static void update_savedsess_menu(void)
 		   IDM_SAVED_MIN + (i-1)*MENU_SAVED_STEP,
 		   sesslist.sessions[i]);
     if (sesslist.nsessions <= 1)
-	AppendMenu(savedsess_menu, MF_GRAYED, IDM_SAVED_MIN, "(No sessions)");
+	AppendMenu(savedsess_menu, MF_GRAYED, IDM_SAVED_MIN, "(暂无会话)");
 }
 
 /*
@@ -2187,7 +2187,7 @@ static void win_seat_update_specials_menu(Seat *seat)
 	if (new_menu) {
 	    InsertMenu(popup_menus[j].menu, IDM_SHOWLOG,
 		       MF_BYCOMMAND | MF_POPUP | MF_ENABLED,
-		       (UINT_PTR) new_menu, "S&pecial Command");
+		       (UINT_PTR) new_menu, "特殊命令(&P)");
 	    InsertMenu(popup_menus[j].menu, IDM_SHOWLOG,
 		       MF_BYCOMMAND | MF_SEPARATOR, IDM_SPECIALSEP, 0);
 	}
@@ -2282,10 +2282,10 @@ static void win_seat_connection_fatal(Seat *seat, const char *msg)
 		queue_toplevel_callback(close_session, NULL);
 		session_closed = true;
 		ReadInitScript(NULL);
-	
+
     debug_logevent( "%s Fatal Error: %s", appname,msg ) ;
     show_mouseptr(true);
-	
+
 		if( conf_get_int(conf,CONF_failure_reconnect) ) {
 			queue_toplevel_callback(close_session, NULL);
 			session_closed = true;
@@ -2293,7 +2293,7 @@ static void win_seat_connection_fatal(Seat *seat, const char *msg)
 			SetTimer(wgs.term_hwnd, TIMER_RECONNECT, GetReconnectDelay()*1000, NULL) ;
 		}
 	} else {
-    char *title = dupprintf("%s Fatal Error", appname);
+    char *title = dupprintf("%s 致命错误", appname);
     show_mouseptr(true);
     MessageBox(wgs.term_hwnd, msg, title, MB_ICONERROR | MB_OK);
     sfree(title);
@@ -2306,7 +2306,7 @@ static void win_seat_connection_fatal(Seat *seat, const char *msg)
     }
 	}
 #else
-    char *title = dupprintf("%s Fatal Error", appname);
+    char *title = dupprintf("%s 致命错误", appname);
     show_mouseptr(true);
     MessageBox(wgs.term_hwnd, msg, title, MB_ICONERROR | MB_OK);
     sfree(title);
@@ -2330,7 +2330,7 @@ void cmdline_error(const char *fmt, ...)
     va_start(ap, fmt);
     message = dupvprintf(fmt, ap);
     va_end(ap);
-    title = dupprintf("%s Command Line Error", appname);
+    title = dupprintf("%s 命令行错误", appname);
     MessageBox(wgs.term_hwnd, message, title, MB_ICONERROR | MB_OK);
     sfree(message);
     sfree(title);
@@ -2540,7 +2540,7 @@ static void init_dpi_info(void)
  *
  * - verify that the bold font is the same width as the ordinary
  *   one, and engage shadow bolding if not.
- * 
+ *
  * - verify that the underlined font is the same width as the
  *   ordinary one (manual underlining by means of line drawing can
  *   be done in a pinch).
@@ -2596,7 +2596,7 @@ static void init_fonts(int pick_width, int pick_height)
  			   c, OUT_DEFAULT_PRECIS, \
  		           CLIP_DEFAULT_PRECIS, FONT_QUALITY(quality), \
  			   FIXED_PITCH | FF_DONTCARE, font->name)
- 
+
     f(FONT_NORMAL, font->charset, fw_dontcare, FALSE, FALSE);
 #else
 
@@ -2684,7 +2684,7 @@ static void init_fonts(int pick_width, int pick_height)
 			    - Have the same style as the regular font.  Then it *is* just the regular
 				font with a linear transformation.
 			    - Report the style name of "Oblique".
-			   
+
 			    My experience is these a) don't look very good b) tend to overhang the
 			    next character and get cut off during paints... which doesn't look very good. */
 			if (strcmp(regStyle, itaStyle) && stricmp(itaStyle, "Oblique") && italicOtm->otmItalicAngle != 0) {
@@ -2977,8 +2977,8 @@ static void recompute_window_offset(void)
 
 static void reset_window(int reinit) {
     /*
-     * This function decides how to resize or redraw when the 
-     * user changes something. 
+     * This function decides how to resize or redraw when the
+     * user changes something.
      *
      * This function doesn't like to change the terminal size but if the
      * font size is locked that may be it's only soluion.
@@ -3033,7 +3033,7 @@ static void reset_window(int reinit) {
 	extra_height = wr.bottom - wr.top - cr.bottom + cr.top;
 
 	if (resize_action != RESIZE_TERM) {
-	    if (font_width != win_width/term->cols || 
+	    if (font_width != win_width/term->cols ||
 		font_height != win_height/term->rows) {
 		deinit_fonts();
 		init_fonts(win_width/term->cols, win_height/term->rows);
@@ -3046,9 +3046,9 @@ static void reset_window(int reinit) {
 #endif
 	    }
 	} else {
-	    if (font_width * term->cols != win_width || 
+	    if (font_width * term->cols != win_width ||
 		font_height * term->rows != win_height) {
-		/* Our only choice at this point is to change the 
+		/* Our only choice at this point is to change the
 		 * size of the terminal; Oh well.
 		 */
 		term_size(term, win_height/font_height, win_width/font_width,
@@ -3113,7 +3113,7 @@ static void reset_window(int reinit) {
 	     * the font or terminal to fit.
 	     */
             SetWindowPos(wgs.term_hwnd, NULL, 0, 0,
-		         font_width*term->cols + extra_width, 
+		         font_width*term->cols + extra_width,
 			 font_height*term->rows + extra_height,
 			 SWP_NOMOVE | SWP_NOZORDER);
 	}
@@ -3122,7 +3122,7 @@ static void reset_window(int reinit) {
 	return;
     }
 
-    /* Okay the user doesn't want us to change the font so we try the 
+    /* Okay the user doesn't want us to change the font so we try the
      * window. But that may be too big for the screen which forces us
      * to change the terminal.
      */
@@ -3138,7 +3138,7 @@ static void reset_window(int reinit) {
 
 	    static RECT ss;
 	    int width, height;
-		
+
 		get_fullscreen_rect(&ss);
 
 	    width = (ss.right - ss.left - extra_width) / font_width;
@@ -3171,9 +3171,9 @@ static void reset_window(int reinit) {
 #endif
 		}
 	    }
-	    
+
             SetWindowPos(wgs.term_hwnd, NULL, 0, 0,
-		         font_width*term->cols + extra_width, 
+		         font_width*term->cols + extra_width,
 			 font_height*term->rows + extra_height,
 			 SWP_NOMOVE | SWP_NOZORDER);
 
@@ -3189,11 +3189,11 @@ static void reset_window(int reinit) {
 
     /* We're allowed to or must change the font but do we want to ?  */
 
-    if (font_width != (win_width-window_border*2)/term->cols || 
+    if (font_width != (win_width-window_border*2)/term->cols ||
 	font_height != (win_height-window_border*2)/term->rows) {
 
 	deinit_fonts();
-	init_fonts((win_width-window_border*2)/term->cols, 
+	init_fonts((win_width-window_border*2)/term->cols,
 		   (win_height-window_border*2)/term->rows);
 	offset_width = (win_width-font_width*term->cols)/2;
 	offset_height = (win_height-font_height*term->rows)/2;
@@ -3203,7 +3203,7 @@ static void reset_window(int reinit) {
 
         InvalidateRect(wgs.term_hwnd, NULL, true);
 #ifdef RDB_DEBUG_PATCH
-	debug("reset_window() -> font resize to (%d,%d)\n", 
+	debug("reset_window() -> font resize to (%d,%d)\n",
               font_width, font_height);
 #endif
     }
@@ -3324,11 +3324,11 @@ static BOOL CALLBACK CtrlTabWindowProc(HWND hwnd, LPARAM lParam) {
 	int hwnd_self, hwnd_next;
 
 	hwnd_self = hwnd_hi_date_time - info->self_hi_date_time;
-	if (hwnd_self == 0) 
+	if (hwnd_self == 0)
 	    hwnd_self = hwnd_lo_date_time - info->self_lo_date_time;
 	hwnd_self *= info->direction;
 	hwnd_next = hwnd_hi_date_time - info->next_hi_date_time;
-	if (hwnd_next == 0) 
+	if (hwnd_next == 0)
 	    hwnd_next = hwnd_lo_date_time - info->next_lo_date_time;
 	hwnd_next *= info->direction;
 	if( ((hwnd_self > 0) && (hwnd_next < 0)) || (((hwnd_self > 0) || (hwnd_next < 0)) && (info->next_self <= 0)) ) {
@@ -3373,7 +3373,7 @@ static void win_seat_notify_remote_exit(Seat *seat)
 #endif
             if (exitcode != INT_MAX) {
                 show_mouseptr(true);
-                MessageBox(wgs.term_hwnd, "Connection closed by remote host",
+                MessageBox(wgs.term_hwnd, "连接被远程主机关闭",
 			   appname, MB_OK | MB_ICONINFORMATION);
 	    }
 	}
@@ -3473,7 +3473,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message,
 #ifdef MOD_HYPERLINK
 	/*
 	 * HACK: PuttyTray / Nutty
-	 */ 
+	 */
 	POINT cursor_pt;
 #endif
     switch (message) {
@@ -3495,11 +3495,11 @@ else if((UINT_PTR)wParam == TIMER_INIT) {  // Initialisation
 	if( !PuttyFlag ) if( LoadFile!=NULL ) {
 		RunPuttyEd( hwnd, LoadFile ) ;
 		free( LoadFile ) ;
-		LoadFile = NULL ; 
+		LoadFile = NULL ;
 	}
-	
+
 	if( debug_flag ) { debug_logevent( "Starting post connection operations" ) ; }
-	
+
 	if( (conf_get_int(conf,CONF_protocol) == PROT_SSH) && (!is_backend_connected) ) break ; // On sort si en SSH on n'est pas connecte
 	// Lancement d'une (ou plusieurs separees par \\n) commande(s) automatique(s) a l'initialisation
 
@@ -3522,7 +3522,7 @@ else if((UINT_PTR)wParam == TIMER_INIT) {  // Initialisation
 			SetForegroundWindow( hwnd ) ;
 		}
 	}
-	
+
 	// Envoi automatiquement dans le systeme tray si besoin
 	if( GetAutoSendToTray() ) ManageToTray( hwnd ) ;
 
@@ -3531,22 +3531,22 @@ else if((UINT_PTR)wParam == TIMER_INIT) {  // Initialisation
 		if( strlen( conf_get_str(conf,CONF_username) ) > 0 ) {
 			if( strlen( conf_get_str(conf,CONF_password) ) > 0 ) {
 				char bufpass[1024]; strcpy(bufpass,conf_get_str(conf,CONF_password)) ;
-				MASKPASS(GetCryptSaltFlag(), bufpass); 
-				strcat(buffer,bufpass); 
+				MASKPASS(GetCryptSaltFlag(), bufpass);
+				strcat(buffer,bufpass);
 				memset(bufpass,0,strlen(bufpass));
 				strcat( buffer, "\\n" ) ;
 			}
 		}
 		if( strlen( conf_get_str(conf,CONF_autocommand) ) > 0 ) {
-			strcat( buffer, "\\n\\p" ) ; 
+			strcat( buffer, "\\n\\p" ) ;
 			strcat( buffer, conf_get_str(conf,CONF_autocommand) ) ;
 			strcat( buffer, "\\n" ) ;
 		}
-		if( strlen(buffer) > 0 ) { 
-			conf_set_str( conf, CONF_autocommand, buffer ); 
+		if( strlen(buffer) > 0 ) {
+			conf_set_str( conf, CONF_autocommand, buffer );
 		}
 	}
-	
+
 	RenewPassword( conf ) ;
 
 	// On envoie l'autocommand
@@ -3560,7 +3560,7 @@ else if((UINT_PTR)wParam == TIMER_INIT) {  // Initialisation
 	}
 
 	RefreshBackground( hwnd ) ;
-	
+
 	first_connect = false ;
 	}
 
@@ -3573,9 +3573,9 @@ else if((UINT_PTR)wParam == TIMER_DND){
 
 else if((UINT_PTR)wParam == TIMER_AUTOCOMMAND) {  // Autocommand au demarrage
 
-	KillTimer( hwnd, TIMER_AUTOCOMMAND ) ; 
+	KillTimer( hwnd, TIMER_AUTOCOMMAND ) ;
 	if( AutoCommand == NULL ) {
-		ValidateRect( hwnd, NULL ) ; 
+		ValidateRect( hwnd, NULL ) ;
 		AutoCommand = (char*) malloc( strlen(conf_get_str(conf,CONF_autocommand))+10 ) ;
 		strcpy( AutoCommand, conf_get_str(conf,CONF_autocommand) ) ;
 	}
@@ -3599,14 +3599,14 @@ else if((UINT_PTR)wParam == TIMER_AUTOCOMMAND) {  // Autocommand au demarrage
 			buffer[i] = AutoCommand[i] ; buffer[i+1] = '\0' ; i++ ;
 			buffer[i] = AutoCommand[i] ; buffer[i+1] = '\0' ; i++ ;
 			break ;
-		} else { buffer[i] = AutoCommand[i] ; buffer[i+1] = '\0' ; i++ ; 
+		} else { buffer[i] = AutoCommand[i] ; buffer[i+1] = '\0' ; i++ ;
 		}
 	}
-		
+
 	del( AutoCommand, 1, i ) ; //AutoCommand += i ;
 	if( strlen( buffer ) > 0 ) { SendAutoCommand( hwnd, buffer ) ; }
 	if( AutoCommand[0] == '\0' ) {
-		free( AutoCommand ) ; AutoCommand = NULL ; 
+		free( AutoCommand ) ; AutoCommand = NULL ;
 		InvalidateRect( hwnd, NULL, true ) ;
 		}
 	else { SetTimer(hwnd, TIMER_AUTOCOMMAND, autocommand_delay, NULL) ; }
@@ -3615,17 +3615,17 @@ else if((UINT_PTR)wParam == TIMER_AUTOCOMMAND) {  // Autocommand au demarrage
 else if((UINT_PTR)wParam == TIMER_AUTOPASTE) {  // AutoPaste
 	char buffer[4096] = "" ;
 	int i = 0, j  ;
-	KillTimer( hwnd, TIMER_AUTOPASTE ) ; 
+	KillTimer( hwnd, TIMER_AUTOPASTE ) ;
 	if( PasteCommand == NULL ) { ValidateRect( hwnd, NULL ) ; }
 	else if( strlen( PasteCommand ) == 0 ) { free( PasteCommand ) ; PasteCommand = NULL ; }
 	else {
-		while( PasteCommand[0] != '\0' ) { 
+		while( PasteCommand[0] != '\0' ) {
 			buffer[i] = PasteCommand[0] ; buffer[i+1] = '\0' ;
 			j = 0 ; do { PasteCommand[j] = PasteCommand[j+1] ; j++ ; } while( PasteCommand[j] != '\0' ) ;
 			if( buffer[i] == '\n' ) { buffer[i] = '\0' ; break ; }
 			i++ ;
 			}
-		if( strlen( buffer ) > 0 ) { 
+		if( strlen( buffer ) > 0 ) {
 			SendAutoCommand( hwnd, buffer ) ;
 			SetTimer(hwnd, TIMER_AUTOPASTE, autocommand_delay, NULL) ;
 			}
@@ -3638,7 +3638,7 @@ else if( GetBackgroundImageFlag() && ((UINT_PTR)wParam == TIMER_SLIDEBG) ) {  //
 	}
 #endif
 else if((UINT_PTR)wParam == TIMER_REDRAW) {  // rafraichissement automatique (bug d'affichage)
-	RefreshBackground( hwnd ) ; // On inhibe cette fonction a cause du probleme de fuite memoire due a l'image de fond !!! 
+	RefreshBackground( hwnd ) ; // On inhibe cette fonction a cause du probleme de fuite memoire due a l'image de fond !!!
 	//InvalidateRect( hwnd, NULL, true ) ; // On remplace par
 	}
 else if((UINT_PTR)wParam == TIMER_ANTIIDLE) {  // Envoi de l'anti-idle
@@ -3651,8 +3651,8 @@ else if((UINT_PTR)wParam == TIMER_ANTIIDLE) {  // Envoi de l'anti-idle
 #ifdef MOD_RECONNECT
 	if(!backend||!is_backend_connected) { // On essaie de se reconnecter en cas de problème de connexion
 		if ( conf_get_int(conf,CONF_failure_reconnect) && is_backend_first_connected ) {
-			lp_eventlog(&wgs.logpolicy, "No connection, trying to reconnect...") ; 
-			SetTimer(hwnd, TIMER_RECONNECT, GetReconnectDelay()*1000, NULL) ; 
+			lp_eventlog(&wgs.logpolicy, "No connection, trying to reconnect...") ;
+			SetTimer(hwnd, TIMER_RECONNECT, GetReconnectDelay()*1000, NULL) ;
 			}
 			break;
 		}
@@ -3660,10 +3660,10 @@ else if((UINT_PTR)wParam == TIMER_ANTIIDLE) {  // Envoi de l'anti-idle
 	}
 else if((UINT_PTR)wParam == TIMER_BLINKTRAYICON) {  // Clignotement de l'icone dans le systeme tray sur reception d'un signal BELL (printf '\007' pour simuler)
 	static int BlinkingState = 0 ;
-	static HICON hBlinkingIcon = NULL ; 
+	static HICON hBlinkingIcon = NULL ;
 
 	if( GetVisibleFlag()!=VISIBLE_TRAY ) {
-		KillTimer( hwnd, TIMER_BLINKTRAYICON ) ; TrayIcone.hIcon = hBlinkingIcon ; BlinkingState = 0 ; break ; 
+		KillTimer( hwnd, TIMER_BLINKTRAYICON ) ; TrayIcone.hIcon = hBlinkingIcon ; BlinkingState = 0 ; break ;
 	}
 	if( (BlinkingState%2)==0 ) {
 		hBlinkingIcon = TrayIcone.hIcon ;
@@ -3681,9 +3681,9 @@ else if((UINT_PTR)wParam == TIMER_BLINKTRAYICON) {  // Clignotement de l'icone d
 }
 #ifdef MOD_RECONNECT
 else if((UINT_PTR)wParam == TIMER_RECONNECT) {
-	if( !backend ) { 
+	if( !backend ) {
 		lp_eventlog(&wgs.logpolicy, "No backend connection, reconnecting...") ;
-		PostMessage( hwnd, WM_COMMAND, IDM_RESTART, 0 ) ; 
+		PostMessage( hwnd, WM_COMMAND, IDM_RESTART, 0 ) ;
 	}
 	KillTimer( hwnd, TIMER_RECONNECT ) ;
 }
@@ -3710,11 +3710,11 @@ else if((UINT_PTR)wParam == TIMER_LOGROTATION) {  // log rotation
 			}
 
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)
-		if( GetIconeFlag() == -1 ) conf_set_int( conf, CONF_bg_type, 0 ) ; 
-		if( !GetBackgroundImageFlag() ) conf_set_int( conf, CONF_bg_type, 0 ); 
+		if( GetIconeFlag() == -1 ) conf_set_int( conf, CONF_bg_type, 0 ) ;
+		if( !GetBackgroundImageFlag() ) conf_set_int( conf, CONF_bg_type, 0 );
 #endif
 		if( !PuttyFlag )
-		if( conf_get_bool( conf,CONF_saveonexit) && conf_get_int( conf,CONF_windowstate) ) 
+		if( conf_get_bool( conf,CONF_saveonexit) && conf_get_int( conf,CONF_windowstate) )
 			PostMessage( hwnd, WM_SYSCOMMAND, SC_MAXIMIZE, (LPARAM)NULL );
 		if( conf_get_int(conf, CONF_ctrl_tab_switch) && GetCtrlTabFlag() ) {
 			int wndExtra = GetClassLong(hwnd, GCL_CBWNDEXTRA);
@@ -3735,21 +3735,21 @@ else if((UINT_PTR)wParam == TIMER_LOGROTATION) {  // log rotation
 #ifdef MOD_PERSO
 	if( GetProtectFlag() ) {
 		MessageBox(hwnd,
-			   "You are not allowed to close a protected window",
-			   "Exit warning", MB_ICONERROR | MB_OK ) ;
+			   "您不能关闭受保护的窗口",
+			   "退出警告", MB_ICONERROR | MB_OK ) ;
 		return 0 ;
 		}
 	    char *str;
 	    show_mouseptr(1);
-	    str = dupprintf("%s Exit Confirmation", appname);
-		
+	    str = dupprintf("%s 退出确认", appname);
+
 #ifdef MOD_RUTTY
 /* rutty: */
 	    if (scriptdata.runs)
 		{
 		  if (session_closed ||
 		  MessageBox(hwnd,
-			   "session scripting is running !\n Are you sure you want to close this session?",
+			   "会话脚步正在运行！！\n 您确定要关闭当前会话吗？？",
 			   str, MB_ICONWARNING | MB_OKCANCEL | MB_DEFBUTTON1) == IDOK)
 		  {
         script_close(&scriptdata);
@@ -3762,7 +3762,7 @@ else if((UINT_PTR)wParam == TIMER_LOGROTATION) {  // log rotation
 #endif
 	    if ( !conf_get_bool(conf,CONF_warn_on_close) || session_closed ||
 		MessageBox(hwnd,
-			   "Are you sure you want to close this session?",
+			   "您真的确定要关闭当前会话吗？？？",
 			   str, MB_ICONWARNING | MB_OKCANCEL | MB_DEFBUTTON1)
 		== IDOK) {
 #ifdef MOD_RUTTY
@@ -3778,11 +3778,11 @@ else if((UINT_PTR)wParam == TIMER_LOGROTATION) {  // log rotation
 #else
         char *title, *msg, *additional = NULL;
 	show_mouseptr(true);
-        title = dupprintf("%s Exit Confirmation", appname);
+        title = dupprintf("%s 确认退出", appname);
         if (backend && backend->vt->close_warn_text) {
             additional = backend->vt->close_warn_text(backend);
         }
-        msg = dupprintf("Are you sure you want to close this session?%s%s",
+        msg = dupprintf("您确定要关当前会话吗？%s%s",
                         additional ? "\n" : "",
                         additional ? additional : "");
         if (session_closed || !conf_get_bool(conf, CONF_warn_on_close) ||
@@ -3877,7 +3877,7 @@ strcpy( cmd, conf_get_str(conf,CONF_autocommand) ) ;
 
 if( GetRemotePath()!=NULL ) {
 	cmd2 = (char*)malloc( strlen(conf_get_str(conf,CONF_autocommand))+strlen(GetRemotePath())+10 ) ;
-	strcpy( cmd2, cmd ) ;	
+	strcpy( cmd2, cmd ) ;
 	strcat(cmd2,"\n");
 	strcat(cmd2,"cd ");
 	strcat(cmd2, GetRemotePath());
@@ -3976,8 +3976,8 @@ free(cmd);
 		//if( (!backend || !is_backend_connected) && GetAutoreconnectFlag() ) {
 		if( !backend ) {
 		    if ( conf_get_int(conf,CONF_failure_reconnect) && is_backend_first_connected ) {
-			SetTimer(hwnd, TIMER_RECONNECT, GetReconnectDelay()*1000, NULL) ; 
-			lp_eventlog(&wgs.logpolicy, "Unable to connect, trying to reconnect...") ; 
+			SetTimer(hwnd, TIMER_RECONNECT, GetReconnectDelay()*1000, NULL) ;
+			lp_eventlog(&wgs.logpolicy, "Unable to connect, trying to reconnect...") ;
 		    }
 		    break;
 		}
@@ -4063,7 +4063,7 @@ free(cmd);
 		    int i;
 		    for (i = 0; i < lenof(popup_menus); i++)
 			EnableMenuItem(popup_menus[i].menu, IDM_FULLSCREEN,
-				       MF_BYCOMMAND | 
+				       MF_BYCOMMAND |
                                        (resize_action == RESIZE_DISABLED
                                         ? MF_GRAYED : MF_ENABLED));
 		    /* Gracefully unzoom if necessary */
@@ -4186,7 +4186,7 @@ free(cmd);
 		    else
 			nflg |= WS_MINIMIZEBOX;
 		    if (resize_action == RESIZE_DISABLED || !conf_get_int(conf,CONF_window_maximizable))
-#else		    
+#else
 		    if (resize_action == RESIZE_DISABLED)
 #endif
 			nflg &= ~WS_MAXIMIZEBOX;
@@ -4265,7 +4265,7 @@ free(cmd);
 	    break;
 	  case IDM_PASTE:
 #ifdef MOD_PERSO
-	    if( !GetProtectFlag() ) 
+	    if( !GetProtectFlag() )
 #endif
 	    term_request_paste(term, CLIP_SYSTEM);
 	    break;
@@ -4288,16 +4288,16 @@ free(cmd);
 		break;
 	  case IDM_SCRIPTSEND:
     {
-      char scriptfilename[FILENAME_MAX]; 
+      char scriptfilename[FILENAME_MAX];
       Filename * scriptfile;
 		  if(prompt_scriptfile(hwnd, scriptfilename))
       {
-		    script_init(&scriptdata, conf);	
+		    script_init(&scriptdata, conf);
     	  scriptfile = filename_from_str(scriptfilename);
         script_sendfile(&scriptdata, scriptfile);
         filename_free(scriptfile);
       }
-     } 
+     }
 	   break;
 /* rutty */
 #endif
@@ -4306,7 +4306,7 @@ free(cmd);
 		conf_set_str( conf, CONF_host_alt, conf_get_str( conf, CONF_host ) ) ;
 	        RunSessionWithCurrentSettings( hwnd, conf, "", NULL, NULL, 0, NULL ) ;
 		break;
-	  /*case IDM_USERCMD:  
+	  /*case IDM_USERCMD:
 	  	ManageSpecialCommand( hwnd, wParam-IDM_USERCMD ) ;
 	        break ;*/
 	  case IDM_QUIT:
@@ -4316,13 +4316,13 @@ free(cmd);
 	  case IDM_PROTECT:
 	  	ManageProtect( hwnd, wintw, conf_get_str(conf, CONF_wintitle) ) ;
 		break ;
-	  case IDM_VISIBLE: 
+	  case IDM_VISIBLE:
 	  	ManageVisible( hwnd, wintw, conf_get_str(conf, CONF_wintitle) ) ;
 		break ;
 	  case IDM_SHORTCUTSTOGGLE:
 		ManageShortcutsFlag( hwnd ) ;
 		break ;
-          case IDM_TOTRAY: 
+          case IDM_TOTRAY:
 		if( GetVisibleFlag()==VISIBLE_YES ) {
 			SetVisibleFlag( VISIBLE_TRAY ) ;
 			return ManageToTray( hwnd ) ;
@@ -4359,7 +4359,7 @@ free(cmd);
 		GoPrevious( hwnd ) ;
 		break ;
 #endif
-          case IDM_WINROL: 
+          case IDM_WINROL:
 		if( GetWinrolFlag() ) {
 			ManageWinrol( hwnd, conf_get_int(conf,CONF_resize_action) ) ;
 		}
@@ -4425,8 +4425,8 @@ free(cmd);
 		{
 		int w = LOWORD( lParam ), h = HIWORD( lParam ) ;
 		if (w < 1) { w = 1 ; } if (h < 1) { h = 1 ; }
-		conf_set_int( conf, CONF_width, w ) ; 
-		conf_set_int( conf, CONF_height, h ) ; 
+		conf_set_int( conf, CONF_width, w ) ;
+		conf_set_int( conf, CONF_height, h ) ;
 		term_size( term, h, w, conf_get_int( conf, CONF_savelines)  ) ;
 		reset_window(0);
 		}
@@ -4435,8 +4435,8 @@ free(cmd);
 		{
 		int x = LOWORD( lParam ), y = HIWORD( lParam ) ;
 		if (x < 1) { x = 1 ; } if (y < 1) { y = 1 ; }
-		conf_set_int( conf, CONF_xpos, x ) ; 
-		conf_set_int( conf, CONF_ypos, y ) ; 
+		conf_set_int( conf, CONF_xpos, x ) ;
+		conf_set_int( conf, CONF_ypos, y ) ;
 		SetWindowPos( hwnd, 0, x, y, 0, 0, SWP_NOSIZE|SWP_NOZORDER|SWP_NOOWNERZORDER|SWP_NOACTIVATE ) ;
 		//MoveWindow(hwnd, x, y, 0, 0, TRUE ) ;
 		//reset_window(0);
@@ -4529,7 +4529,7 @@ free(cmd);
 */
 	case MYWM_NOTIFYICON :
 		switch (lParam)	{
-			case WM_LBUTTONDBLCLK : 
+			case WM_LBUTTONDBLCLK :
 				SetVisibleFlag( VISIBLE_YES ) ;
 				//ShowWindow(hwnd, SW_SHOWNORMAL);
 				ShowWindow(hwnd, SW_RESTORE);
@@ -4540,7 +4540,7 @@ free(cmd);
 				else return 0 ;
 			break ;
 			case WM_RBUTTONUP:
-			case WM_LBUTTONUP: 
+			case WM_LBUTTONUP:
 				DisplaySystemTrayMenu( hwnd ) ;
 			break ;
 		}
@@ -4554,7 +4554,7 @@ free(cmd);
 		}
 		else return DefWindowProc(hwnd, message, wParam, lParam);
 	break;
-	
+
 	case WM_COPYDATA: {  // Reception d'un de donnees dans un message
 #ifdef MOD_RUTTY
        COPYDATASTRUCT *cds;
@@ -4563,23 +4563,23 @@ free(cmd);
        {
          script_ahk_send(&scriptdata, cds);
          return 1;
-       }  
+       }
        else if (cds->dwData == ruttyAHK_enable)
        {
          script_ahk_enable(cds);
          return 1;
-       }  
+       }
        else if (cds->dwData == ruttyAHK_set)
        {
          script_ahk_set(cds);
          return 1;
-       }  
-       else  
+       }
+       else
          return 0;  /* not our message */
-    } 
+    }
 #else
 		PCOPYDATASTRUCT pMyCDS = (PCOPYDATASTRUCT) lParam;
-			switch( pMyCDS->dwData ) {	
+			switch( pMyCDS->dwData ) {
 				case 1: // Reception d'une chaine de caracteres a envoyer dans le terminal
 					if( pMyCDS->cbData > 0 ) {
 						SendKeyboardPlus( hwnd, (char*)pMyCDS->lpData ) ;
@@ -4609,10 +4609,10 @@ free(cmd);
       case WM_RBUTTONDOWN:
 #ifdef MOD_RECONNECT
 	if( ((!backend) || (!is_backend_connected)) && GetAutoreconnectFlag() && is_backend_first_connected ) { // trying to reconnect
-		PostMessage( hwnd, WM_COMMAND, IDM_RESTART, 0 ) ; 
+		PostMessage( hwnd, WM_COMMAND, IDM_RESTART, 0 ) ;
 		lp_eventlog(&wgs.logpolicy, "No connection on mouse click, trying to reconnect...") ;
-		break ; 
-	} 
+		break ;
+	}
 #endif
       case WM_LBUTTONUP:
       case WM_MBUTTONUP:
@@ -4626,11 +4626,11 @@ free(cmd);
 			SendMessage( hwnd, WM_COMMAND, IDM_DUPSESS, 0 ) ;
 		}
 #ifdef MOD_RECONNECT
-		else { 
+		else {
 			if( is_backend_first_connected && GetAutoreconnectFlag() ) {
-				SendMessage( hwnd, WM_COMMAND, IDM_RESTART, 0 ) ; 
+				SendMessage( hwnd, WM_COMMAND, IDM_RESTART, 0 ) ;
 				lp_eventlog(&wgs.logpolicy, "No connection on mouse click, trying to reconnect...") ;
-			} 
+			}
 		}
 #endif
 		break ;
@@ -4805,7 +4805,7 @@ free(cmd);
 	/*
 	 * HACK: PuttyTray / Nutty
 	 * Hyperlink stuff: Change cursor type if hovering over link
-	 */ 
+	 */
 	if (urlhack_mouse_old_x != TO_CHR_X(X_POS(lParam)) || urlhack_mouse_old_y != TO_CHR_Y(Y_POS(lParam))) {
 		urlhack_mouse_old_x = TO_CHR_X(X_POS(lParam));
 		urlhack_mouse_old_y = TO_CHR_Y(Y_POS(lParam));
@@ -4957,7 +4957,7 @@ free(cmd);
 	     * pending terminal update: just mark the relevant
 	     * character cells as INVALID and wait for the
 	     * scheduled full update to sort it out.
-	     * 
+	     *
 	     * I have a suspicion this isn't the _right_ solution.
 	     * An alternative approach would be to have terminal.c
 	     * separately track what _should_ be on the terminal
@@ -4981,7 +4981,7 @@ free(cmd);
             (p.rcPaint.right-offset_width-1)/font_width,
             (p.rcPaint.bottom-offset_height-1)/font_height,
             !term->window_update_pending);
-	
+
         SelectObject(hdccod, GetStockObject(SYSTEM_FONT));
         SelectObject(hdccod, GetStockObject(WHITE_PEN));
 
@@ -4995,19 +4995,19 @@ free(cmd);
                 p.rcPaint.bottom - p.rcPaint.top + offset_height,
                 hdcBack, p.rcPaint.left, p.rcPaint.top, SRCCOPY
             );
-            
+
             DeleteDC(hdcBack);
             hdccod = hdcScreen;
         }
-        
+
         // Last paint edges
         paint_term_edges(term,hdccod, p.rcPaint.left, p.rcPaint.top, p.rcPaint.right, p.rcPaint.bottom);
-	
+
         EndPaint(hwnd, &p);
         ShowCaret(hwnd);
 	} else {
 #endif
-	    term_paint(term, 
+	    term_paint(term,
 		       (p.rcPaint.left-offset_width)/font_width,
 		       (p.rcPaint.top-offset_height)/font_height,
 		       (p.rcPaint.right-offset_width-1)/font_width,
@@ -5026,7 +5026,7 @@ free(cmd);
 		fillcolour = CreateSolidBrush (
 				    colours[ATTR_DEFBG>>ATTR_BGSHIFT]);
 		oldbrush = SelectObject(hdc, fillcolour);
-		edge = CreatePen(PS_SOLID, 0, 
+		edge = CreatePen(PS_SOLID, 0,
 				    colours[ATTR_DEFBG>>ATTR_BGSHIFT]);
 		oldpen = SelectObject(hdc, edge);
 
@@ -5042,12 +5042,12 @@ free(cmd);
 			p.rcPaint.left, p.rcPaint.top,
 			p.rcPaint.right, p.rcPaint.bottom);
 
-		ExcludeClipRect(hdc, 
+		ExcludeClipRect(hdc,
 			offset_width, offset_height,
 			offset_width+font_width*term->cols,
 			offset_height+font_height*term->rows);
 
-		Rectangle(hdc, p.rcPaint.left, p.rcPaint.top, 
+		Rectangle(hdc, p.rcPaint.left, p.rcPaint.top,
 			  p.rcPaint.right, p.rcPaint.bottom);
 
 		/* SelectClipRgn(hdc, NULL); */
@@ -5083,7 +5083,7 @@ free(cmd);
       }
       case WM_SETFOCUS:
 #ifdef MOD_PERSO
-        if( GetTransparencyFlag() && conf_get_int(conf,CONF_transparencynumber) >= 0 ) 
+        if( GetTransparencyFlag() && conf_get_int(conf,CONF_transparencynumber) >= 0 )
 		{ SetTransparency( hwnd, 255-conf_get_int(conf,CONF_transparencynumber) ) ; }
 	//RefreshBackground( hwnd ) ;
 #endif
@@ -5144,10 +5144,10 @@ free(cmd);
 	    if (!need_backend_resize && resize_action == RESIZE_EITHER &&
 		(conf_get_int(conf, CONF_height) != term->rows ||
 		 conf_get_int(conf, CONF_width) != term->cols)) {
-		/* 
+		/*
 		 * Great! It seems that both the terminal size and the
 		 * font size have been changed and the user is now dragging.
-		 * 
+		 *
 		 * It will now be difficult to get back to the configured
 		 * font size!
 		 *
@@ -5242,7 +5242,7 @@ free(cmd);
         InvalidateRect(hwnd, NULL, true);
     }
 	sys_cursor_update();
-	
+
 	if( conf_get_bool(conf,CONF_saveonexit) ) GetWindowCoord( hwnd ) ;
 
 	break;
@@ -5556,7 +5556,7 @@ free(cmd);
 				term_update(term);
 			}
 			goto KEY_END;
-		}	
+		}
 	case WM_KEYUP:
 		if( GetPuttyFlag() || !GetHyperlinkFlag() ) goto KEY_END;
 		if (wParam == VK_CONTROL && conf_get_int(term->conf,CONF_url_ctrl_click)) {
@@ -5575,10 +5575,10 @@ free(cmd);
       case WM_SYSKEYUP:
 #endif
 #ifdef MOD_RECONNECT
-	//if( !back && GetAutoreconnectFlag() && is_backend_first_connected && (WM_COMMAND==WM_KEYDOWN) && !(GetKeyState(VK_CONTROL)&0x8000) && !(GetKeyState(VK_SHIFT)&0x8000) && !(GetKeyState(VK_MENU)&0x8000) && (wParam!=VK_TAB) && (wParam!=VK_LEFT) && (wParam!=VK_UP) && (wParam!=VK_RIGHT) && (wParam!=VK_DOWN) && !((wParam>=VK_F1)&&(wParam<=VK_F16)) ) { 
-        if( (!backend || !is_backend_connected) && (message==WM_KEYDOWN) && GetAutoreconnectFlag() && is_backend_first_connected && (wParam!=VK_CONTROL) && (wParam!=VK_SHIFT) && (wParam!=VK_MENU) && (wParam!=VK_TAB) && (wParam!=VK_LEFT) && (wParam!=VK_UP) && (wParam!=VK_RIGHT) && (wParam!=VK_DOWN) && !((wParam>=VK_F1)&&(wParam<=VK_F16)) ) { 
- 		lp_eventlog(&wgs.logpolicy, "No connection on key pressed, trying to reconnect...") ; 
-		PostMessage( hwnd, WM_COMMAND, IDM_RESTART, 0 ) ;  
+	//if( !back && GetAutoreconnectFlag() && is_backend_first_connected && (WM_COMMAND==WM_KEYDOWN) && !(GetKeyState(VK_CONTROL)&0x8000) && !(GetKeyState(VK_SHIFT)&0x8000) && !(GetKeyState(VK_MENU)&0x8000) && (wParam!=VK_TAB) && (wParam!=VK_LEFT) && (wParam!=VK_UP) && (wParam!=VK_RIGHT) && (wParam!=VK_DOWN) && !((wParam>=VK_F1)&&(wParam<=VK_F16)) ) {
+        if( (!backend || !is_backend_connected) && (message==WM_KEYDOWN) && GetAutoreconnectFlag() && is_backend_first_connected && (wParam!=VK_CONTROL) && (wParam!=VK_SHIFT) && (wParam!=VK_MENU) && (wParam!=VK_TAB) && (wParam!=VK_LEFT) && (wParam!=VK_UP) && (wParam!=VK_RIGHT) && (wParam!=VK_DOWN) && !((wParam>=VK_F1)&&(wParam<=VK_F16)) ) {
+ 		lp_eventlog(&wgs.logpolicy, "No connection on key pressed, trying to reconnect...") ;
+		PostMessage( hwnd, WM_COMMAND, IDM_RESTART, 0 ) ;
 		break ;
 	}
 #endif
@@ -5591,7 +5591,7 @@ free(cmd);
 				info.next_hi_date_time = info.self_hi_date_time = GetWindowLong(hwnd, 0);
 				info.next_lo_date_time = info.self_lo_date_time = GetWindowLong(hwnd, 4);
 				EnumWindows(CtrlTabWindowProc, (LPARAM) &info);
-				if (info.next != NULL) 
+				if (info.next != NULL)
 					if( info.next != hwnd )
 						SetForegroundWindow(info.next);
 			return 0;
@@ -5601,7 +5601,7 @@ free(cmd);
 	}
 
 		AntiIdleCount = 0 ;
-      
+
 		/* Permet de sauvegarder tous les caracteres tapes au clavier pour les avoir dans le /savedump */
 #ifdef MOD_SAVEDUMP
 		if( debug_flag ) addkeypressed( message, wParam, lParam, GetKeyState(VK_SHIFT)&0x8000, GetKeyState(VK_CONTROL)&0x8000, (GetKeyState(VK_MENU)&0x8000)||(GetKeyState(VK_LMENU)&0x8000),GetKeyState(VK_RMENU)&0x8000, (GetKeyState(VK_RWIN)&0x8000)||(GetKeyState(VK_LWIN)&0x8000 ) );
@@ -5619,7 +5619,7 @@ free(cmd);
 		if((wParam==VK_F1)&&(message==WM_KEYDOWN)&&(GetKeyState(VK_CONTROL)&0x8000)&&(GetKeyState(VK_SHIFT)&0x8000))  // CTRL+SHIFT+F1 => Manage shortcut flag
 			{ SetShortcutsFlag( abs(GetShortcutsFlag()-1) ) ; return 0 ; }
 */
-		if( GetShortcutsFlag() ) { 
+		if( GetShortcutsFlag() ) {
 			if ( (message==WM_KEYDOWN)||(message==WM_SYSKEYDOWN) ) {
 
 				if( ManageShortcuts(term, conf, hwnd, clips_system, wParam
@@ -5630,16 +5630,16 @@ free(cmd);
 					//, is_alt_pressed()
 					, (GetKeyState(VK_RWIN)&0x8000)||(GetKeyState(VK_LWIN)&0x8000)
 					) )  return 0 ;
-			} 
-		} else { 
-			if( GetProtectFlag() == 1 ) return 0 ; 
+			}
+		} else {
+			if( GetProtectFlag() == 1 ) return 0 ;
 		}
 
 		// Majuscule uniquement
 		if( GetCapsLockFlag() ) {
-			if( ( wParam>='A' ) && ( wParam <= 'Z' ) 
-					    && !(GetKeyState( VK_CAPITAL ) & 0x0001) 
-					    && !(GetKeyState( VK_SHIFT ) & 0x8000) ) { 
+			if( ( wParam>='A' ) && ( wParam <= 'Z' )
+					    && !(GetKeyState( VK_CAPITAL ) & 0x0001)
+					    && !(GetKeyState( VK_SHIFT ) & 0x8000) ) {
 				keybd_event( VK_CAPITAL, 0x45, KEYEVENTF_EXTENDEDKEY | 0, 0 ) ;
 				keybd_event( VK_CAPITAL, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0) ;
 				SendMessage(hwnd, WM_CHAR, wParam, 0) ;
@@ -5850,7 +5850,7 @@ if( (GetKeyState(VK_MENU)&0x8000) && (wParam==VK_SPACE) ) {
 	    int n;
 	    char *buff;
 
-	    if (osPlatformId == VER_PLATFORM_WIN32_WINDOWS || 
+	    if (osPlatformId == VER_PLATFORM_WIN32_WINDOWS ||
 	        osPlatformId == VER_PLATFORM_WIN32s)
                 break; /* no Unicode */
 
@@ -5953,7 +5953,7 @@ if( (GetKeyState(VK_MENU)&0x8000) && (wParam==VK_SPACE) ) {
 				if(session_closed && !backend) {
 					/*
 					time_t tnow = time(NULL);
-					
+
 					if(last_reconnect && ((tnow - last_reconnect) < GetReconnectDelay()) ) {
 						lp_eventlog(default_logpolicy, "Woken up from suspend, waiting for delay..." );
 						Sleep(GetReconnectDelay()*1000);
@@ -5965,7 +5965,7 @@ if( (GetKeyState(VK_MENU)&0x8000) && (wParam==VK_SPACE) ) {
 					start_backend();
 					SetTimer(hwnd, TIMER_INIT, init_delay, NULL) ;
 					*/
-					lp_eventlog(&wgs.logpolicy, "Unable to connect on wakeup, trying to reconnect...") ; 
+					lp_eventlog(&wgs.logpolicy, "Unable to connect on wakeup, trying to reconnect...") ;
 					SetTimer(hwnd, TIMER_RECONNECT, GetReconnectDelay()*1000, NULL) ;
 				}
 				break;
@@ -5978,7 +5978,7 @@ if( (GetKeyState(VK_MENU)&0x8000) && (wParam==VK_SPACE) ) {
 				break;
 		}
 	}
-	break;	
+	break;
 #endif
 
       default:
@@ -6137,7 +6137,7 @@ static void sys_cursor_update(void)
 
     /* IMM calls on Win98 and beyond only */
     if (osPlatformId == VER_PLATFORM_WIN32s) return; /* 3.11 */
-    
+
     if (osPlatformId == VER_PLATFORM_WIN32_WINDOWS &&
         osMinorVersion == 0) return; /* 95 */
 
@@ -6391,13 +6391,13 @@ static void do_text_internal(
                  GetBValue(fg) * 2 / 3);
     }
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)
-    HDC hdc = wintw_hdc ; 
+    HDC hdc = wintw_hdc ;
     if( GetBackgroundImageFlag() && (!GetPuttyFlag()) ) {
 	line_box.left = x;
 	line_box.top = y;
 	line_box.right = x + char_width * len;
 	line_box.bottom = y + font_height;
-    
+
 	if(textdc) {
 		int x = line_box.left;
 		int y = line_box.top;
@@ -6406,10 +6406,10 @@ static void do_text_internal(
 
 		POINT bgloc = { x, y };
 		COLORREF backgroundcolor = colours[258]; // Default Background
-        
+
 		if(!bBgRelToTerm)
 			ClientToScreen(wgs.term_hwnd, &bgloc);
-        
+
 		if(bg == backgroundcolor) {
 		// Use fast screen fill for default background.
 			BitBlt(textdc, x, y, width, height, backgroundblenddc, bgloc.x, bgloc.y, SRCCOPY);
@@ -6584,8 +6584,8 @@ static void do_text_internal(
 	//	    ETO_CLIPPED | etoFlagOpaque, &line_box, uni_buf, nlen, lpDx);
 		ExtTextOutW(hdc, x + xoffset,
 		    y - font_height * (lattr == LATTR_BOT) + text_adjust,
-		    ETO_CLIPPED | etoFlagOpaque, 
-	            &line_box, uni_buf, nlen, 
+		    ETO_CLIPPED | etoFlagOpaque,
+	            &line_box, uni_buf, nlen,
 	            lpDx_maybe);
 	else
 #endif
@@ -6617,7 +6617,7 @@ static void do_text_internal(
 	// 	   ETO_CLIPPED | etoFlagOpaque, &line_box, directbuf, len, lpDx);
 		ExtTextOut(hdc, x + xoffset,
 		   y - font_height * (lattr == LATTR_BOT) + text_adjust,
-		   ETO_CLIPPED | etoFlagOpaque, 
+		   ETO_CLIPPED | etoFlagOpaque,
 		   &line_box, directbuf, len, lpDx_maybe);
 	else
 #endif
@@ -6632,7 +6632,7 @@ static void do_text_internal(
                  * can leave 'droppings' even with the clip box! I
                  * suppose I could loop it one character at a time ...
                  * yuk.
-                 * 
+                 *
                  * Or ... I could do a test print with "W", and use +1
                  * or -1 for this shift depending on if the leftmost
                  * column is blank...
@@ -6661,9 +6661,9 @@ static void do_text_internal(
 	if( GetBackgroundImageFlag() && (!PuttyFlag) )
  	// exact_textout(hdc, x, y - font_height * (lattr == LATTR_BOT) + text_adjust,
 	// 	      &line_box, wbuf, len, lpDx, !(attr & TATTR_COMBINING) &&!transBg);
-		exact_textout(hdc, x + xoffset, 
+		exact_textout(hdc, x + xoffset,
 			y - font_height * (lattr == LATTR_BOT) + text_adjust,
-			&line_box, wbuf, len, lpDx, 
+			&line_box, wbuf, len, lpDx,
 			!(attr & TATTR_COMBINING) &&!transBg);
 	else
 #endif
@@ -7514,7 +7514,7 @@ if( !get_param("PUTTY") && conf_get_int(conf, CONF_disablealtgr) ) {
     }
     }
 
-    /* Okay we've done everything interesting; let windows deal with 
+    /* Okay we've done everything interesting; let windows deal with
      * the boring stuff */
     {
 	bool capsOn = false;
@@ -7683,11 +7683,11 @@ void make_title( char * res, char * fmt, const char * title ) {
 	int p;
 	char b[1024] ;
 	int port ;
-	
+
 	sprintf( res, fmt, title ) ;
 
 	while( (p=poss( "%%s", res)) > 0 ) { del(res,p,3); if(strlen(conf_get_str(conf,CONF_sessionname))>0) insert(res,conf_get_str(conf,CONF_sessionname),p); }
-	while( (p=poss( "%%h", res)) > 0 ) { 
+	while( (p=poss( "%%h", res)) > 0 ) {
 		del(res,p,3);
 		if( conf_get_int(conf,CONF_protocol) == PROT_SERIAL ) {
 			insert(res,conf_get_str(conf,CONF_serline),p);
@@ -7697,8 +7697,8 @@ void make_title( char * res, char * fmt, const char * title ) {
 	}
 	while( (p=poss( "%%u", res)) > 0 ) { del(res,p,3); insert(res,conf_get_str(conf,CONF_username),p); }
 	while( (p=poss( "%%f", res)) > 0 ) { del(res,p,3); if(strlen(conf_get_str(conf,CONF_folder))>0) insert(res,conf_get_str(conf,CONF_folder),p); }
-	
-	port = conf_get_int(conf,CONF_port); 
+
+	port = conf_get_int(conf,CONF_port);
 	switch(conf_get_int(conf,CONF_protocol)) {
 		case PROT_RAW: strcpy(b,"raw"); break;
 		case PROT_TELNET: strcpy(b,"telnet"); if(port==-1) port=23 ; break;
@@ -7707,11 +7707,11 @@ void make_title( char * res, char * fmt, const char * title ) {
 		case PROT_SERIAL: strcpy(b,"serial"); break;
 	}
 	while( (p=poss( "%%P", res)) > 0 ) { del(res,p,3); insert(res,b,p); }
-	
-	sprintf(b,"%d", port ) ; 
+
+	sprintf(b,"%d", port ) ;
 	while( (p=poss( "%%p", res)) > 0 ) { del(res,p,3); insert(res,b,p); }
-	
-	sprintf(b,"%ld", GetCurrentProcessId() ) ; 
+
+	sprintf(b,"%ld", GetCurrentProcessId() ) ;
 	while( (p=poss( "%%i", res)) > 0 ) { del(res,p,3); insert(res,b,p); }
 	while( (p=poss( "%%d", res)) > 0 ) { // forward port dynamic
 		char *key, *val, *k;
@@ -7726,9 +7726,9 @@ void make_title( char * res, char * fmt, const char * title ) {
 				if(nb!=0) {strcat(b,"|");}
 				strcat(b,k+1);
 				switch( GetPortFwdState( atoi(k+1), GetCurrentProcessId() ) ) {
-					case -1: 
+					case -1:
 						break ;
-					case 0: 
+					case 0:
 						strcat(b,"+");
 						break ;
 					default:
@@ -7778,24 +7778,24 @@ static void wintw_set_title(TermWin *tw, const char *title_in) {
 	if( (title[0]=='_')&&(title[1]=='_') ) { // Mode commande a distance
 		if( ManageLocalCmd( MainHwnd, title+2 ) ) { free(title); return ; }
 	}
-	
+
 	if( !GetTitleBarFlag() ) { set_title_internal( tw, title ) ; free(title) ; return ; }
-		
-	if( strstr(title, " (PROTECTED)")==(title+strlen(title)-12) ) 
+
+	if( strstr(title, " (PROTECTED)")==(title+strlen(title)-12) )
 		{ title[strlen(title)-12]='\0' ; }
 
 #if (defined MOD_BACKGROUNDIMAGE) && (!defined FLJ)
-	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + strlen( conf_get_filename(conf,CONF_bg_image_filename)->path ) + 40 ) ; 
+	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + strlen( conf_get_filename(conf,CONF_bg_image_filename)->path ) + 40 ) ;
 	if( GetBackgroundImageFlag() && GetImageViewerFlag() && (!PuttyFlag) ) { sprintf( buffer, "%s", conf_get_filename(conf,CONF_bg_image_filename)->path ) ; }
-	else 
+	else
 #else
-	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + 40 ) ; 
+	buffer = (char*) malloc( strlen( title ) + strlen( conf_get_str(conf,CONF_host)) + 40 ) ;
 #endif
 	if( GetSizeFlag() && (!IsZoomed( MainHwnd )) ) {
 		if( strlen( title ) > 0 ) {
 			if( title[strlen(title)-1] == ']' ) {
 				make_title( buffer, "%s", title ) ;
-			} else { 
+			} else {
 				sprintf( fmt, "%%s [%dx%d]", conf_get_int(conf,CONF_height), conf_get_int(conf,CONF_width)) ;
 				make_title( buffer, fmt, title ) ;
 			}
@@ -7803,23 +7803,23 @@ static void wintw_set_title(TermWin *tw, const char *title_in) {
 			sprintf( buffer, "%s [%dx%d] - %s", conf_get_str(conf,CONF_host), conf_get_int(conf,CONF_height), conf_get_int(conf,CONF_width), appname ) ;
 		}
 	} else {
-		if( strlen( title ) > 0 ) { 
-			make_title( buffer, "%s", title ) ; 
+		if( strlen( title ) > 0 ) {
+			make_title( buffer, "%s", title ) ;
 		} else {
 			sprintf( buffer, "%s - %s", conf_get_str(conf,CONF_host), appname ) ;
 		}
 	}
 	if( GetProtectFlag() ) if( strstr(buffer, " (PROTECTED)")==NULL ) { strcat( buffer, " (PROTECTED)" ) ; }
 	if( conf_get_bool(conf, CONF_alwaysontop) ) if( strstr(buffer, " (ONTOP)")==NULL ) { strcat( buffer, " (ONTOP)" ) ; }
-	if( conf_get_bool(conf, CONF_ssh_tunnel_print_in_title) ) if( strstr(buffer, " (SOCKS: ")==NULL ) { 
-		make_title( fmt, " (SOCKS: %s)", "%%d") ; 
+	if( conf_get_bool(conf, CONF_ssh_tunnel_print_in_title) ) if( strstr(buffer, " (SOCKS: ")==NULL ) {
+		make_title( fmt, " (SOCKS: %s)", "%%d") ;
 		strcat( buffer, fmt ) ;
 	}
 	set_title_internal( tw, buffer ) ;
 	free(title);
 	free(buffer);
 }
-	
+
 static void wintw_set_icon_title(TermWin *tw, const char *title2)
 {
 	char title[1024]="",buf[512]=""; ;
@@ -7827,7 +7827,7 @@ static void wintw_set_icon_title(TermWin *tw, const char *title2)
 	do { buf[i]=title2[i]; i++ ; }
 	while ( (i<511)&&(title2[i]!='\0') ) ;
 	buf[i+1]='\0';
-	
+
 	make_title( title, "%s", buf ) ;
     sfree(icon_name);
     icon_name = snewn(1 + strlen(title), char);
@@ -8174,7 +8174,7 @@ static void wintw_clip_write(
 	 * looked up in `unitab', we just copy straight over from
 	 * tdata. For each one that doesn't, we must WCToMB it
 	 * individually and produce a \u escape sequence.
-	 * 
+	 *
 	 * It would probably be more robust to just bite the bullet
 	 * and WCToMB each individual Unicode character one by one,
 	 * then MBToWC each one back to see if it was an accurate
@@ -8250,7 +8250,7 @@ static void wintw_clip_write(
 		    attrBold  = attr[tindex] & ATTR_BOLD;
 		else
 		    attrBold  = 0;
-                
+
 		attrUnder = attr[tindex] & ATTR_UNDER;
 
                 /*
@@ -8511,7 +8511,7 @@ void modalfatalbox(const char *fmt, ...)
     message = dupvprintf(fmt, ap);
     va_end(ap);
     show_mouseptr(true);
-    title = dupprintf("%s Fatal Error", appname);
+    title = dupprintf("%s 致命错误", appname);
     MessageBox(wgs.term_hwnd, message, title,
                MB_SYSTEMMODAL | MB_ICONERROR | MB_OK);
     sfree(message);
@@ -8531,7 +8531,7 @@ void nonfatal(const char *fmt, ...)
     message = dupvprintf(fmt, ap);
     va_end(ap);
     show_mouseptr(true);
-    title = dupprintf("%s Error", appname);
+    title = dupprintf("%s 错误", appname);
     MessageBox(wgs.term_hwnd, message, title, MB_ICONERROR | MB_OK);
     sfree(message);
     sfree(title);
@@ -8579,7 +8579,7 @@ static void flash_window(int mode)
 		if( BlinkingState>=MaxBlinkingTime ) {
 			BlinkingState = 0 ;
 			flash_window(0);
-			return ; 
+			return ;
 		} else {
 			BlinkingState++ ;
 		}
@@ -8666,9 +8666,9 @@ static void wintw_bell(TermWin *tw, int mode)
             char *buf, *otherbuf;
             show_mouseptr(true);
             buf = dupprintf(
-                "Unable to play sound file\n%s\nUsing default sound instead",
+                "无法播放声音文件\n%s\n改用默认提示音",
                 bell_wavefile->path);
-            otherbuf = dupprintf("%s Sound Error", appname);
+            otherbuf = dupprintf("%s 提示音错误", appname);
             MessageBox(wgs.term_hwnd, buf, otherbuf,
                        MB_OK | MB_ICONEXCLAMATION);
             sfree(buf);
@@ -8698,16 +8698,16 @@ static void wintw_bell(TermWin *tw, int mode)
 #ifdef MOD_PERSO
 	if( GetVisibleFlag()!=VISIBLE_TRAY ) {
 		if(conf_get_bool(conf,CONF_foreground_on_bell) ) {		// Tester avec   sleep 4 ; echo -e '\a'
-			if( IsIconic(wgs.term_hwnd) ) SwitchToThisWindow( wgs.term_hwnd, TRUE ) ; 
+			if( IsIconic(wgs.term_hwnd) ) SwitchToThisWindow( wgs.term_hwnd, TRUE ) ;
 			else SetForegroundWindow( wgs.term_hwnd ) ;
-		} else { 
+		} else {
 			if( mode == BELL_VISUAL ) {
-				if( IsIconic(wgs.term_hwnd) ) 
+				if( IsIconic(wgs.term_hwnd) )
 					FlashWindow(wgs.term_hwnd, TRUE) ;
-				else 
-					flash_window(2) ; 
-			} else { 
-				if( conf_get_int(conf,CONF_beep_ind)==B_IND_FLASH ) flash_window(2) ; 
+				else
+					flash_window(2) ;
+			} else {
+				if( conf_get_int(conf,CONF_beep_ind)==B_IND_FLASH ) flash_window(2) ;
 			}
 		}
 	} else if( GetVisibleFlag()==VISIBLE_TRAY ) {
@@ -8745,7 +8745,7 @@ static void wintw_set_minimised(TermWin *tw, bool minimised)
 static void wintw_move(TermWin *tw, int x, int y)
 {
     int resize_action = conf_get_int(conf, CONF_resize_action);
-    if (resize_action == RESIZE_DISABLED || 
+    if (resize_action == RESIZE_DISABLED ||
 	resize_action == RESIZE_FONT ||
         IsZoomed(wgs.term_hwnd))
        return;
@@ -8820,7 +8820,7 @@ static bool get_fullscreen_rect(RECT * ss)
 	ss->left = ss->top = 0;
 	ss->right = GetSystemMetrics(SM_CXSCREEN);
 	ss->bottom = GetSystemMetrics(SM_CYSCREEN);
-*/ 
+*/
 	return GetClientRect(GetDesktopWindow(), ss);
 #endif
 }
@@ -8839,7 +8839,7 @@ static void make_full_screen()
 
 	if (is_full_screen())
 		return;
-	
+
     /* Remove the window furniture. */
     style = GetWindowLongPtr(wgs.term_hwnd, GWL_STYLE);
     style &= ~(WS_CAPTION | WS_BORDER | WS_THICKFRAME);

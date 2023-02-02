@@ -1066,10 +1066,10 @@ if( get_param("INIFILE")==SAVEMODE_DIR ) {
 				i-- ;
 			} while( i >= 0 ) ;
 		}
-	} else { 
-		strcpy( InitDir, "" ) ; 
+	} else {
+		strcpy( InitDir, "" ) ;
 	}
-	
+
     /*
      * Test start directory
      */

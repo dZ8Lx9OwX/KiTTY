@@ -72,9 +72,9 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
             crMaybeWaitUntilV((pktin = ssh2_transport_pop(s)) != NULL);
             if (pktin->type != SSH2_MSG_KEX_DH_GEX_REQUEST &&
                 pktin->type != SSH2_MSG_KEX_DH_GEX_REQUEST_OLD) {
-                ssh_proto_error(s->ppl.ssh, "Received unexpected packet when "
-                                "expecting Diffie-Hellman group exchange "
-                                "request, type %d (%s)", pktin->type,
+            ssh_proto_error(s->ppl.ssh, "等待 Diffie-Hellman 初始化数据包时，"
+                            "收到意外的数据包，"
+                            "类型：%d (%s)", pktin->type,
                                 ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                               s->ppl.bpp->pls->actx,
                                               pktin->type));
@@ -147,7 +147,7 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
         s->f = get_mp_ssh2(pktin);
         if (get_err(pktin)) {
             ssh_proto_error(s->ppl.ssh,
-                            "Unable to parse Diffie-Hellman initial packet");
+                            "无法解析 Diffie-Hellman 初始化数据包");
             *aborted = true;
             return;
         }
@@ -155,8 +155,8 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
         {
             const char *err = dh_validate_f(s->dh_ctx, s->f);
             if (err) {
-                ssh_proto_error(s->ppl.ssh, "Diffie-Hellman initial packet "
-                                "failed validation: %s", err);
+                ssh_proto_error(s->ppl.ssh, "Diffie-Hellman 初始化数据包"
+                                "验证失败：%s", err);
                 *aborted = true;
                 return;
             }
@@ -196,15 +196,15 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
 
         s->ecdh_key = ssh_ecdhkex_newkey(s->kex_alg);
         if (!s->ecdh_key) {
-            ssh_sw_abort(s->ppl.ssh, "Unable to generate key for ECDH");
+            ssh_sw_abort(s->ppl.ssh, "无法为 ECDH 生成密钥");
             *aborted = true;
             return;
         }
 
         crMaybeWaitUntilV((pktin = ssh2_transport_pop(s)) != NULL);
         if (pktin->type != SSH2_MSG_KEX_ECDH_INIT) {
-            ssh_proto_error(s->ppl.ssh, "Received unexpected packet when "
-                            "expecting ECDH initial packet, type %d (%s)",
+            ssh_proto_error(s->ppl.ssh, "等待 ECDH 初始化数据包时，"
+                            "收到意外的数据包，类型：%d (%s)",
                             pktin->type,
                             ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                           s->ppl.bpp->pls->actx,
@@ -219,8 +219,8 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
 
             s->K = ssh_ecdhkex_getkey(s->ecdh_key, keydata);
             if (!get_err(pktin) && !s->K) {
-                ssh_proto_error(s->ppl.ssh, "Received invalid elliptic curve "
-                                "point in ECDH initial packet");
+                ssh_proto_error(s->ppl.ssh, "在 ECDH 初始化数据包中收到"
+                                "无效的椭圆曲线点");
                 *aborted = true;
                 return;
             }
@@ -240,7 +240,7 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
         ssh_ecdhkex_freekey(s->ecdh_key);
         s->ecdh_key = NULL;
     } else if (s->kex_alg->main_type == KEXTYPE_GSS) {
-        ssh_sw_abort(s->ppl.ssh, "GSS key exchange not supported in server");
+        ssh_sw_abort(s->ppl.ssh, "服务器不支持GSS密钥交换");
     } else {
         assert(s->kex_alg->main_type == KEXTYPE_RSA);
         ppl_logevent("Doing RSA key exchange with hash %s",
@@ -291,8 +291,8 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
 
         crMaybeWaitUntilV((pktin = ssh2_transport_pop(s)) != NULL);
         if (pktin->type != SSH2_MSG_KEXRSA_SECRET) {
-            ssh_proto_error(s->ppl.ssh, "Received unexpected packet when "
-                            "expecting RSA kex secret, type %d (%s)",
+            ssh_proto_error(s->ppl.ssh, "等待 RSA kex 机密时，"
+                            "收到意外的数据包，类型：%d (%s)",
                             pktin->type,
                             ssh2_pkt_type(s->ppl.bpp->pls->kctx,
                                           s->ppl.bpp->pls->actx,
@@ -309,7 +309,7 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
         }
 
         if (!s->K) {
-            ssh_proto_error(s->ppl.ssh, "Unable to decrypt RSA kex secret");
+            ssh_proto_error(s->ppl.ssh, "无法解析 RSA kex 机密");
             *aborted = true;
             return;
         }

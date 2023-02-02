@@ -1928,14 +1928,14 @@ void SetNewIcon( HWND hwnd, char * iconefile, int icone, const int mode ) {
 
 	HICON hIcon = NULL, hIconBig = NULL ;
 	if( (strlen(iconefile)>0) && existfile(iconefile) ) {
-		hIcon = LoadImage(NULL, iconefile, IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_LOADFROMFILE|LR_SHARED) ; 
-		hIconBig = LoadImage(NULL, iconefile, IMAGE_ICON, 0, 0, LR_LOADFROMFILE|LR_SHARED|LR_DEFAULTSIZE) ; 
+		hIcon = LoadImage(NULL, iconefile, IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_LOADFROMFILE|LR_SHARED) ;
+		hIconBig = LoadImage(NULL, iconefile, IMAGE_ICON, 0, 0, LR_LOADFROMFILE|LR_SHARED|LR_DEFAULTSIZE) ;
 	}
 
 	if( hIcon || hIconBig ) {
 		if(!hIcon) hIcon = hIconBig ;
 		if(!hIconBig) hIconBig = hIcon ;
-		SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIconBig) ; 
+		SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIconBig) ;
 		SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon) ;
 		TrayIcone.hIcon = hIcon ;
 		//DeleteObject( hIcon ) ;
@@ -1948,18 +1948,18 @@ void SetNewIcon( HWND hwnd, char * iconefile, int icone, const int mode ) {
 			TrayIcone.hIcon = hIcon ;
 		} else {
 			if( IconeFlag==0 ) return ;
-			if( IconeFlag <= 0 ) { IconeNum = 0 ; 
+			if( IconeFlag <= 0 ) { IconeNum = 0 ;
 			} else {
-				if( mode == SI_RANDOM ) { 
+				if( mode == SI_RANDOM ) {
 					SYSTEMTIME st ;
 					GetSystemTime( &st ) ;
-					IconeNum = ( GetCurrentProcessId() * time( NULL ) ) % NumberOfIcons ; 
-				} else { 
-					IconeNum++ ; if( IconeNum >= NumberOfIcons ) IconeNum = 0 ; 
+					IconeNum = ( GetCurrentProcessId() * time( NULL ) ) % NumberOfIcons ;
+				} else {
+					IconeNum++ ; if( IconeNum >= NumberOfIcons ) IconeNum = 0 ;
 				}
 			}
 			hIcon = LoadIcon( hInstIcons, MAKEINTRESOURCE(IDI_MAINICON_0 + IconeNum ) ) ;
-			SendMessage( hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon );	
+			SendMessage( hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon );
 			SendMessage( hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon );
 			TrayIcone.hIcon = hIcon ;
 		}

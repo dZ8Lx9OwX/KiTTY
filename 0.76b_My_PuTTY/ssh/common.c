@@ -890,7 +890,7 @@ bool ssh1_common_get_specials(
      * asked anyway.
      */
     if (!(ppl->remote_bugs & BUG_CHOKES_ON_SSH1_IGNORE)) {
-        add_special(ctx, "IGNORE message", SS_NOP, 0);
+        add_special(ctx, "IGNORE 信息", SS_NOP, 0);
         return true;
     }
 
@@ -907,7 +907,7 @@ bool ssh1_common_filter_queue(PacketProtocolLayer *ppl)
           case SSH1_MSG_DISCONNECT:
             msg = get_string(pktin);
             ssh_remote_error(ppl->ssh,
-                             "Remote side sent disconnect message:\n\"%.*s\"",
+                             "远端发送断开消息：\n\"%.*s\"",
                              PTRLEN_PRINTF(msg));
             /* don't try to pop the queue, because we've been freed! */
             return true;               /* indicate that we've been freed */

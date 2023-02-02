@@ -55,9 +55,9 @@ static size_t serial_gotdata(
          * may become meaningful here.
          */
         if (!err)
-            error_msg = "End of file reading from serial device";
+            error_msg = "从串口设备读取文件结束";
         else
-            error_msg = "Error reading from serial device";
+            error_msg = "从串口设备读读取错误";
 
         serial_terminate(serial);
 
@@ -77,7 +77,7 @@ static void serial_sentdata(struct handle *h, size_t new_backlog, int err)
 {
     Serial *serial = (Serial *)handle_get_privdata(h);
     if (err) {
-        const char *error_msg = "Error writing to serial device";
+        const char *error_msg = "写入串口设备时出错";
 
         serial_terminate(serial);
 
@@ -380,7 +380,7 @@ static void serial_special(Backend *be, SessionSpecialCode code, int arg)
 static const SessionSpecial *serial_get_specials(Backend *be)
 {
     static const SessionSpecial specials[] = {
-        {"Break", SS_BRK},
+        {"中断", SS_BRK},
         {NULL, SS_EXITMENU}
     };
     return specials;
@@ -451,7 +451,7 @@ const BackendVtable serial_backend = {
     .unthrottle = serial_unthrottle,
     .cfg_info = serial_cfg_info,
     .id = "serial",
-    .displayname = "Serial",
+    .displayname = "串口",
     .protocol = PROT_SERIAL,
     .serial_parity_mask = ((1 << SER_PAR_NONE) |
                            (1 << SER_PAR_ODD) |
