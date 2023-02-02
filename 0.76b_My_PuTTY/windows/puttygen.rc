@@ -94,10 +94,8 @@ BEGIN
     PUSHBUTTON "¹Ø±Õ(&C)", IDCANCEL, 134, 80, 40, 14
 END
 
-#ifndef MOD_INTEGRATED_KEYGEN
 #include "version.rc2"
 
 #ifndef NO_MANIFESTS
 1 RT_MANIFEST "puttygen.mft"
 #endif /* NO_MANIFESTS */
-#endif
