@@ -353,7 +353,7 @@ static void ssh2_bpp_handle_input(BinaryPacketProtocol *bpp)
                     break;
                 if (s->packetlen >= (long)OUR_V2_PACKETLIMIT) {
                     ssh_sw_abort(s->bpp.ssh,
-                                 "No valid incoming packet found");
+                                 "未找到有效的传入数据包");
                     crStopV;
                 }
             }

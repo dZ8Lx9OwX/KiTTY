@@ -175,7 +175,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
     crMaybeWaitUntilV((pktin = ssh1_login_pop(s)) != NULL);
 
     if (pktin->type != SSH1_SMSG_PUBLIC_KEY) {
-        ssh_proto_error(s->ppl.ssh, "Public key packet not received");
+        ssh_proto_error(s->ppl.ssh, "未收到公钥数据包");
         return;
     }
 

@@ -264,7 +264,7 @@ struct ssh_rportfwd *ssh1_rportfwd_alloc(
     int addressfamily, const char *log_description, PortFwdRecord *pfr,
     ssh_sharing_connstate *share_ctx)
 {
-    unreachable("Should never be called in the server");
+    unreachable("不应在服务器中调用");
 }
 
 static size_t ssh1sesschan_write(SshChannel *sc, bool is_stderr,

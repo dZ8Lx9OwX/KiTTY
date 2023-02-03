@@ -463,10 +463,10 @@ static void close_session(void *ignored_context);
 #include "script.h"
 ScriptData scriptdata;
 
-#include "script_win.c" 
-#include "script_ahk.c" 
-#include "script.c" 
-/* rutty */  
+#include "script_win.c"
+#include "script_ahk.c"
+#include "script.c"
+/* rutty */
 #endif
 #ifdef MOD_PROXY
 #include "kitty_proxy.h"
@@ -800,7 +800,7 @@ void RestartSession( void ) {
 
 #ifdef MOD_FAR2L
     term->far2l_ext = 0;
-#endif	
+#endif
 	PostMessage(wgs.term_hwnd,WM_KEYDOWN,VK_RETURN ,0) ;
 	PostMessage(wgs.term_hwnd,WM_KEYUP,VK_RETURN ,1) ;
 }
@@ -1686,7 +1686,7 @@ TrayIcone.hWnd = wgs.term_hwnd ;
 #ifdef MOD_PERSO
 		if( !PuttyFlag ) InitSpecialMenu( m, conf_get_str(conf,CONF_folder), conf_get_str(conf,CONF_sessionname) ) ;
 #endif
-#ifdef MOD_RUTTY 
+#ifdef MOD_RUTTY
 /* rutty: */
         AppendMenu(m, MF_ENABLED, IDM_SCRIPTSEND, "发送录制的脚本文件(&S)" ) ;
         AppendMenu(m, MF_SEPARATOR, 0, 0);
@@ -1731,7 +1731,7 @@ TrayIcone.hWnd = wgs.term_hwnd ;
         else
             AppendMenu(m, MF_ENABLED, IDM_VISIBLE, "始终可见(&B)");
         AppendMenu(m, MF_ENABLED, IDM_PROTECT, "保护会话(&C)");
-//char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"信息",MB_OK);
+//char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"info",MB_OK);
         if( GetWinrolFlag() ) AppendMenu(m, MF_ENABLED, IDM_WINROL, "向上卷起(&P)");
 	HMENU FontMenu = CreateMenu();
 		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTUP, "字体放大");
@@ -4563,20 +4563,20 @@ free(cmd);
        {
          script_ahk_send(&scriptdata, cds);
          return 1;
-       }  
+       }
        else if (cds->dwData == ruttyAHK_enable)
        {
          script_ahk_enable(cds);
          return 1;
-       }  
+       }
        else if (cds->dwData == ruttyAHK_set)
        {
          script_ahk_set(cds);
          return 1;
-       }  
-       else  
+       }
+       else
          return 0;  /* not our message */
-    } 
+    }
 #else
 		PCOPYDATASTRUCT pMyCDS = (PCOPYDATASTRUCT) lParam;
 			switch( pMyCDS->dwData ) {

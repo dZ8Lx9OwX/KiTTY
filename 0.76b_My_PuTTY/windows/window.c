@@ -1729,9 +1729,9 @@ TrayIcone.hWnd = wgs.term_hwnd ;
         if( conf_get_bool(conf,CONF_alwaysontop) )
             AppendMenu(m, MF_ENABLED|MF_CHECKED, IDM_VISIBLE, "始终可见(&B)");
         else
-            AppendMenu(m, MF_ENABLED, IDM_VISIBLE, "始终可见(&B)e");
+            AppendMenu(m, MF_ENABLED, IDM_VISIBLE, "始终可见(&B)");
         AppendMenu(m, MF_ENABLED, IDM_PROTECT, "保护会话(&C)");
-//char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"信息",MB_OK);
+//char b[256];sprintf(b,"%d",GetWinrolFlag());MessageBox(NULL,b,"info",MB_OK);
         if( GetWinrolFlag() ) AppendMenu(m, MF_ENABLED, IDM_WINROL, "向上卷起(&P)");
 	HMENU FontMenu = CreateMenu();
 		AppendMenu(FontMenu, MF_ENABLED, IDM_FONTUP, "字体放大");
@@ -3513,7 +3513,7 @@ else if((UINT_PTR)wParam == TIMER_INIT) {  // Initialisation
 
 	// Affichage d'une note de la session s'il y en a une
 	if( GetSessionField( conf_get_str( conf, CONF_sessionname), conf_get_str( conf, CONF_folder), "Notes", buffer )  )
-		{ if( strlen( buffer ) > 0 ) MessageBox( hwnd, buffer, "Notes", MB_OK ) ; }
+		{ if( strlen( buffer ) > 0 ) MessageBox( hwnd, buffer, "注释", MB_OK ) ; }
 
 	// On met le focus sur la fenêtre
 	if( first_connect ) {
@@ -7812,8 +7812,8 @@ static void wintw_set_title(TermWin *tw, const char *title_in) {
 	if( GetProtectFlag() ) if( strstr(buffer, " (PROTECTED)")==NULL ) { strcat( buffer, " (PROTECTED)" ) ; }
 	if( conf_get_bool(conf, CONF_alwaysontop) ) if( strstr(buffer, " (ONTOP)")==NULL ) { strcat( buffer, " (ONTOP)" ) ; }
 	if( conf_get_bool(conf, CONF_ssh_tunnel_print_in_title) ) {
-		if( strstr(buffer, " (SOCKS: ")==NULL ) { 
-			make_title( fmt, " (SOCKS: %s)", "%%d") ; 
+		if( strstr(buffer, " (SOCKS: ")==NULL ) {
+			make_title( fmt, " (SOCKS: %s)", "%%d") ;
 			strcat( buffer, fmt ) ;
 		}
 	}
@@ -8449,7 +8449,7 @@ static void process_clipdata(HGLOBAL clipdata, bool unicode)
 	    memcpy(clipboard_contents, p, clipboard_length * sizeof(wchar_t));
 	    clipboard_contents[clipboard_length] = L'\0';
 #ifdef MOD_PERSO
-		if( (GetPasteSize()==0) || (clipboard_length<=GetPasteSize()) || MessageBox(NULL,"Clipboard content is very large.\nAre you sure ?","Confirmation",MB_YESNO|MB_ICONWARNING)==IDYES )
+		if( (GetPasteSize()==0) || (clipboard_length<=GetPasteSize()) || MessageBox(NULL,"剪贴板内容非常多.\n你确定吗？","确认提示",MB_YESNO|MB_ICONWARNING)==IDYES )
 #endif
 	    term_do_paste(term, clipboard_contents, clipboard_length);
 	}
@@ -8465,7 +8465,7 @@ static void process_clipdata(HGLOBAL clipdata, bool unicode)
 	    clipboard_length = i - 1;
 	    clipboard_contents[clipboard_length] = L'\0';
 #ifdef MOD_PERSO
-		if( (GetPasteSize()==0) || (clipboard_length<=GetPasteSize()) || MessageBox(NULL,"Clipboard content is very large.\nAre you sure ?","Confirmation",MB_YESNO|MB_ICONWARNING)==IDYES )
+		if( (GetPasteSize()==0) || (clipboard_length<=GetPasteSize()) || MessageBox(NULL,"剪贴板内容非常多.\n你确定吗？","确认提示",MB_YESNO|MB_ICONWARNING)==IDYES )
 #endif
 	    term_do_paste(term, clipboard_contents, clipboard_length);
 	}

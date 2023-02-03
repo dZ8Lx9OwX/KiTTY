@@ -1455,7 +1455,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
 
 #ifdef MOD_PERSO
 	auth_loop_num++ ;
-//char b[128];sprintf(b,"%d",auth_loop_num);MessageBox(NULL,b,"信息",MB_OK);
+//char b[128];sprintf(b,"%d",auth_loop_num);MessageBox(NULL,b,"info",MB_OK);
 	if( debug_flag && !IsPasswordInConf() ) { debug_logevent( "No password in configuration" ) ; }
 	if( (auth_loop_num==1) && IsPasswordInConf() ) {
 		GetPasswordInConfig(bufpass) ;

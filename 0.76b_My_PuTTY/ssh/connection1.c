@@ -243,7 +243,7 @@ static bool ssh1_connection_filter_queue(struct ssh1_connection_state *s)
 
             if (!c || c->halfopen != expect_halfopen) {
                 ssh_remote_error(
-                    s->ppl.ssh, "Received %s for %s channel %u",
+                    s->ppl.ssh, "收到 %s 来自 %s 通道 %u",
                     ssh1_pkt_type(pktin->type),
                     !c ? "nonexistent" : c->halfopen ? "half-open" : "open",
                     localid);

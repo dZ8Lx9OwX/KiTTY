@@ -1177,7 +1177,7 @@ void showabout(HWND hwnd)
 	char buffer[1024] ;
     DialogBox(hinst, MAKEINTRESOURCE(IDD_ABOUTBOX), hwnd, AboutProc);
 	sprintf( buffer, "That's all folks ! version\r\n%s", BuildVersionTime ) ;
-    MessageBox( hwnd, buffer, "信息", MB_OK ) ;
+    MessageBox( hwnd, buffer, "info", MB_OK ) ;
 	*/
 	if( get_param("PUTTY") ) DialogBox(hinst, MAKEINTRESOURCE(IDD_ABOUTBOX), hwnd, AboutProcOrig);
 	else {

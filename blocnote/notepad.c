@@ -14,7 +14,7 @@ static char * Notepad_szprogname = "mNotepad" ;
 static char Notepad_filename[4096] = "Untitled" ;
 static int Notepad_modified = 0 ;
 
-static const char Notepad_szFilenameFilter[] = "文本文件, (*.txt, *.log, *.ini)\0*.txt;*.log;*.ini\0C/C++文件, (*.c, *.cpp, *.h, *.rc)\0*.c;*.cpp;*.h;*.rc\0脚本文件, (*.ksh, *.sh)\0*.ksh;*.sh\0SQL文件, (*.sql)\0*.sql\0所有文件, (*.*)\0*.*\0" ;
+static const char Notepad_szFilenameFilter[] = "Text files, (*.txt, *.log, *.ini)\0*.txt;*.log;*.ini\0C/C++ files, (*.c, *.cpp, *.h, *.rc)\0*.c;*.cpp;*.h;*.rc\0Script files, (*.ksh, *.sh)\0*.ksh;*.sh\0SQL files, (*.sql)\0*.sql\0All files, (*.*)\0*.*\0" ;
 
 static int FontSize = 18 ;
 
@@ -29,7 +29,7 @@ static bool readonly = false ;
 BOOL FileExists(LPCTSTR szPath) {
   DWORD dwAttrib = GetFileAttributes(szPath);
 
-  return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+  return (dwAttrib != INVALID_FILE_ATTRIBUTES && 
          !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
@@ -50,12 +50,12 @@ void Notepad_SetNoModify( HWND hwnd ) { SendMessage( hwnd, EM_SETMODIFY, FALSE, 
 int Notepad_IsModify( HWND hwnd ) { return SendMessage( hwnd, EM_GETMODIFY, 0, 0 ) ; }
 
 int WINAPI Notepad_WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-
+	
 	//recuperation de la taille de l'ecran
 	int cxScreen, cyScreen ;
 	cxScreen = GetSystemMetrics (SM_CXSCREEN);
 	cyScreen = GetSystemMetrics (SM_CYSCREEN);
-
+	
 #ifndef NOMAIN
 	cxScreen = 800/2 ;
 	cyScreen = 600/2 ;
@@ -66,9 +66,9 @@ int WINAPI Notepad_WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, LPSTR l
 	WNDCLASS wc;
 	HMENU hMenu, hSMFichier, hSMEdition, hSMApropos;
 
-#ifdef NOMAIN
+#ifdef NOMAIN	
 	if( lpCmdLine!=NULL ) {
-		if( strlen(lpCmdLine) > 0 ) {
+		if( strlen(lpCmdLine) > 0 ) {	
 			char *st = strstr( lpCmdLine, "|" ) ;
 			if( st!=NULL ) {
 				SavFile=(char*)malloc(strlen(st)+1);
@@ -92,7 +92,7 @@ int WINAPI Notepad_WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, LPSTR l
 	}
 	TestIfParentIsKiTTY() ;
 #endif
-
+	
 	notepad_hinst = hinstance;
  	HANDLE hAccel = LoadAccelerators (notepad_hinst, MAKEINTRESOURCE(NOTEPAD_IDR_ACCEL)) ;
 
@@ -126,7 +126,7 @@ int WINAPI Notepad_WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, LPSTR l
 	AppendMenu(hSMEdition, MF_STRING, NOTEPAD_IDM_SETFONT, Notepad_LoadString(NOTEPAD_STR_SETFONT));
 
 	hSMFichier = CreateMenu();
-
+	
 	if( !readonly ) {
 		AppendMenu(hSMFichier, MF_STRING, NOTEPAD_IDM_NEW, Notepad_LoadString(NOTEPAD_STR_NEW));
 		AppendMenu(hSMFichier, MF_STRING, NOTEPAD_IDM_OPEN, Notepad_LoadString(NOTEPAD_STR_OPEN));
@@ -147,8 +147,8 @@ int WINAPI Notepad_WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, LPSTR l
 
 	hMenu = CreateMenu();
 	AppendMenu(hMenu,MF_POPUP,(UINT_PTR)hSMFichier,Notepad_LoadString(NOTEPAD_STR_FILE));
-	AppendMenu(hMenu,MF_POPUP,(UINT_PTR)hSMEdition,Notepad_LoadString(NOTEPAD_STR_EDIT));
-
+	AppendMenu(hMenu,MF_POPUP,(UINT_PTR)hSMEdition,Notepad_LoadString(NOTEPAD_STR_EDIT)); 
+	
 #ifdef NOMAIN
 	HMENU hSMDelim = CreateMenu() ;
 	AppendMenu(hSMDelim, MF_STRING|MF_CHECKED, NOTEPAD_IDM_CRLF, Notepad_LoadString(NOTEPAD_STR_CRLF));
@@ -156,7 +156,7 @@ int WINAPI Notepad_WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, LPSTR l
 	AppendMenu(hSMDelim, MF_STRING|MF_UNCHECKED, NOTEPAD_IDM_SLASH, Notepad_LoadString(NOTEPAD_STR_SLASH));
 	AppendMenu(hSMDelim, MF_STRING|MF_UNCHECKED, NOTEPAD_IDM_TILDE, Notepad_LoadString(NOTEPAD_STR_TILDE));
 	if( !readonly ) { AppendMenu(hMenu,MF_POPUP,(UINT_PTR)hSMDelim,Notepad_LoadString(NOTEPAD_STR_DELIM)); }
-
+	
 	HMENU hWindows = CreateMenu() ;
 	AppendMenu(hWindows, MF_STRING, NOTEPAD_IDM_RESIZE_ALL, "&Arrange");
 	AppendMenu(hWindows, MF_STRING, NOTEPAD_IDM_CASCADE_ALL, "&Cascade");
@@ -169,7 +169,7 @@ int WINAPI Notepad_WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, LPSTR l
 
 	//hwnd = CreateWindow(Notepad_szprogname, Notepad_szprogname, WS_OVERLAPPEDWINDOW,CW_USEDEFAULT, CW_USEDEFAULT, cxScreen, cyScreen, NULL, hMenu, hinstance, NULL);
 	hwnd = CreateWindowEx(WS_EX_ACCEPTFILES,Notepad_szprogname, Notepad_szprogname, WS_OVERLAPPEDWINDOW,CW_USEDEFAULT, CW_USEDEFAULT, (int)cxScreen/2, (int)cyScreen/2, NULL, hMenu, hinstance, NULL);
-
+	
 	if (!hwnd) return FALSE;
 
 	ShowWindow(hwnd, nCmdShow) ;
@@ -184,7 +184,7 @@ int WINAPI Notepad_WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, LPSTR l
 	if( strlen(lpCmdLine)>0 )
 		SendMessage( hwnd, WM_COMMAND, NOTEPAD_IDM_LOAD, (LPARAM)lpCmdLine ) ;
 #endif
-
+	
 	while (GetMessage(&msg, NULL, 0, 0)) {
 		if(!TranslateAccelerator(hwnd, hAccel, &msg)){
 			TranslateMessage(&msg);
@@ -207,7 +207,7 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 	switch (uMsg) {
 		case WM_CREATE: {
-
+			
 			if( readonly ) {
 				hEdit = CreateWindow("edit", "", WS_CHILD | WS_VISIBLE | ES_READONLY |
 					ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL,
@@ -228,7 +228,7 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			SendMessage(hEdit, EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(5, 5)) ;
 #ifdef NOMAIN
 
-			if( LoadFile!=NULL )
+			if( LoadFile!=NULL ) 
 			if( strlen(LoadFile)>0 ) {
 				if( !strcmp(LoadFile,"1") ) { // On charge le bloc-note
 					if( OpenClipboard(NULL) ) {
@@ -252,7 +252,7 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			SetFocus( hEdit ) ;
 			time_t t = time( 0 ) ;
 			struct tm * tm = (struct tm *)gmtime( &t );
-			if( ( ( tm->tm_mday==9) && (tm->tm_mon+1)==10) )
+			if( ( ( tm->tm_mday==9) && (tm->tm_mon+1)==10) ) 
 				SetWindowText(hEdit, "It's October, 9th.\r\n _   _                           _     _      _   _         _\r\n| | | | __ _ _ __  _ __  _   _  | |__ (_)_ __| |_| |__   __| | __ _ _   _\r\n| |_| |/ _` | '_ \\| '_ \\| | | | | '_ \\| | '__| __| '_ \\ / _` |/ _` | | | |\r\n|  _  | (_| | |_) | |_) | |_| | | |_) | | |  | |_| | | | (_| | (_| | |_| |\r\n|_| |_|\\__,_| .__/| .__/ \\__, | |_.__/|_|_|   \\__|_| |_|\\__,_|\\__,_|\\__, |\r\n            |_|   |_|    |___/                                      |___/\r\n  ____          _\r\n / ___|   _  __| |\r\n| |  | | | |/ _` |\r\n| |__| |_| | (_| |\r\n \\____\\__, |\\__,_|\r\n      |___/\r\n" ) ;
 #endif
 
@@ -262,60 +262,60 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		case WM_SIZE: MoveWindow( hEdit, 0, 0, LOWORD(lParam), HIWORD(lParam), TRUE ) ;
 			break ;
 
-		case WM_DESTROY:
+		case WM_DESTROY: 
 			PostQuitMessage( 0 ) ;
 			break ;
-
+		
 		case WM_CLOSE:
 			SendMessage( hwnd, WM_COMMAND, NOTEPAD_IDM_QUIT, 0L ) ;
 			break ;
-
+		
 		case WM_COMMAND: //Commandes du menu
 			switch( LOWORD(wParam) ) {
 				//Fonction QUIT
-				case NOTEPAD_IDM_QUIT:
+				case NOTEPAD_IDM_QUIT: 
 					if( Notepad_IsModify( hEdit ) ) {
-						if( MessageBox( hwnd, "当前文件未保存.\n确认要退出吗 ?"
-							,"提示", MB_OKCANCEL|MB_ICONWARNING|MB_DEFBUTTON2 ) == IDOK )
+						if( MessageBox( hwnd, "Current file is not saved.\nAre you sure you want to quit ?"
+							,"Confirmation", MB_OKCANCEL|MB_ICONWARNING|MB_DEFBUTTON2 ) == IDOK )
 							PostMessage(hwnd, WM_DESTROY,0,0) ;
 						}
 					else PostMessage(hwnd, WM_DESTROY,0,0) ;
 					break ;
-
+				
 				//Fonction SAVEAS
 				case NOTEPAD_IDM_SAVEAS: Notepad_saveas( hwnd, hEdit ) ;
 					Notepad_SetNoModify( hEdit ) ;
 					Notepad_settitle( hwnd ) ;
 					EnableMenuItem( GetMenu(hwnd), NOTEPAD_IDM_SAVE, MF_ENABLED|MF_BYCOMMAND ) ;
 					break;
-
+				
 				//Fonction OPEN
-				case NOTEPAD_IDM_OPEN:
+				case NOTEPAD_IDM_OPEN: 
 					if( Notepad_IsModify( hEdit ) ) {
-						if( MessageBox( hwnd, "当前文件未保存.\n确认要打开新文件 ?"
-							,"提示", MB_OKCANCEL|MB_ICONWARNING|MB_DEFBUTTON2 ) != IDOK ) break ;
-
+						if( MessageBox( hwnd, "Current file is not saved.\nAre you sure you want to open a new one ?"
+							,"Confirmation", MB_OKCANCEL|MB_ICONWARNING|MB_DEFBUTTON2 ) != IDOK ) break ;
+							
 						}
 					Notepad_open( hwnd, hEdit ) ;
 					Notepad_SetNoModify( hEdit ) ;
 					Notepad_settitle( hwnd ) ;
 					EnableMenuItem( GetMenu(hwnd), NOTEPAD_IDM_SAVE, MF_ENABLED|MF_BYCOMMAND ) ;
 					break ;
-
+						
 				//Fonction NEW
-				case NOTEPAD_IDM_NEW:
+				case NOTEPAD_IDM_NEW: 
 					if( Notepad_IsModify( hEdit ) ) {
-					if( MessageBox( hwnd, "当前文件未保存.\n确认要创建新文件 ?"
-							,"提示", MB_OKCANCEL|MB_ICONWARNING|MB_DEFBUTTON2 ) != IDOK ) break ;
-
+					if( MessageBox( hwnd, "Current file is not saved.\nAre you sure you want to create a new one ?"
+							,"Confirmation", MB_OKCANCEL|MB_ICONWARNING|MB_DEFBUTTON2 ) != IDOK ) break ;
+							
 						}
 					SetWindowText( hEdit, "" ) ;
 					Notepad_SetNoModify( hEdit ) ;
-					strcpy( Notepad_filename, "未命名" ) ;
+					strcpy( Notepad_filename, "Untitled" ) ;
 					Notepad_settitle( hwnd ) ;
 					EnableMenuItem( GetMenu(hwnd), NOTEPAD_IDM_SAVE, MF_DISABLED|MF_GRAYED|MF_BYCOMMAND ) ;
 					break ;
-
+						
 				// Fonction LOAD
 				case NOTEPAD_IDM_LOAD:
 					Notepad_load( (char*)lParam , hEdit ) ;
@@ -323,7 +323,7 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 					Notepad_settitle( hwnd ) ;
 					EnableMenuItem( GetMenu(hwnd), NOTEPAD_IDM_SAVE, MF_ENABLED|MF_BYCOMMAND ) ;
 					break ;
-
+				
 				// Fonction SAVE
 				case NOTEPAD_IDM_SAVE:
 					Notepad_save( Notepad_filename, hEdit ) ;
@@ -332,7 +332,7 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 				//Fonction COPYRIGHT
 				case NOTEPAD_IDM_ABOUT:
-					MessageBox(hwnd,Notepad_LoadString(NOTEPAD_STR_LICENCE),"关于",MB_ICONINFORMATION);
+					MessageBox(hwnd,Notepad_LoadString(NOTEPAD_STR_LICENCE),"About",MB_ICONINFORMATION);
 					break ;
 
 				//Fonction CUT
@@ -461,7 +461,7 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 							}
 						}
 					break ;
-
+					
 				// Fonction load du fichier d'initialisation
 				case NOTEPAD_IDM_LOAD_INI:
 					//SendMessage( hwnd, WM_COMMAND, NOTEPAD_IDM_LOAD, (LPARAM)get_param_str("INI") ) ;
@@ -473,7 +473,7 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 					//SendMessage( hwnd, WM_COMMAND, NOTEPAD_IDM_LOAD, (LPARAM)get_param_str("SAV") ) ;
 					if( SavFile!=NULL ) SendMessage( hwnd, WM_COMMAND, NOTEPAD_IDM_LOAD, (LPARAM)SavFile ) ;
 					break;
-
+				
 				// Fonction de resize
 				case NOTEPAD_IDM_RESIZE:
 					SetWindowsSize( hwnd ) ;
@@ -487,7 +487,7 @@ LRESULT CALLBACK Notepad_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			Notepad_OnDropFiles( hwnd, (HDROP) wParam, buffer ) ;
 			SendMessage( hwnd, WM_COMMAND, NOTEPAD_IDM_LOAD, (LPARAM)buffer ) ;
 			break ;
-
+				
 		default: // Message par défaut
 			return DefWindowProc(hwnd, uMsg, wParam, lParam ) ;
 		}
@@ -521,13 +521,13 @@ int Notepad_load( char * szFile, HWND hEdit ) {
 		CloseHandle(fo);
 		}
 	else {
-		MessageBox( NULL, "无法加载文件！","错误", MB_OK|MB_ICONERROR) ;
+		MessageBox( NULL, "Unable to load file","Error", MB_OK|MB_ICONERROR) ;
 		return 0 ;
 		}
-
+	
 	return 1 ;
 	}
-
+	
 int Notepad_open( HWND hwnd, HWND hEdit ) {
 	OPENFILENAME ofn;
 	CHAR szFile[MAX_PATH]={0};
@@ -547,7 +547,7 @@ int Notepad_open( HWND hwnd, HWND hEdit ) {
 
 	return 1 ;
 	}
-
+	
 int Notepad_save( char * szFile, HWND hEdit ) {
 	HANDLE fp = CreateFile(szFile, GENERIC_WRITE, 0, 0, CREATE_ALWAYS,FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 	strcpy( Notepad_filename, szFile ) ;
@@ -563,7 +563,7 @@ int Notepad_save( char * szFile, HWND hEdit ) {
 	CloseHandle(fp);
 	return 1 ;
 	}
-
+	
 int Notepad_saveas( HWND hwnd, HWND hEdit ) {
 	OPENFILENAME opn;
         CHAR szFile[MAX_PATH]={0};

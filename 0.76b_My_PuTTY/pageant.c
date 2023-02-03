@@ -25,13 +25,13 @@
  #ifndef MOD_INTEGRATED_AGENT
 int random_byte(void)
 {
-    modalfatalbox("Internal error: attempt to use random numbers in Pageant");
+    modalfatalbox("内部错误：尝试在Pageant中使用随机数");
     exit(0);
     return 0;                 /* unreachable, but placate optimiser */
 }
 void random_read(void *buf, size_t size)
 {
-    modalfatalbox("Internal error: attempt to use random numbers in Pageant");
+    modalfatalbox("内部错误：尝试在Pageant中使用随机数");
 }
 #endif
 
@@ -330,7 +330,7 @@ int GetScrumbleKeyFlag(void) ;
 static int * tab_int = NULL ;
 void scrumble_int(void) {
 	int count = pageant_count_ssh2_keys(), s, i, j ;
-	bool test ; 
+	bool test ;
 	if( count>0 ) {
 		if( GetScrumbleKeyFlag() ) {
 			if( tab_int != NULL ) { free(tab_int) ; tab_int = NULL ; }
@@ -354,7 +354,7 @@ void scrumble_int(void) {
 			tab_int = (int*)malloc( count*sizeof(int) ) ;
 			for( i=0 ; i<count ; i++ ) { tab_int[i] = i ; }
 		}
-		
+
 		/*
 		char b[1024]="",c[256];
 		for( i=0 ;i<count ; i++ ) {
@@ -363,7 +363,7 @@ void scrumble_int(void) {
 		}
 		MessageBox(NULL,b,"info",MB_OK);
 		*/
-	
+
 	}
 }
 int get_scrumble_int( int i ) {
@@ -372,27 +372,27 @@ int get_scrumble_int( int i ) {
 	else { return tab_int[i] ; }
 }
 static int confirm_key_usage(char* fingerprint, char* comment) {
-	const char* title = "Confirm SSH Key usage";
+	const char* title = "确认SSH密钥使用";
 	char* message = NULL;
 	int result = IDYES; // successful result is the default
 	if(comment!=NULL) {
-		if( ( GetAskConfirmationFlag()==1 ) 
+		if( ( GetAskConfirmationFlag()==1 )
 			||
 			( (GetAskConfirmationFlag()==2) && (
 			(NULL != strstr(comment, "needs confirm"))||(NULL != strstr(comment, "need confirm"))||(NULL != strstr(comment, "confirmation"))
 			)
 			) ) {
-			message = dupprintf("Allow authentication with key with fingerprint\n%s\ncomment: %s", fingerprint, comment);
+			message = dupprintf("允许使用带有指纹的密钥进行身份验证\n%s\n备注：%s", fingerprint, comment);
 			result = MessageBox(NULL, message, title, MB_ICONQUESTION | MB_YESNO | MB_SYSTEMMODAL);
 		}
 	}
-	
+
 	if (result != IDYES) {
 		if(message!=NULL) sfree(message);
 		return 0;
 	} else {
-		message = dupprintf("Allow authentication with key with fingerprint\n%s\ncomment: %s", fingerprint, comment);
-		if( GetShowBalloonOnKeyUsage()==1 ) ShowBalloonTip( trayIcone, "SSH private key usage", message ) ;
+		message = dupprintf("允许使用带有指纹的密钥进行身份验证\n%s\n备注：%s", fingerprint, comment);
+		if( GetShowBalloonOnKeyUsage()==1 ) ShowBalloonTip( trayIcone, "SSH私钥使用", message ) ;
 		if(message!=NULL) sfree(message);
 		return 1;
 	}
@@ -807,7 +807,7 @@ static PageantAsyncOp *pageant_make_op(
         unsigned response_type;
         unsigned char response_md5[16];
         int i;
-	
+
         pageant_client_log(pc, reqid, "request: SSH1_AGENTC_RSA_CHALLENGE");
 
         response = NULL;
@@ -923,7 +923,7 @@ void debug_log( const char *fmt, ... ) {
 		vfprintf( fp, fmt, ap ) ; // ecriture dans un fichier
 		fclose( fp ) ;
 	}
- 
+
 	va_end( ap ) ;
 }
 
@@ -950,7 +950,7 @@ void debug_log( const char *fmt, ... ) {
 	}
 	if( confirm_fingerprint!=NULL ) sfree(confirm_fingerprint);
 #endif
-	
+
         if (have_flags)
             pageant_client_log(pc, reqid, "signature flags = 0x%08"PRIx32,
                                flags);

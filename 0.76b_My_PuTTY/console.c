@@ -10,54 +10,54 @@
 #include "console.h"
 
 const char hk_absentmsg_common_fmt[] =
-    "The server's host key is not cached. You have no guarantee\n"
-    "that the server is the computer you think it is.\n"
-    "The server's %s key fingerprint is:\n"
+    "服务器的主机密钥未缓存. 无法为\n"
+    "您保证服务器就是您认为的计算机.\n"
+    "服务器 %s 的密钥指纹是：\n"
     "%s\n";
 const char hk_absentmsg_interactive_intro[] =
-    "If you trust this host, enter \"y\" to add the key to\n"
-    "PuTTY's cache and carry on connecting.\n"
-    "If you want to carry on connecting just once, without\n"
-    "adding the key to the cache, enter \"n\".\n"
-    "If you do not trust this host, press Return to abandon the\n"
-    "connection.\n";
+    "如果您信任此主机, 请输入\"y\"将\n"
+    "密钥添加到PuTTY的缓存并继续连接.\n"
+    "如果您只想进行一次连接, 在不将密\n"
+    "钥添加到缓存的情况下, 请输入\"n\".\n"
+    "如果您不信任此主机, 请按Return返回键\n"
+    "放弃连接.\n";
 const char hk_absentmsg_interactive_prompt[] =
-    "Store key in cache? (y/n, Return cancels connection, "
-    "i for more info) ";
+    "是否将密钥存储在缓存中？ (y/n, Return返回键取消连接, "
+    "i 了解更多信息) ";
 
 const char hk_wrongmsg_common_fmt[] =
-    "WARNING - POTENTIAL SECURITY BREACH!\n"
-    "The server's host key does not match the one PuTTY has\n"
-    "cached. This means that either the server administrator\n"
-    "has changed the host key, or you have actually connected\n"
-    "to another computer pretending to be the server.\n"
-    "The new %s key fingerprint is:\n"
+    "警告-潜在的安全漏洞！！！\n"
+    "服务器的主机密钥与PuTTY缓存的主机\n"
+    "密钥不匹配. 这意味着服务器管理员\n"
+    "已更改了主机密钥, 或者您实际上已\n"
+    "连接到另外一台计算机伪装的服务器.\n"
+    "新的 %s 密钥指纹是：\n"
     "%s\n";
 const char hk_wrongmsg_interactive_intro[] =
-    "If you were expecting this change and trust the new key,\n"
-    "enter \"y\" to update PuTTY's cache and continue connecting.\n"
-    "If you want to carry on connecting but without updating\n"
-    "the cache, enter \"n\".\n"
-    "If you want to abandon the connection completely, press\n"
-    "Return to cancel. Pressing Return is the ONLY guaranteed\n"
-    "safe choice.\n";
+    "如果您想要接受此更改并且信任新的密钥,\n"
+    "请输入\"y\"以更新密钥缓存并继续连接.\n"
+    "如果您想继续连接但不更新\n"
+    "密钥缓存,请输入\"n\".\n"
+    "如果要完全放弃连接, 请按\n"
+    "Return返回键以取消连接. \n"
+    "按Return返回键是唯一保证安全的选择.\n";
 const char hk_wrongmsg_interactive_prompt[] =
-    "Update cached key? (y/n, Return cancels connection, "
-    "i for more info) ";
+    "是否更新缓存密钥？(y/n, Return返回键取消连接, "
+    "i 了解更多信息) ";
 
 const char weakcrypto_msg_common_fmt[] =
-    "The first %s supported by the server is\n"
-    "%s, which is below the configured warning threshold.\n";
+    "服务器支持的第一个 %s 是 \n"
+    "%s, 低于配置的警告阈值.\n";
 
 const char weakhk_msg_common_fmt[] =
-    "The first host key type we have stored for this server\n"
-    "is %s, which is below the configured warning threshold.\n"
-    "The server also provides the following types of host key\n"
-    "above the threshold, which we do not have stored:\n"
+    "我们为此服务器存储的第一个主机密钥类型\n"
+    "是 %s, 低于配置的警告阈值.\n"
+    "服务器还提供以下类型的主机密钥\n"
+    "高于警告阈值, 但我们尚未存储：\n"
     "%s\n";
 
-const char console_continue_prompt[] = "Continue with connection? (y/n) ";
-const char console_abandoned_msg[] = "Connection abandoned.\n";
+const char console_continue_prompt[] = "是否继续连接? (y/n) ";
+const char console_abandoned_msg[] = "已放弃连接.\n";
 
 bool console_batch_mode = false;
 
@@ -85,7 +85,7 @@ void modalfatalbox(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    console_print_error_msg_fmt_v("FATAL ERROR", fmt, ap);
+    console_print_error_msg_fmt_v("致命错误！！", fmt, ap);
     va_end(ap);
     cleanup_exit(1);
 }
@@ -94,13 +94,13 @@ void nonfatal(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    console_print_error_msg_fmt_v("ERROR", fmt, ap);
+    console_print_error_msg_fmt_v("错误！", fmt, ap);
     va_end(ap);
 }
 
 void console_connection_fatal(Seat *seat, const char *msg)
 {
-    console_print_error_msg("FATAL ERROR", msg);
+    console_print_error_msg("致命错误！！", msg);
     cleanup_exit(1);
 }
 

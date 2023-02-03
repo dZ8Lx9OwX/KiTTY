@@ -275,7 +275,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		sprintf( buffer, "KiTTY - %s", BuildVersionTime ) ;
 		SetDlgItemText(hwnd,IDA_VERSION,buffer);
 
-		str = dupprintf("关于%s_v0.76.1.2.1 - 这是一个KiTTY中文版本！", appname);
+		str = dupprintf("关于%s_v0.76.1.3.1 - 这是一个KiTTY中文版本！", appname);
 		SetWindowText(hwnd, str);
 		sfree(str);
 
@@ -489,7 +489,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
             char *text = dupprintf
                 ("%s\r\n\r\n%s\r\n\r\n%s\r\n\r\n%s",
                  appname, ver, buildinfo_text,
-                 "\251 " SHORT_COPYRIGHT_DETAILS ". All rights reserved.");
+                 "(C)" SHORT_COPYRIGHT_DETAILS " 保留所有权利。");
             sfree(buildinfo_text);
             SetDlgItemText(hwnd, IDA_TEXT, text);
             MakeDlgItemBorderless(hwnd, IDA_TEXT);
@@ -1177,7 +1177,7 @@ void showabout(HWND hwnd)
 	char buffer[1024] ;
     DialogBox(hinst, MAKEINTRESOURCE(IDD_ABOUTBOX), hwnd, AboutProc);
 	sprintf( buffer, "That's all folks ! version\r\n%s", BuildVersionTime ) ;
-    MessageBox( hwnd, buffer, "信息", MB_OK ) ;
+    MessageBox( hwnd, buffer, "info", MB_OK ) ;
 	*/
 	if( get_param("PUTTY") ) DialogBox(hinst, MAKEINTRESOURCE(IDD_ABOUTBOX), hwnd, AboutProcOrig);
 	else {

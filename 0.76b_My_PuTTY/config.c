@@ -2823,7 +2823,7 @@ void setup_config_box(struct controlbox *b, bool midsession,
 		 HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_logtimestamp), I(1) ) ;
 #endif
-    ctrl_radiobuttons(s, "W要记录的日志文件已存在时：", 'e', 1,
+    ctrl_radiobuttons(s, "要记录的日志文件已存在时：", 'e', 1,
 		      HELPCTX(logging_exists),
 		      conf_radiobutton_handler, I(CONF_logxfovr),
 		      "总是覆盖", I(LGXF_OVR),
@@ -3067,7 +3067,7 @@ s = ctrl_getset(b, "终端/提示音", "overload",
     ctrl_checkbox(s, "禁用切换到备用终端屏幕", 'w',
 		  HELPCTX(features_altscreen),
 		  conf_checkbox_handler, I(CONF_no_alt_screen));
-    ctrl_checkbox(s, "禁用远程控制更改窗口标题g", 't',
+    ctrl_checkbox(s, "禁用远程控制更改窗口标题", 't',
 		  HELPCTX(features_retitle),
 		  conf_checkbox_handler,
 		  I(CONF_no_remote_wintitle));
@@ -3597,7 +3597,7 @@ if( !GetPuttyFlag() ) {
 //    ctrl_settitle(b, "Connection/Port knocking", "Options controlling port knocking") ;
     s = ctrl_getset(b, "连接", "PortKnocking",
 			"Port Knocking(端口试探)序列：");
-    ctrl_editbox(s, "Sequence:",  NO_SHORTCUT, 100,
+    ctrl_editbox(s, "顺序",  NO_SHORTCUT, 100,
 		 HELPCTX(no_help),
 		 conf_editbox_handler, I(CONF_portknockingoptions), I(1));
     ctrl_text(s, "用逗号作为分隔的\"端口:协议\"列表,TCP/UDP协议有效.",HELPCTX(no_help));
@@ -4277,7 +4277,7 @@ if( !GetPuttyFlag() ) {
 	    ctrl_droplist(s, "错误的处理SSH-2密钥重复交换", 'k', 20,
 			  HELPCTX(ssh_bugs_rekey2),
 			  sshbug_handler, I(CONF_sshbug_rekey2));
-	    ctrl_droplist(s, "阻塞PuTTY的SSH-2'winadj'请求", 'j',
+	    ctrl_droplist(s, "PuTTY的SSH-2'winadj'请求阻塞", 'j',
                           20, HELPCTX(ssh_bugs_winadj),
 			  sshbug_handler, I(CONF_sshbug_winadj));
 	    ctrl_droplist(s, "回复已关闭通道的请求", 'q', 20,
@@ -4324,7 +4324,7 @@ if( !GetPuttyFlag() ) {
 			  "PSCP和WinSCP集成");
 
            s = ctrl_getset(b, "连接/SSH/PSCP和WinSCP", "winSCPproto", "通用协议设置：") ;
-	   ctrl_radiobuttons(s, "Prefered protocol:", NO_SHORTCUT, 4,
+	   ctrl_radiobuttons(s, "首选协议", NO_SHORTCUT, 4,
               HELPCTX(no_help),
               conf_radiobutton_handler,
               I(CONF_winscpprot),

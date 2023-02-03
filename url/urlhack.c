@@ -22,9 +22,10 @@ static unsigned int link_regions_len;
 static unsigned int link_regions_current_pos;
 
 // Regex with http://, https://, ftp://, mailto: and ssh:// links
-const char* urlhack_default_regex = "(((((https?|ftp):\\/\\/)|www\\.)(([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)|localhost|([a-zA-Z0-9\\-]+\\.)*[a-zA-Z0-9\\-]+\\.(com|net|org|info|biz|int|gov|name|edu|[a-zA-Z][a-zA-Z]))(:[0-9]+)?((\\/|\\?)[^ \"]*[^ ,;\\.:\">)]?)?)|(mailto:[a-zA-Z0-9\\-_\\.]+@[a-zA-Z0-9\\-_\\.]+\\.[a-z]{2,})|(ssh:\\/\\/([a-zA-Z0-9\\-_]+(:[^@]*)?@)?[a-zA-Z0-9\\-_\\.]+(:[0-9]{2,5})?(\\/[a-zA-Z0-9\\-_]+)?))" ;
-//  (((((https?|ftp):\/\/)|www\.)(([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)|localhost|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|net|org|info|biz|int|gov|name|edu|[a-zA-Z][a-zA-Z]))(:[0-9]+)?((\/|\?)[^ "]*[^ ,;\.:">)]?)?)|(mailto:[a-zA-Z0-9\-_\.]+@[a-zA-Z0-9\-_\.]+\.[a-z]{2,})|(ssh:\/\/([a-zA-Z0-9\-_]+(:[^@]*)?@)?[a-zA-Z0-9\-_\.]+(:[0-9]{2,5})?(\/[a-zA-Z0-9\-_]+)?))
 
+const char* urlhack_default_regex = "((ht|f)tp(s?):\\/\\/[0-9a-zA-Z]([-\\.\\w]*[0-9a-zA-Z])*([:](0-9)+)*(\\/?)([-a-zA-Z0-9\\.\\?\\,\\'\\/\\\\\\+=&%\\$#_]*)?)|(mailto:[a-zA-Z0-9\\-_\\.]+@[a-zA-Z0-9\\-_\\.]+\\.[a-z]{2,})|(ssh:\\/\\/([a-zA-Z0-9\\-_]+(:[^@]*)?@)?[a-zA-Z0-9\\-_\\.]+(:[0-9]{2,5})?(\\/[a-zA-Z0-9\\-_]+)?))" ;
+
+//const char* urlhack_default_regex = "(((((https?|ftp):\\/\\/)|www\\.)(([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)|localhost|([a-zA-Z0-9\\-]+\\.)*[a-zA-Z0-9\\-]+\\.(com|net|org|info|biz|int|gov|name|edu|[a-zA-Z][a-zA-Z]))(:[0-9]+)?((\\/|\\?)[^ \"]*[^ ,;\\.:\">)]?)?)|(mailto:[a-zA-Z0-9\\-_\\.]+@[a-zA-Z0-9\\-_\\.]+\\.[a-z]{2,})|(ssh:\\/\\/([a-zA-Z0-9\\-_]+(:[^@]*)?@)?[a-zA-Z0-9\\-_\\.]+(:[0-9]{2,5})?(\\/[a-zA-Z0-9\\-_]+)?))" ;
 
 // Regex with http://, https://, ftp://, mailto://
 //const char* urlhack_default_regex = " (((((https?|ftp|svn):\\/\\/)|www\\.)(([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)|localhost|([a-zA-Z0-9\\-]+\\.)*[a-zA-Z0-9\\-]+\\.(com|net|org|info|biz|int|gov|name|edu|[a-zA-Z][a-zA-Z]))(:[0-9]+)?((\\/|\\?)[^ \"]*[^ ,;\\.:\">)])?)|(mailto:\\/\\/[a-zA-Z0-9\\-_\\.]+@[a-zA-Z0-9\\-_\\.]+\\.[a-z]{2,}))" ;
@@ -51,17 +52,17 @@ int urlhack_is_in_link_region(int x, int y)
             return i+1;
         i++;
     }
-    
+
     return 0;
 }
 
 int urlhack_is_in_this_link_region(text_region r, int x, int y)
 {
-    if ((r.y0 == r.y1 && y == r.y0 && y == r.y1 && x >= r.x0 && x < r.x1) || 
+    if ((r.y0 == r.y1 && y == r.y0 && y == r.y1 && x >= r.x0 && x < r.x1) ||
         (r.y0 != r.y1 && ((y == r.y0 && x >= r.x0) || (y == r.y1 && x < r.x1) || (y > r.y0 && y < r.y1)))) {
         return 1;
     }
-    
+
     return 0;
 }
 
@@ -201,18 +202,18 @@ void urlhack_reset()
 
 static void rtfm(char *error)
 {
-    char std_msg[] = "The following error occured when compiling the regular expression\n" \
-        "for the hyperlink support. Hyperlink detection is disabled during\n" \
-        "this session (restart to try again).\n\n";
+    char std_msg[] = "编译超链接支持的正则表达式时\n" \
+                      "出现以下错误.当前会话期间禁用了\n" \
+                      "超链接检测(请重新启动以重试).\n\n";
 
     char *full_msg = dupprintf("%s%s", std_msg, error);
 
 	urlhack_disabled = 1 ;
 	//SetHyperlinkFlag(0);
-	
-    MessageBox(0, full_msg, "Hyperlink patch error", MB_OK);
+
+    MessageBox(0, full_msg, "超链接补丁错误", MB_OK);
     free(full_msg);
-	
+
 }
 
 void logevent(void *frontend, const char *string);
@@ -233,27 +234,27 @@ void urlhack_set_regular_expression(int mode, const char* expression)
     switch (mode) {
     case URLHACK_REGEX_CUSTOM:
 	if( to_use!= NULL) { free(to_use) ; }
-	to_use = (char*)malloc(strlen(expression)+1); 
+	to_use = (char*)malloc(strlen(expression)+1);
 	strcpy(to_use,expression);
         //to_use = expression;
         break;
     case URLHACK_REGEX_CLASSIC:
 	if( to_use!= NULL) { free(to_use) ; }
-	to_use = (char*)malloc(strlen(urlhack_default_regex)+1); 
+	to_use = (char*)malloc(strlen(urlhack_default_regex)+1);
 	strcpy(to_use,urlhack_default_regex);
         //to_use = urlhack_default_regex;
         break;
     case URLHACK_REGEX_LIBERAL:
 	if( to_use!= NULL) { free(to_use) ; }
-	to_use = (char*)malloc(strlen(urlhack_liberal_regex)+1); 
+	to_use = (char*)malloc(strlen(urlhack_liberal_regex)+1);
 	strcpy(to_use,urlhack_liberal_regex);
         //to_use = urlhack_liberal_regex;
         break;
     default:
         assert(!"illegal default regex setting");
     }
-   
-    if( is_regexp_compiled ) { 
+
+    if( is_regexp_compiled ) {
 	regfree(&urlhack_rx);
 	is_regexp_compiled = 0;
     }
@@ -264,8 +265,8 @@ void urlhack_set_regular_expression(int mode, const char* expression)
 		char buffer[512]="";
 		regerror(result, &urlhack_rx, buffer, sizeof buffer);
 		rtfm(buffer);
-	} else { 
-		is_regexp_compiled = 1 ; 
+	} else {
+		is_regexp_compiled = 1 ;
 		logevent(NULL, "Hyperlink patch: regex successfully compiled" ) ;
 	}
 #endif
@@ -275,7 +276,7 @@ void urlhack_go_find_me_some_hyperlinks(int screen_width)
 {
 #ifndef MOD_NOHYPERLINK
     char* text_pos;
-	
+
     if( urlhack_disabled!=0 ) {
 	    return ;
     }
@@ -294,14 +295,14 @@ void urlhack_go_find_me_some_hyperlinks(int screen_width)
 
         int x0 = (start_pos - window_text) % screen_width;
         int y0 = (start_pos - window_text) / screen_width;
-	    
+
 	int x1 = (text_pos + groupArray.rm_eo - window_text) % screen_width;
         int y1 = (text_pos + groupArray.rm_eo - window_text) / screen_width;
-	    
+
 	if (x0 >= screen_width) x0 = screen_width - 1;
         if (x1 >= screen_width) x1 = screen_width - 1;
         urlhack_add_link_region(x0, y0, x1, y1);
-		    
+
 	text_pos = text_pos + groupArray.rm_eo + 1;
 	error = regexec(&urlhack_rx, text_pos, 1, &groupArray ,REG_NOTBOL) ;
 	}
