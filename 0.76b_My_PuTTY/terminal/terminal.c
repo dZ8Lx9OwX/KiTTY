@@ -3557,6 +3557,10 @@ static void do_osc(Terminal *term)
                                             memcpy(GData,buffer,BufferSize);
                                             GlobalUnlock(hData);
 
+                                            // some clients don't flush the buffer before setting data,
+                                            // so we'll do that here just in case
+                                            EmptyClipboard();
+
                                             if (OpenClipboard(NULL)) {
 
                                                 if (!SetClipboardData(fmt, (HANDLE)hData)) {

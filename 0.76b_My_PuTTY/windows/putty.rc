@@ -3,7 +3,7 @@
 #define APPNAME "PuTTY"
 #define APPDESC "cnKiTTY - KiTTYÖÐÎÄ°æ±¾"
 
-#include "winhelp.rc2"
+#include "help.rc2"
 
 IDI_MAINICON ICON "putty.ico"
 
