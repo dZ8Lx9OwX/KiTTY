@@ -12,7 +12,7 @@
 #include "putty.h"
 #include "ssh.h"
 #include "putty-rc.h"
-#include "winseat.h"
+#include "win-gui-seat.h"
 #include "storage.h"
 #include "dialog.h"
 #include "licence.h"
@@ -275,7 +275,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		sprintf( buffer, "KiTTY - %s", BuildVersionTime ) ;
 		SetDlgItemText(hwnd,IDA_VERSION,buffer);
 
-		str = dupprintf("关于%s_v0.76.1.5.1 - 这是一个KiTTY中文版本！", appname);
+		str = dupprintf("关于%s_v0.76.1.6.1 - 这是一个KiTTY中文版本！", appname);
 		SetWindowText(hwnd, str);
 		sfree(str);
 
