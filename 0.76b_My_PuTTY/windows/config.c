@@ -502,6 +502,10 @@ void win_setup_config_box(struct controlbox *b, HWND *hwndp, bool has_help,
 			HELPCTX(no_help),
 			conf_checkbox_handler,
 			I(CONF_ctrl_tab_switch));
+		ctrl_checkbox(s, "在OSC52剪贴板同步之前发出警告", NO_SHORTCUT,
+		  HELPCTX(no_help),
+		  conf_checkbox_handler, I(CONF_osc52_warn_before_cliboard_sync)); 
+
 		}
 #endif
     ctrl_checkbox(s, "Alt-Enter 开启全屏", 'f',

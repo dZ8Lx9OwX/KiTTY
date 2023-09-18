@@ -275,7 +275,7 @@ static INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg,
 		sprintf( buffer, "KiTTY - %s", BuildVersionTime ) ;
 		SetDlgItemText(hwnd,IDA_VERSION,buffer);
 
-		str = dupprintf("关于%s_v0.76.1.12.1 - 这是一个KiTTY中文版本！", appname);
+		str = dupprintf("关于%s_v0.76.1.13.1 - 这是一个KiTTY中文版本！", appname);
 		SetWindowText(hwnd, str);
 		sfree(str);
 
@@ -681,7 +681,7 @@ static INT_PTR CALLBACK GenericMainDlgProc(HWND hwnd, UINT msg,
 	int h ;
 	GetWindowRect(hwnd, &rcClient) ;
 
-        int NormalSize = 536 ;
+        int NormalSize = 555 ;
 
 	if( GetConfigBoxWindowHeight() > 0 ) { h = GetConfigBoxWindowHeight() ; }
 	else if( GetConfigBoxHeight() >= 100 ) { h = GetConfigBoxHeight() ; }
